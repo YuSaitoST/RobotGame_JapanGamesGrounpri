@@ -5,6 +5,7 @@
 #pragma once
 
 #include "Scene.h"
+#include "_Classes_Yu/_InputClasses/UseKeyCheck.h"
 
 using Microsoft::WRL::ComPtr;
 using std::unique_ptr;

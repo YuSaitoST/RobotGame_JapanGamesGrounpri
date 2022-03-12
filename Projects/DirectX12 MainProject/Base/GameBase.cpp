@@ -44,7 +44,8 @@ GameBase::GameBase() :
 
 GameBase::~GameBase()
 {
-    m_scene->Terminate();
+    //m_scene->Terminate();
+    m_scene.reset();
 
     if (m_audioEngine)
     {

@@ -54,6 +54,7 @@ NextScene MainScene::Update(const float deltaTime)
 
 	// TODO: Add your game logic here.
 
+	Press.Accepts();
 
 
 	return NextScene::Continue;
