@@ -29,6 +29,7 @@ public:
 		if (flag_ & (1 << DOWN )) direct_.y = 1;
 		if (flag_ & (1 << LEFT )) direct_.x = -1;
 		if (flag_ & (1 << RIGHT)) direct_.x = 1;
+		direct_.Normalize();
 		return direct_;
 	}
 

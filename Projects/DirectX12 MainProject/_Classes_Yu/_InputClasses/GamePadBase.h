@@ -32,6 +32,7 @@ public:
 		if (flag_ & (1 << P_DOWN )) direct_.y = 1;
 		if (flag_ & (1 << P_LEFT )) direct_.x = -1;
 		if (flag_ & (1 << P_RIGHT)) direct_.x = 1;
+		direct_.Normalize();
 		return direct_;
 	}
 	
