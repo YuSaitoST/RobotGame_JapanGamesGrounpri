@@ -6,6 +6,7 @@
 
 #include "Scene.h"
 #include "_Classes_Yu/_InputClasses/UseKeyCheck.h"
+#include "_Classes_Yu/_CellList/ObjectManager.h"
 
 using Microsoft::WRL::ComPtr;
 using std::unique_ptr;
@@ -36,7 +37,5 @@ public:
 	void Render() override;
 
 private:
-
-
-
+	ObjectManager* m_object_;
 };
