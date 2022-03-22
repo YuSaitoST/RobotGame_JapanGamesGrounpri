@@ -5,6 +5,7 @@
 #pragma once
 
 #include "Scene.h"
+#include "_Classes_Yu/_MainLight/MainLight.h"
 #include "_Classes_Yu/_InputClasses/UseKeyCheck.h"
 #include "_Classes_Yu/_CellList/ObjectManager.h"
 

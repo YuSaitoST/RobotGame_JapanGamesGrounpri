@@ -15,6 +15,9 @@ MainScene::MainScene()
 // Initialize a variable and audio resources.
 void MainScene::Initialize()
 {
+	Light.Set();
+	Light.Enable(true);
+
 	m_object_->Initialize();
 }
 
