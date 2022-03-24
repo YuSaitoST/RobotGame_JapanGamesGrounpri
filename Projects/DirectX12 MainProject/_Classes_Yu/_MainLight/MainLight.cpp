@@ -1,17 +1,12 @@
 #include "MainLight.h"
 
-void MainLight::Initialize() {
-	light_.Type = D3DLIGHT_DIRECTIONAL;
-	light_.Diffuse = DX9::Colors::Value(1.0f, 1.0f, 1.0f, 1.0f);
-	light_.Specular = DX9::Colors::Value(1.0f, 1.0f, 1.0f, 1.0f);
-	light_.Ambient = DX9::Colors::Value(1.0f, 1.0f, 1.0f, 1.0f);
-	light_.Direction = DX9::VectorSet(0.0f, -1.0f, 1.0f);
+void MainLight::Setting(const char* name, D3DLIGHT9 light) {
+	lightList_.push_back(*name);
+	DXTK->Direct3D9->SetLight((lightList_.size() - 1), light);
 }
 
-void MainLight::Set() { 
-	DXTK->Direct3D9->SetLight(0, light_); 
-}
-
-void MainLight::Enable(bool enable) { 
-	DXTK->Direct3D9->LightEnable(0, enable); 
+void MainLight::SetEnable(const char* name, bool enable) {
+	const std::vector<char>::iterator iter = std::find(std::begin(lightList_), std::end(lightList_), *name);
+	const int index = std::distance(std::begin(lightList_), iter);
+	DXTK->Direct3D9->LightEnable(index, enable);
 }

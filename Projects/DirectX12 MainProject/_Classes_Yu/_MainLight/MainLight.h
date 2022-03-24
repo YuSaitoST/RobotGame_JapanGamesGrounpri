@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Base/dxtk.h"
 #include "Base/pch.h"
+#include "Base/dxtk.h"
 
-#define Light MainLight::GetInstance()
+#define Lighting MainLight::GetInstance()
 
 class MainLight {
 public:
@@ -12,14 +12,13 @@ public:
 		return _inctance;
 	}
 
-	void Set();
-	void Enable(bool enable);
+	void Setting(const char* name, D3DLIGHT9 light);
+	void SetEnable(const char* name, bool enable);
+	void Reset() { lightList_.clear(); }
 
 private:
-	MainLight() { Initialize(); }
+	MainLight() {}
 	virtual ~MainLight() {}
 
-	void Initialize();
-
-	D3DLIGHT9 light_;
+	std::vector<char> lightList_;
 };
