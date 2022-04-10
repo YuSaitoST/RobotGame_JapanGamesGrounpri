@@ -17,15 +17,18 @@ ObjectBase::~ObjectBase() {
 }
 
 void ObjectBase::SetMember(OBJ_TYPE kind, Vector3 pos, float r) {
-	this->obj_type_ = kind;
-	this->pos_.x = pos.x;
-	this->pos_.y = pos.y;
-	if (this->cp_ == nullptr)
-		this->cp_ = new Cell(this);  // Š‘®‚·‚é‹óŠÔ‚ðŠ„‚è“–‚Ä‚é‚½‚ß
+	this->obj_type_		= kind;
+	this->pos_.x		= pos.x;
+	this->pos_.y		= pos.y;
+	this->r_			= r;
 
-	rotate_ = Vector3::Zero;
-	forward_ = Vector3::Zero;
-	collision_ = new bsCollSph();
+	if (this->cp_ == nullptr)
+		this->cp_		= new Cell(this);  // Š‘®‚·‚é‹óŠÔ‚ðŠ„‚è“–‚Ä‚é‚½‚ß
+
+	this->rotate_		= Vector3::Zero;
+	this->forward_		= Vector3::Zero;
+	this->collision_	= new bsCollSph();
+	this->id_my_		= -1;
 }
 
 ObjectBase* ObjectBase::IsCollision(ObjectBase* m) {

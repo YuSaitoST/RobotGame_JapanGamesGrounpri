@@ -5,8 +5,8 @@
 #include "bsCollSph.h"
 
 using namespace DirectX::SimpleMath;
-class Cell;
 
+class Cell;
 enum OBJ_TYPE { PLAYER, ENEMY, WEAPON, NONE_OBJ_ID };
 
 class ObjectBase {
@@ -19,7 +19,7 @@ public:
 	virtual void LoadAssets(std::wstring file_name) = 0;
 	virtual void Update(const float deltaTime) = 0;
 	virtual void Render() = 0;
-	virtual void Render(DX9::MODEL& model) = 0;
+	virtual void Render(DX9::SKINNEDMODEL& model) = 0;
 	virtual void UIRender() = 0;
 
 	virtual ObjectBase* IsCollision(ObjectBase* m);  // è’ìÀîªíË(BoundingÇópÇ¢ÇΩÇ‡ÇÃ)
