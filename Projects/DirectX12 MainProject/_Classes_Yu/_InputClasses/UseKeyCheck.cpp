@@ -7,6 +7,36 @@ void UseKeyCheck::Accepts() {
 	pad_.Accepts(0);
 }
 
+bool UseKeyCheck::MovePlayerStateUp() {
+	return key_.StateArrowKey(ARROW_KEY::K_UP);
+}
+
+bool UseKeyCheck::MovePlayerStateDown() {
+	return key_.StateArrowKey(ARROW_KEY::K_DOWN);
+}
+
+bool UseKeyCheck::MovePlayerStateRight() {
+	return key_.StateArrowKey(ARROW_KEY::K_RIGHT);
+}
+
+bool UseKeyCheck::MovePlayerStateLeft() {
+	return key_.StateArrowKey(ARROW_KEY::K_RIGHT);
+}
+
+bool UseKeyCheck::DushStateKey() {
+	return key_.StateCharaKey('S');
+}
+
+bool UseKeyCheck::JumpEventKey() {
+	return key_.EventCharaKey('D');
+}
+
+bool UseKeyCheck::AtackEventKey() {
+	return key_.EventCharaKey('A');
+}
+
+
+
 bool UseKeyCheck::MoveStateLeft() {
 	return key_.StateArrowKey(ARROW_KEY::K_LEFT) || pad_.StateOnOffKey(0, PAD::P_LEFT);
 }

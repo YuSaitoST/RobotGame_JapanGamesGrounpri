@@ -11,6 +11,17 @@ public:
 
 	void Accepts();
 
+	bool MovePlayerStateUp();
+	bool MovePlayerStateDown();
+	bool MovePlayerStateRight();
+	bool MovePlayerStateLeft();
+
+
+	bool DushStateKey();
+	bool JumpEventKey();
+
+	bool AtackEventKey();
+
 	bool MoveStateLeft();
 	bool MoveStateRight();
 
