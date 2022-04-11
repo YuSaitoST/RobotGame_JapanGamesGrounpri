@@ -20,7 +20,7 @@ bool UseKeyCheck::MovePlayerStateRight() {
 }
 
 bool UseKeyCheck::MovePlayerStateLeft() {
-	return key_.StateArrowKey(ARROW_KEY::K_RIGHT);
+	return key_.StateArrowKey(ARROW_KEY::K_LEFT);
 }
 
 bool UseKeyCheck::DushStateKey() {

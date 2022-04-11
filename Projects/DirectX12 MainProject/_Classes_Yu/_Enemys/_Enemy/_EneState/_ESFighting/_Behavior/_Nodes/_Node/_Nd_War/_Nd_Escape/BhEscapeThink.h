@@ -1,9 +1,9 @@
 #pragma once
 
+#include "_Classes_Yu/_CellList/_Object/AttackState.h"
 #include "_Classes_Yu/_Enemys/_Enemy/_EneState/_ESFighting/_Behavior/_Nodes/Node.h"
 #include "_Classes_Yu/_Enemys/_Enemy/_EneState/_ESFighting/_Behavior/_Nodes/_Node/BhRandSelector.h"
 #include "_Classes_Yu/_Enemys/_Enemy/_EneState/_ESFighting/_Behavior/_Nodes/_Node/_Nd_War/_Nd_Escape/BhBackStep.h"
-
 
 class BhEscapeThink : public Node {
 public:
@@ -17,5 +17,5 @@ private:
 	BhBackStep* nd_vsShoot_;
 
 	Action lastAction_;
-	bool lastActionState_;
+	AttackState lastActionState_;
 };

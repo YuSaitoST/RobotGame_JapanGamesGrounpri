@@ -11,10 +11,14 @@ void EneParamsLoad::LoadParams() {
 	if (a != 0)
 		std::abort();
 
-	char _dummyLine[512];
-	fgets(_dummyLine, 500, _file);
+	char _dummyLine[256];
+	fgets(_dummyLine, 255, _file);
 
-	fscanf_s(_file, "%f,%f,%f", &number_.DISTANCE_APPROACHING_PLAYER, &number_.SHORTEST_DISTANCE, &number_.SPEED);
+	fscanf_s(_file, "%f,%f,%f", 
+		&number_.DISTANCE_APPROACHING_PLAYER, 
+		&number_.SHORTEST_DISTANCE, 
+		&number_.SPEED
+	);
 
 	number_.SPEED = 0.01f;
 

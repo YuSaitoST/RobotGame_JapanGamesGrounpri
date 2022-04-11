@@ -50,5 +50,6 @@ private:
 
 	PlayerManager player_;
 
+
 	DX9::CAMERA camera;
 };

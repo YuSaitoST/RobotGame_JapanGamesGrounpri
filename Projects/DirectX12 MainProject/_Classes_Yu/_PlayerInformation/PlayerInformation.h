@@ -2,6 +2,7 @@
 
 #include "Base/pch.h"
 #include "Base/dxtk.h"
+#include "_Classes_Ao/PlayerManager/PlayerBase/PlayerBase.h"
 
 #define PlayerInfo PlayerInformation
 
@@ -12,6 +13,7 @@ public:
 	PlayerInformation() {}
 	virtual ~PlayerInformation() {}
 
+	static AttackState NowAttackState() { return AttackState::None_Attack; }
 	static Vector3 GetDirection(Vector3 myPos) { return VectorNomalized(GetPosition() - myPos); }
 	static float GetDistance(Vector3 myPos) { return std::fabsf((GetPosition() - myPos).Length()); }
 

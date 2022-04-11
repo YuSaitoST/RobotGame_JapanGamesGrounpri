@@ -20,7 +20,12 @@ PlayerBase::PlayerBase() {
 void PlayerBase::Initialize() {
 	player_pos = SimpleMath::Vector3(0.0f, 0.0f, 0.0f);
 	jump_flag = false;
-	speed = 300.0f;
+	speed = 60.0f;
+
+	jump_flag = false;
+	jump_time = 0.0f;
+	jump_start_v_ = 0.0f;
+
 }
 
 
@@ -64,6 +69,13 @@ void LoadCsv() {
 void PlayerBase::Setting() {
 	player_model->SetRotation(0.0f, XMConvertToRadians(180.0f), 0.0f);
 	player_pos = player_model->GetPosition();
+
+	auto pos = player_model->GetPosition();
+	pos = SimpleMath::Vector3(
+		std::clamp(pos.x, -10.0f, 10.0f),
+		std::clamp(pos.y,   0.0f, 10.0f),
+		std::clamp(pos.z, -10.0f, 10.0f)
+	);
 }
 
 void PlayerBase::Move_Front(const float deltaTime) {
@@ -90,16 +102,22 @@ void PlayerBase::Dush(const float deltaTime) {
 
 
 void PlayerBase::Jump(const float deltaTime) {
-	if (jump_flag) {
+	if (!jump_flag) {
+		jump_flag = true;
+		jump_time = 0.0f;
+		jump_start_v_ = player_model->Position.y;
+	}
 
+	if (jump_flag) {
 		jump_time += deltaTime;
 		auto pos = player_model->GetPosition();
-		
-		pos.y = jump_start_v_ + V0 * jump_time - 0.5f * gravity_ * jump_time * jump_time;
+		pos.y = jump_start_v_ + V0 * jump_time - half * gravity_ * jump_time * jump_time;
 		player_model->SetPosition(pos);
-
-		if (player_model->GetPosition().y <= 0.65f) {
-			jump_flag = false;			
+		
+		//ジャンプの終了判定
+		if (V0 * jump_time < gravity_ * jump_time * jump_time) {
+			jump_flag = false;
+			auto pl = 0;
 		}
 	}
 
@@ -114,6 +132,6 @@ void PlayerBase::_2D() {
 		font.Get(),
 		SimpleMath::Vector2(0.0f, 0.0f),
 		DX9::Colors::Red,
-		L"%f %f %f",player_pos.x, player_pos.y, player_pos.z
+		L"座標　%f %f %f",player_pos.x, player_pos.y, player_pos.z
 	);
 }
