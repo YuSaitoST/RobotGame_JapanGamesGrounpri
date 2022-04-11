@@ -20,12 +20,17 @@ PlayerBase::PlayerBase() {
 void PlayerBase::Initialize() {
 	player_pos = SimpleMath::Vector3(0.0f, 0.0f, 0.0f);
 	jump_flag = false;
+	speed = 300.0f;
 }
+
 
 void PlayerBase::LoadModel() {
 	player_model = DX9::SkinnedModel::CreateFromFile(DXTK->Device9, L"Player\\SwordManEX\\armor_red2_0210b.X");
-}
+	player_model->SetScale(0.5f);
+	
+	font = DX9::SpriteFont::CreateDefaultFont(DXTK->Device9);
 
+}
 void PlayerBase::LoadEffect() {
 
 }
@@ -56,20 +61,25 @@ void LoadCsv() {
 
 }
 
+void PlayerBase::Setting() {
+	player_model->SetRotation(0.0f, XMConvertToRadians(180.0f), 0.0f);
+	player_pos = player_model->GetPosition();
+}
+
 void PlayerBase::Move_Front(const float deltaTime) {
-	player_pos.z -= speed * deltaTime;
+	player_model->Move(0.0f, 0.0f, -speed * deltaTime);
 }
 
 void PlayerBase::Move_Back(const float deltaTime) {
-	player_pos.z += speed * deltaTime;
+	player_model->Move(0.0f, 0.0f, speed * deltaTime);
 }
 
 void PlayerBase::Move_Right(const float deltaTime) {
-	player_pos.x += speed * deltaTime;
+	player_model->Move(-speed * deltaTime, 0.0f, 0.0f);
 }
 
 void PlayerBase::Move_Left(const float deltaTime) {
-	player_pos.x -= speed * deltaTime;
+	player_model->Move(speed * deltaTime, 0.0f, 0.0f);
 }
 
 void PlayerBase::Dush(const float deltaTime) {
@@ -98,4 +108,12 @@ void PlayerBase::Jump(const float deltaTime) {
 
 void PlayerBase::Render() {
 	player_model->Draw();
+}
+void PlayerBase::_2D() {
+	DX9::SpriteBatch->DrawString(
+		font.Get(),
+		SimpleMath::Vector2(0.0f, 0.0f),
+		DX9::Colors::Red,
+		L"%f %f %f",player_pos.x, player_pos.y, player_pos.z
+	);
 }

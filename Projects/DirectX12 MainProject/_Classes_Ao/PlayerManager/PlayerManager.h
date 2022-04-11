@@ -11,8 +11,8 @@ using namespace DirectX;
 class PlayerManager
 {
 public:
-	PlayerManager();
-	~PlayerManager();
+	PlayerManager(){};
+	~PlayerManager(){};
 
 	void Initialize();
 	void LoadModel();
@@ -20,9 +20,10 @@ public:
 	void Update(const float deltaTime);
 	void Render();
 
+	void _2D();
 	
 
 private:
-	PlayerBase* p_base_;
+	PlayerBase p_base_;
 
 };

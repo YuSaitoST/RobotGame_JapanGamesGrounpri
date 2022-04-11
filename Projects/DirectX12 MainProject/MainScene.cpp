@@ -18,6 +18,12 @@ MainScene::MainScene()
 // Initialize a variable and audio resources.
 void MainScene::Initialize()
 {
+	//Camera.Initialize();
+	camera->SetView(SimpleMath::Vector3(3.0f, 2.5f, -10), SimpleMath::Vector3(0, 0, 0));
+	camera->SetPerspectiveFieldOfView(XMConvertToRadians(45.0f), 16.0f / 9.0f, 1.0f, 10000.0f);
+	DXTK->Direct3D9->SetCamera(camera);
+
+
 	D3DLIGHT9 light_test_;
 	light_test_.Type = D3DLIGHT_DIRECTIONAL;
 	light_test_.Diffuse = DX9::Colors::Value(1.0f, 1.0f, 1.0f, 1.0f);
@@ -29,8 +35,7 @@ void MainScene::Initialize()
 	Lighting.SetEnable("MainLight", true);
 
 	m_object_->Initialize();
-
-	Camera.Initialize();
+	player_.Initialize();
 }
 
 // Allocate all memory the Direct3D and Direct2D resources.
@@ -56,10 +61,7 @@ void MainScene::LoadAssets()
 	uploadResourcesFinished.wait();
 
 	m_object_->LoadAssets();
-
-	testModP_ = DX9::Model::CreateFromFile(DXTK->Device9, L"Player\\SwordManEX\\armor_red2_0210b.X");
-	testModP_->SetPosition(Vector3::Zero);
-	testModP_->SetScale(0.035f);
+	player_.LoadModel();
 }
 
 // Releasing resources required for termination.
@@ -95,6 +97,7 @@ NextScene MainScene::Update(const float deltaTime)
 
 	Press.Accepts();
 	m_object_->Update(deltaTime);
+	player_.Update(deltaTime);
 
 	return NextScene::Continue;
 }
@@ -102,19 +105,18 @@ NextScene MainScene::Update(const float deltaTime)
 // Draws the scene.
 void MainScene::Render()
 {
-	DXTK->Direct3D9->Clear(DX9::Colors::RGBA(0, 0, 0, 255));  // 画面をクリア
+	DXTK->Direct3D9->Clear(DX9::Colors::RGBA(0, 0, 255, 0));  // 画面をクリア
 	DXTK->Direct3D9->BeginScene();  // シーンの開始を宣言
-
-	Camera.Render();
-
+	DXTK->Direct3D9->SetCamera(camera);
 
 	m_object_->RenderModels();
+	
+	player_.Render();
 
-	testModP_->Draw();
 
 	DX9::SpriteBatch->Begin();  // スプライトの描画を開始
 
-
+	player_._2D();
 
 	DX9::SpriteBatch->End();  // スプライトの描画を終了
 	DXTK->Direct3D9->EndScene();  // シーンの終了を宣言
