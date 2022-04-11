@@ -10,7 +10,6 @@
 #include "_Classes_Yu/_CellList/ObjectManager.h"
 
 #include "_Classes_Ao/PlayerManager/PlayerManager.h"
-#include "_Classes_Ao/PlayerManager/PlayerBase/PlayerBase.h"
 #include"_Classes_Ao/CameraManager/CameraManager.h"
 
 using Microsoft::WRL::ComPtr;
