@@ -5,18 +5,19 @@
 #include "Base/pch.h"
 #include "Base/dxtk.h"
 #include "SceneFactory.h"
+#include "_Classes_Yu/_Enemys/_EneParamsLoad/EneParamsLoad.h"
 
 // Initialize member variables.
 MainScene::MainScene()
 {
+	ENParams.LoadParams();
+
 	m_object_ = new ObjectManager();
 }
 
 // Initialize a variable and audio resources.
 void MainScene::Initialize()
 {
-	Camera.Initialize();
-
 	D3DLIGHT9 light_test_;
 	light_test_.Type = D3DLIGHT_DIRECTIONAL;
 	light_test_.Diffuse = DX9::Colors::Value(1.0f, 1.0f, 1.0f, 1.0f);
@@ -28,6 +29,8 @@ void MainScene::Initialize()
 	Lighting.SetEnable("MainLight", true);
 
 	m_object_->Initialize();
+
+	Camera.Initialize();
 }
 
 // Allocate all memory the Direct3D and Direct2D resources.
@@ -53,6 +56,10 @@ void MainScene::LoadAssets()
 	uploadResourcesFinished.wait();
 
 	m_object_->LoadAssets();
+
+	testModP_ = DX9::Model::CreateFromFile(DXTK->Device9, L"Player\\SwordManEX\\armor_red2_0210b.X");
+	testModP_->SetPosition(Vector3::Zero);
+	testModP_->SetScale(0.035f);
 }
 
 // Releasing resources required for termination.
@@ -98,9 +105,12 @@ void MainScene::Render()
 	DXTK->Direct3D9->Clear(DX9::Colors::RGBA(0, 0, 0, 255));  // 画面をクリア
 	DXTK->Direct3D9->BeginScene();  // シーンの開始を宣言
 
+	Camera.Render();
+
 
 	m_object_->RenderModels();
 
+	testModP_->Draw();
 
 	DX9::SpriteBatch->Begin();  // スプライトの描画を開始
 

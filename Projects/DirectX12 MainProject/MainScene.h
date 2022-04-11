@@ -9,6 +9,8 @@
 #include "_Classes_Yu/_InputClasses/UseKeyCheck.h"
 #include "_Classes_Yu/_CellList/ObjectManager.h"
 
+#include "_Classes_Yu/__TestSource/_MainCamera/MainCamera.h"
+
 using Microsoft::WRL::ComPtr;
 using std::unique_ptr;
 using std::make_unique;
@@ -43,4 +45,6 @@ private:
 	DX12::HGPUDESCRIPTOR dx9GpuDescriptor_;
 
 	ObjectManager* m_object_;
+
+	DX9::MODEL testModP_;
 };
