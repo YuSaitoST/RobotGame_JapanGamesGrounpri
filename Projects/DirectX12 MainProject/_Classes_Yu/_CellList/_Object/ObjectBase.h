@@ -42,5 +42,7 @@ protected:
 	Vector3 rotate_;		// ‰ñ“]
 	Vector3 forward_;       // ³–Ê•ûŒü
 	float r_;               // ”¼Œa
-	int id_my_;			    // ©•ª‚ÌID
+	int id_my_;
+	void Initialize();
+	// ©•ª‚ÌID
 };

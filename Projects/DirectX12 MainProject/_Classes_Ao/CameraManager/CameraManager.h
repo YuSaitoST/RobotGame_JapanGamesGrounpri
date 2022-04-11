@@ -11,8 +11,8 @@ public:
 	CameraManager();
 	~CameraManager();
 
-	bool Initialize();
-	int Update(const float deltaTime);
+	void Initialize();
+	void Update(const float deltaTime);
 	void Render();
 
 private:

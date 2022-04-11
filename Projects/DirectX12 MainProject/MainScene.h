@@ -9,6 +9,9 @@
 #include "_Classes_Yu/_InputClasses/UseKeyCheck.h"
 #include "_Classes_Yu/_CellList/ObjectManager.h"
 
+#include "_Classes_Ao/PlayerManager/PlayerManager.h"
+#include"_Classes_Ao/CameraManager/CameraManager.h"
+
 using Microsoft::WRL::ComPtr;
 using std::unique_ptr;
 using std::make_unique;
@@ -43,4 +46,9 @@ private:
 	DX12::HGPUDESCRIPTOR dx9GpuDescriptor_;
 
 	ObjectManager* m_object_;
+	CameraManager* camera_;
+
+	PlayerManager player_;
+
+	DX9::CAMERA camera;
 };

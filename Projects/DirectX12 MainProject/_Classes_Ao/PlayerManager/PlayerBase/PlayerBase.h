@@ -4,18 +4,21 @@
 #include "Base/dxtk.h"
 
 #include "_Classes_Ao/PlayerManager/PlayerBase/Dush/Dush.h"
+#include "_Classes_Yu/_CellList/_Object/ObjectBase.h"
 
 using namespace DirectX;
 
-class PlayerBase
+class PlayerBase //:public ObjectBase
 {
 public:
 	PlayerBase();
-	~PlayerBase();
+	~PlayerBase() {};
 
 	void Initialize();
 	void LoadModel();
 	void LoadEffect();
+
+	void Setting();
 
 	void Move_Front(const float deltaTime);
 	void Move_Back(const float deltaTime);
@@ -23,12 +26,13 @@ public:
 	void Move_Left(const float deltaTime);
 
 
-	void Attack(const float deltaTime);
-	void Shot(const float deltaTime);
+	void Attack(const float deltaTime) {};
+	void Shot(const float deltaTime) {};
 	void Dush(const float deltaTime);
 	void Jump(const float deltaTime);
 
 	void Render();
+	void _2D();
 
 	SimpleMath::Vector3 GetPlayer_Pos() { return player_pos; }
 	bool GetJump() { return jump_flag; }
@@ -41,6 +45,11 @@ public:
 private:
 	DX9::SKINNEDMODEL player_model;
 	SimpleMath::Vector3 player_pos;
+
+	OBJ_TYPE player;
+	int player_tag = 0;
+
+	DX9::SPRITEFONT font;
 
 	float speed;
 
@@ -64,5 +73,6 @@ private:
 private:
 	//ëºÉNÉâÉXÇ©ÇÁåƒÇ—èoÇ∑
 	Dush_* dush_;
+
 
 };
