@@ -1,0 +1,14 @@
+UniverSports_Remake/.vs/
+Projects/DirectX12 MainProject/cppcoro/
+Projects/DirectX12 MainProject/Resource/
+Projects/DirectX12AffinityLayer/
+Projects/DirectXTK9/
+Projects/DirectXTK12/
+Projects/External/
+Projects/packages/
+*.user
+*.config
+*.inc
+*.lib
+*.dll
+*.obj
