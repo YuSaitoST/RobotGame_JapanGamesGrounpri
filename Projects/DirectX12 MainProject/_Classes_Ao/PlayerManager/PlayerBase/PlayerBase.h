@@ -67,7 +67,7 @@ private:
 	//d—Í‰Á‘¬“x
 	const float gravity_ = 170.0f;
 	//‰‘¬
-	const float V0 = 70.5f;
+	const float V0 = 30.5f;
 
 
 private:
