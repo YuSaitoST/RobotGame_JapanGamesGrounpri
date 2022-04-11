@@ -4,7 +4,6 @@ Enemy::Enemy() {
 	cp_ = nullptr;
 	SetMember(OBJ_TYPE::NONE_OBJ_ID, Vector3::Zero, 1.0f);
 
-	attackState_ = AttackState::None_Attack;
 	state_ = nullptr;
 	isHitPlayer_ = false;
 }
@@ -15,7 +14,6 @@ Enemy::Enemy(Vector3 pos, float r) {
 
 	SwitchState(SPONE);
 
-	attackState_ = AttackState::None_Attack;
 	isHitPlayer_ = false;
 }
 

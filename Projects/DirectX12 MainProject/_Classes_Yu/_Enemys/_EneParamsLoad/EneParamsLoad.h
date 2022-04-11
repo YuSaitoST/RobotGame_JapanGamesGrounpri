@@ -1,6 +1,5 @@
 #pragma once
 
-#define ENParams EneParamsLoad::GetInstance()
 #define ENParams EneParamsLoad::GetInstance().GetNumber()
 
 enum ENE_STATE { SPONE, STANDBY, FIGHTING, STAN, DOWN };

@@ -25,6 +25,7 @@ void ObjectBase::SetMember(OBJ_TYPE kind, Vector3 pos, float r) {
 	if (this->cp_ == nullptr)
 		this->cp_		= new Cell(this);  // Š‘®‚·‚é‹óŠÔ‚ðŠ„‚è“–‚Ä‚é‚½‚ß
 
+	this->attackState_	= AttackState::None_Attack;
 	this->rotate_		= Vector3::Zero;
 	this->forward_		= Vector3::Zero;
 	this->collision_	= new bsCollSph();

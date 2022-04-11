@@ -10,7 +10,7 @@
 // Initialize member variables.
 MainScene::MainScene()
 {
-	ENParams.LoadParams();
+	EneParamsLoad::GetInstance().LoadParams();
 
 	m_object_ = new ObjectManager();
 }
