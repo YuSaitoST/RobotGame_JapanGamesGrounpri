@@ -1,13 +1,6 @@
 #include "BhShooting.h"
-
-BhShooting::BhShooting() {
-
-}
-
-BhShooting::~BhShooting() {
-
-}
+#include "_Classes_Yu/_Enemys/EnemyManager.h"
 
 Action BhShooting::Behavior(const int myID) {
-	return FAILIRE;
+	return EnemyManager::Sertch(myID)->Shooting();
 }

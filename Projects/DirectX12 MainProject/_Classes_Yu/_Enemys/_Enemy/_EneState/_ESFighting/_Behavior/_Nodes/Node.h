@@ -1,13 +1,10 @@
 #pragma once
 
-enum Action { SUCSESS, FAILIRE, ROOPING };
+enum Action { SUCSESS, FAILIRE, REPEAT };
 
 class Node {
 public:
-	Node() : next_(nullptr) {}
+	Node() {}
 	virtual ~Node() {}
 	virtual Action Behavior(const int myID) = 0;
-
-protected:
-	Node* next_;
 };

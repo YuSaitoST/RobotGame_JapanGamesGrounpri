@@ -2,10 +2,10 @@
 
 #include "_Classes_Yu/_Enemys/_Enemy/_EneState/_ESFighting/_Behavior/_Nodes/Node.h"
 
-class BhShooting : public Node {
+class BhBackStep : public Node {
 public:
-	BhShooting() {}
-	virtual ~BhShooting() {}
+	BhBackStep() {}
+	virtual ~BhBackStep() {}
 
 	virtual Action Behavior(const int myID) override;
 };

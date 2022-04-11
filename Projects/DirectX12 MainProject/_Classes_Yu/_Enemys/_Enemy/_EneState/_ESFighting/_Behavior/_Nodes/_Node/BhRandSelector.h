@@ -16,4 +16,7 @@ private:
 
 	Node* node1_;
 	Node* node2_;
+
+	Action lastAction_;
+	int lastActionNum_;
 };

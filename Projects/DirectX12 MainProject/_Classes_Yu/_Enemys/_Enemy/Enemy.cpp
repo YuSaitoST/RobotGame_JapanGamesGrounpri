@@ -4,7 +4,9 @@ Enemy::Enemy() {
 	cp_ = nullptr;
 	SetMember(OBJ_TYPE::NONE_OBJ_ID, Vector3::Zero, 1.0f);
 
+	attackState_ = AttackState::None_Attack;
 	state_ = nullptr;
+	isHitPlayer_ = false;
 }
 
 Enemy::Enemy(Vector3 pos, float r) {
@@ -12,6 +14,9 @@ Enemy::Enemy(Vector3 pos, float r) {
 	SetMember(OBJ_TYPE::ENEMY, pos, r);
 
 	SwitchState(SPONE);
+
+	attackState_ = AttackState::None_Attack;
+	isHitPlayer_ = false;
 }
 
 Enemy::~Enemy() {
@@ -23,6 +28,9 @@ void Enemy::Initialize(const int id) {
 }
 
 void Enemy::Update(const float deltaTime) {
+	ObjectBase* hitObj = IsHitObject();
+	isHitPlayer_ = (hitObj != nullptr) ? (hitObj->myObjectType() == OBJ_TYPE::PLAYER) : false;
+
 	state_->Update(id_my_);
 }
 
@@ -41,10 +49,23 @@ void Enemy::SwitchState(ENE_STATE state) {
 	}
 }
 
-void Enemy::Move(Vector3 forward) {
+Action Enemy::Move(Vector3 forward) {
 	pos_ += forward * ENParams.SPEED;
+	return REPEAT;
 }
 
-void Enemy::Adjacent() {
+Action Enemy::Thruster() {
+	return SUCSESS;
+}
 
+Action Enemy::BackStep() {
+	return SUCSESS;
+}
+
+Action Enemy::Adjacent() {
+	return SUCSESS;
+}
+
+Action Enemy::Shooting() {
+	return SUCSESS;
 }

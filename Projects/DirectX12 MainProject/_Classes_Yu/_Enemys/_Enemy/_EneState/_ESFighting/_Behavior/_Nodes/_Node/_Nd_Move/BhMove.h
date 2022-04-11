@@ -4,7 +4,7 @@
 
 class BhMove : public Node {
 public:
-	BhMove() { next_ = nullptr; };
+	BhMove() {};
 	virtual ~BhMove() {}
 
 	virtual Action Behavior(const int myID) override;

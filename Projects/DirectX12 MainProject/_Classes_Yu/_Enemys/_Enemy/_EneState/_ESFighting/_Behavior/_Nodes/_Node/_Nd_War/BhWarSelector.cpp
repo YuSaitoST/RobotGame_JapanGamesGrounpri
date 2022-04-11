@@ -8,7 +8,8 @@ BhWarSelector::BhWarSelector() {
 }
 
 BhWarSelector::~BhWarSelector() {
-
+	delete nd_random_;
+	delete nd_escape_;
 }
 
 Action BhWarSelector::Behavior(const int myID) {

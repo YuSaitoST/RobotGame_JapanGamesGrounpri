@@ -4,8 +4,8 @@
 
 class BhAdjacent : public Node {
 public:
-	BhAdjacent();
-	virtual ~BhAdjacent();
+	BhAdjacent() {}
+	virtual ~BhAdjacent() {}
 
 	virtual Action Behavior(const int myID) override;
 };
