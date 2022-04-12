@@ -18,11 +18,11 @@ void PlayerManager::LoadModel() {
 
 void PlayerManager::Update(const float deltaTime) {
 	camera->SetPosition(
-		p_base_.GetModel()->GetPosition().x + 2.5f,
-		p_base_.GetModel()->GetPosition().y + 5.0f,
-		p_base_.GetModel()->GetPosition().z - 10.0f
+		p_base_.GetModel()->GetPosition().x + 2.0f,
+		p_base_.GetModel()->GetPosition().y + 5.5f,
+		p_base_.GetModel()->GetPosition().z - 6.0f
 	);
-	camera->SetRotation(XMConvertToRadians(10.0f), 0.0f, 0.0f);
+	camera->SetRotation(XMConvertToRadians(20.0f), 0.0f, 0.0f);
 
 	p_base_.Setting();
 
@@ -51,10 +51,13 @@ void PlayerManager::Update(const float deltaTime) {
 	if (Press.DushStateKey()) {
 		p_base_.Dush(deltaTime);
 	}
+	
 	//UŒ‚(‹ßÚ)
+
 	
 	//UŒ‚(ËŒ‚)
 	
+
 	//ƒWƒƒƒ“ƒv
 	if (!p_base_.GetJump()) {
 		if (Press.JumpEventKey()) {
