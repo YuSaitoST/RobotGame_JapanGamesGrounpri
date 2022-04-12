@@ -16,9 +16,6 @@ MainScene::MainScene()
 void MainScene::Initialize()
 {
 	//Camera.Initialize();
-	camera->SetView(SimpleMath::Vector3(3.0f, 2.5f, -10), SimpleMath::Vector3(0, 0, 0));
-	camera->SetPerspectiveFieldOfView(XMConvertToRadians(45.0f), 16.0f / 9.0f, 1.0f, 10000.0f);
-	DXTK->Direct3D9->SetCamera(camera);
 
 
 	D3DLIGHT9 light_test_;
@@ -104,7 +101,6 @@ void MainScene::Render()
 {
 	DXTK->Direct3D9->Clear(DX9::Colors::RGBA(0, 0, 255, 0));  // 画面をクリア
 	DXTK->Direct3D9->BeginScene();  // シーンの開始を宣言
-	DXTK->Direct3D9->SetCamera(camera);
 
 	m_object_->RenderModels();
 	

@@ -26,4 +26,7 @@ public:
 private:
 	PlayerBase p_base_;
 
+	DX9::CAMERA camera;
+
+
 };
