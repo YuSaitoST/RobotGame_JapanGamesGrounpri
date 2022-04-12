@@ -34,6 +34,7 @@ public:
 	void Render();
 	void _2D();
 
+	DX9::SKINNEDMODEL& GetModel() { return player_model; }
 	SimpleMath::Vector3 GetPlayer_Pos() { return player_pos; }
 	bool GetJump() { return jump_flag; }
 
