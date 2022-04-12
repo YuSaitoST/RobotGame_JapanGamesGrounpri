@@ -8,6 +8,7 @@
 #include "_Classes_Yu/_MainLight/MainLight.h"
 #include "_Classes_Yu/_InputClasses/UseKeyCheck.h"
 #include "_Classes_Yu/_CellList/ObjectManager.h"
+#include "_Classes_Yu/_FIelds/Fields.h"
 
 #include "_Classes_Ao/PlayerManager/PlayerManager.h"
 #include"_Classes_Ao/CameraManager/CameraManager.h"
@@ -50,5 +51,5 @@ private:
 
 	PlayerManager player_;
 
-
+	Fields* field_;
 };
