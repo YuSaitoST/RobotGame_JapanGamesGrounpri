@@ -71,6 +71,8 @@ void PlayerBase::Setting() {
 	player_pos = player_model->GetPosition();
 
 	auto pos = player_model->GetPosition();
+	std::max(0.0f, 200.0f);
+
 }
 
 void PlayerBase::Move_Front(const float deltaTime) {

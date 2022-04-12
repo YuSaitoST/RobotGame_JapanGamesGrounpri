@@ -1,4 +1,5 @@
 #include "PlayerManager.h"
+#include "_Classes_Yu/_PlayerInformation/PlayerInformation.h"
 
 void PlayerManager::Initialize() {
 	camera->SetView(SimpleMath::Vector3(0, 0, 0), SimpleMath::Vector3(0, 0, 0));
@@ -6,6 +7,8 @@ void PlayerManager::Initialize() {
 	DXTK->Direct3D9->SetCamera(camera);
 
 	p_base_.Initialize();
+	// プレイヤーのposのポインタ
+	PlayerInfo.SetMenber(p_base_.GetPlayer_Pos());
 	
 }
 

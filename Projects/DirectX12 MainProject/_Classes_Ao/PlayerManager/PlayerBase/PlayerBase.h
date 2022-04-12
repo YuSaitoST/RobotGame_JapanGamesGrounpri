@@ -35,7 +35,7 @@ public:
 	void _2D();
 
 	DX9::SKINNEDMODEL& GetModel() { return player_model; }
-	SimpleMath::Vector3 GetPlayer_Pos() { return player_pos; }
+	SimpleMath::Vector3* GetPlayer_Pos() { return &player_pos; }
 	bool GetJump() { return jump_flag; }
 
 	//ブースト(加速)
@@ -45,7 +45,7 @@ public:
 
 private:
 	DX9::SKINNEDMODEL player_model;
-	SimpleMath::Vector3 player_pos;
+	SimpleMath::Vector3 player_pos = SimpleMath::Vector3(0.0f, 0.0f, 0.0f);
 
 	OBJ_TYPE player;
 	int player_tag = 0;
