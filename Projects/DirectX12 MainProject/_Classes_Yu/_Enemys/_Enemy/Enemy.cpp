@@ -15,6 +15,8 @@ Enemy::Enemy(Vector3 pos, float r) {
 	SwitchState(SPONE);
 
 	isHitPlayer_ = false;
+
+	amountOfBackStep_ = 0.0f;
 }
 
 Enemy::~Enemy() {
@@ -48,8 +50,8 @@ void Enemy::SwitchState(ENE_STATE state) {
 }
 
 Action Enemy::Move(Vector3 forward) {
-	pos_ += forward * ENParams.SPEED;
-	return REPEAT;
+	pos_ += forward * ENParams.MOVE_SPEED;
+	return SUCSESS;
 }
 
 Action Enemy::Thruster() {
@@ -57,7 +59,20 @@ Action Enemy::Thruster() {
 }
 
 Action Enemy::BackStep() {
-	return SUCSESS;
+	const Vector3 oldPos = pos_;
+
+	// ˆÚ“®ŒvŽZ
+	pos_ += -forward_ * ENParams.BACKSTEP_SPEED;
+
+	// ˆÚ“®—Ê
+	amountOfBackStep_ += std::fabsf((pos_ - oldPos).Length());
+
+	const bool isFine = (ENParams.BACKSTEP_DISTANCE < amountOfBackStep_);
+
+	if (isFine)
+		amountOfBackStep_ = 0.0f;
+
+	return isFine ? SUCSESS : REPEAT;
 }
 
 Action Enemy::Adjacent() {

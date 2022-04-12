@@ -7,6 +7,7 @@
 #include "_EneState/_ESStandby/ESStandby.h"
 #include "_EneState/_ESFighting/ESFighting.h"
 
+enum Action;
 class Enemy final : public ObjectBase {
 public:
 	Enemy();
@@ -22,6 +23,8 @@ public:
 
 	void SwitchState(ENE_STATE state);
 
+	Vector3* GetPosP() { return &pos_; }
+
 	Action Move(Vector3 forward);
 	Action Thruster();
 	Action BackStep();
@@ -34,4 +37,6 @@ private:
 	ESStandby st_standby_;
 	ESFighting st_fighting_;
 	bool isHitPlayer_;
+
+	float amountOfBackStep_;
 };

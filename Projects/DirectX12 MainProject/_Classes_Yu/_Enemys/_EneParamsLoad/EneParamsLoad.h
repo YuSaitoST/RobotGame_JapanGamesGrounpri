@@ -9,7 +9,9 @@ public:
 	struct Number {
 		float DISTANCE_APPROACHING_PLAYER;
 		float SHORTEST_DISTANCE;
-		float SPEED;
+		float MOVE_SPEED;
+		float BACKSTEP_SPEED;
+		float BACKSTEP_DISTANCE;
 	};
 
 	static EneParamsLoad& GetInstance() {

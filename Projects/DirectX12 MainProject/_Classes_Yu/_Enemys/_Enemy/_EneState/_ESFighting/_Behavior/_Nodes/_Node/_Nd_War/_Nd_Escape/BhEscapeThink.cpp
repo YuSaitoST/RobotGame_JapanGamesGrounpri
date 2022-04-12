@@ -28,9 +28,12 @@ Action BhEscapeThink::Behavior(const int myID) {
 		return lastAction_;
 	}
 
-	lastActionState_ = PlayerInfo::NowAttackState();
+	lastActionState_ = PlayerInfo.NowAttackState();
+
+	//auto dis = PlayerInfo::GetDistance(EnemyManager::Sertch(myID)->myPosition());
 
 	if (lastActionState_ == AttackState::Adjacent)
+	//if(ENParams.SHORTEST_DISTANCE<dis&&dis<ENParams.DISTANCE_APPROACHING_PLAYER)
 		lastAction_ = nd_vsAdj_->Behavior(myID);
 	else if (lastActionState_ == AttackState::Shooting)
 		lastAction_ = nd_vsShoot_->Behavior(myID);

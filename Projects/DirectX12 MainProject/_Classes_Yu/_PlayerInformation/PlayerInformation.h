@@ -4,20 +4,30 @@
 #include "Base/dxtk.h"
 #include "_Classes_Ao/PlayerManager/PlayerBase/PlayerBase.h"
 
-#define PlayerInfo PlayerInformation
+#define PlayerInfo PlayerInformation::GetInctance()
 
 using namespace DirectX::SimpleMath;
 
 class PlayerInformation {
 public:
+	static PlayerInformation& GetInctance() {
+		static PlayerInformation inctance;
+		return inctance;
+	}
+
+	void SetMenber(Vector3* pos) { position_ = pos; }
+	Vector3* GetPositionPointer() const { return position_; }
+
+	AttackState NowAttackState() { return AttackState::None_Attack; }
+	Vector3 GetDirection(Vector3 myPos) { return VectorNomalized(GetPosition() - myPos); }
+	float GetDistance(Vector3 myPos) { return std::fabsf((GetPosition() - myPos).Length()); }
+
+private:
 	PlayerInformation() {}
 	virtual ~PlayerInformation() {}
 
-	static AttackState NowAttackState() { return AttackState::None_Attack; }
-	static Vector3 GetDirection(Vector3 myPos) { return VectorNomalized(GetPosition() - myPos); }
-	static float GetDistance(Vector3 myPos) { return std::fabsf((GetPosition() - myPos).Length()); }
+	Vector3 GetPosition() { return Vector3::Zero; }
+	Vector3 VectorNomalized(Vector3 vec) { vec.Normalize(); return vec; }
 
-private:
-	static Vector3 GetPosition() { return Vector3::Zero; }
-	static Vector3 VectorNomalized(Vector3 vec) { vec.Normalize(); return vec; }
+	Vector3* position_;
 };
