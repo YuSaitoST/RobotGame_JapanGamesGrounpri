@@ -71,11 +71,6 @@ void PlayerBase::Setting() {
 	player_pos = player_model->GetPosition();
 
 	auto pos = player_model->GetPosition();
-	pos = SimpleMath::Vector3(
-		std::clamp(pos.x, -10.0f, 10.0f),
-		std::clamp(pos.y,   0.0f, 10.0f),
-		std::clamp(pos.z, -10.0f, 10.0f)
-	);
 }
 
 void PlayerBase::Move_Front(const float deltaTime) {
