@@ -5,11 +5,15 @@
 #include "Base/pch.h"
 #include "Base/dxtk.h"
 #include "SceneFactory.h"
+#include "_Classes_Yu/_Enemys/_EneParamsLoad/EneParamsLoad.h"
 
 // Initialize member variables.
 MainScene::MainScene()
 {
+	EneParamsLoad::GetInstance().LoadParams();
+
 	m_object_ = new ObjectManager();
+	field_ = new Fields();
 }
 
 // Initialize a variable and audio resources.
@@ -56,6 +60,7 @@ void MainScene::LoadAssets()
 
 	m_object_->LoadAssets();
 	player_.LoadModel();
+	field_->LoadAssets();
 }
 
 // Releasing resources required for termination.
@@ -66,6 +71,7 @@ void MainScene::Terminate()
 
 	// TODO: Add your Termination logic here.
 
+	delete field_;
 	delete m_object_;
 }
 
@@ -105,6 +111,7 @@ void MainScene::Render()
 	m_object_->RenderModels();
 	
 	player_.Render();
+	field_->Render();
 
 
 	DX9::SpriteBatch->Begin();  // スプライトの描画を開始

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "_Classes_Yu/_CellList/CellList.h"
+#include "_Classes_Yu/_Enemys/EnemyManager.h"
 
 extern CellList cellList;
 
@@ -15,6 +16,8 @@ public:
 	void RenderModels();
 	void RenderSprites();
 
-private:
+	static Enemy* GetEnemy(const int index) { return m_enemy_->Sertch(index); }
 
+private:
+	static EnemyManager* m_enemy_;
 };
