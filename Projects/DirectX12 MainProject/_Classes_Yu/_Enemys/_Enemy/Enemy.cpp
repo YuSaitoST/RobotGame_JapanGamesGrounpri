@@ -14,9 +14,13 @@ Enemy::Enemy(Vector3 pos, float r) {
 
 	SwitchState(SPONE);
 
+	forward_ = Vector3(0.0f, 0.0f, -1.0f);
 	isHitPlayer_ = false;
 
 	amountOfBackStep_ = 0.0f;
+
+	timeDelta_ = 0.0f;
+	jumpTime_ = 0.0f;
 }
 
 Enemy::~Enemy() {
@@ -28,10 +32,13 @@ void Enemy::Initialize(const int id) {
 }
 
 void Enemy::Update(const float deltaTime) {
+	timeDelta_ = deltaTime;
+
 	ObjectBase* hitObj = IsHitObject();
 	isHitPlayer_ = (hitObj != nullptr) ? (hitObj->myObjectType() == OBJ_TYPE::PLAYER) : false;
 
-	state_->Update(id_my_);
+	//state_->Update(id_my_);
+	BackStep();
 }
 
 void Enemy::Render(DX9::SKINNEDMODEL& model) {
@@ -59,15 +66,19 @@ Action Enemy::Thruster() {
 }
 
 Action Enemy::BackStep() {
-	const Vector3 oldPos = pos_;
+	const Vector2 oldPosXZ(pos_.x, pos_.z);
+	jumpTime_ += timeDelta_;
 
 	// ˆÚ“®ŒvŽZ
 	pos_ += -forward_ * ENParams.BACKSTEP_SPEED;
+	pos_.y += 3.0f * jumpTime_ - 0.5f * GRAVITY * jumpTime_ * jumpTime_;
 
-	// ˆÚ“®—Ê
-	amountOfBackStep_ += std::fabsf((pos_ - oldPos).Length());
+	// ˆÚ“®—ÊŒvŽZ(x-z‚Í‚¢‚ç‚È‚¢‚ÆŽv‚¤)
+	const Vector2 nowPosXZ(pos_.x, pos_.z);
+	amountOfBackStep_ += std::fabsf((nowPosXZ - oldPosXZ).Length());
+	pos_.y = std::min(std::max(0.0f, pos_.y), 5.0f);
 
-	const bool isFine = (ENParams.BACKSTEP_DISTANCE < amountOfBackStep_);
+	const bool isFine = (pos_.y == 0.0f);
 
 	if (isFine)
 		amountOfBackStep_ = 0.0f;

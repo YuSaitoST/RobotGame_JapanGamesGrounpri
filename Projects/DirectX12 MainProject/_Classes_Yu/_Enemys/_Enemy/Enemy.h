@@ -6,6 +6,7 @@
 #include "_EneState/_ESSpone/ESSpone.h"
 #include "_EneState/_ESStandby/ESStandby.h"
 #include "_EneState/_ESFighting/ESFighting.h"
+#include "_Classes_Yu/_DeltaTime/DeltaTime.h"
 
 enum Action;
 class Enemy final : public ObjectBase {
@@ -38,5 +39,9 @@ private:
 	ESFighting st_fighting_;
 	bool isHitPlayer_;
 
+	float timeDelta_;
 	float amountOfBackStep_;
+	float jumpTime_;
+
+	const float GRAVITY = 9.80665f;
 };

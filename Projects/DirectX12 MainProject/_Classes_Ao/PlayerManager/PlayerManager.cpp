@@ -1,4 +1,5 @@
 #include "PlayerManager.h"
+#include "_Classes_Yu/_PlayerInformation/PlayerInformation.h"
 
 void PlayerManager::Initialize() {
 	camera->SetView(SimpleMath::Vector3(0, 0, 0), SimpleMath::Vector3(0, 0, 0));
@@ -6,6 +7,8 @@ void PlayerManager::Initialize() {
 	DXTK->Direct3D9->SetCamera(camera);
 
 	p_base_.Initialize();
+	// プレイヤーのposのポインタ
+	PlayerInfo.SetMenber(p_base_.GetPlayer_Pos());
 	
 }
 
@@ -15,11 +18,11 @@ void PlayerManager::LoadModel() {
 
 void PlayerManager::Update(const float deltaTime) {
 	camera->SetPosition(
-		p_base_.GetModel()->GetPosition().x + 2.5f,
-		p_base_.GetModel()->GetPosition().y + 5.0f,
-		p_base_.GetModel()->GetPosition().z - 10.0f
+		p_base_.GetModel()->GetPosition().x + 2.0f,
+		p_base_.GetModel()->GetPosition().y + 5.5f,
+		p_base_.GetModel()->GetPosition().z - 6.0f
 	);
-	camera->SetRotation(XMConvertToRadians(10.0f), 0.0f, 0.0f);
+	camera->SetRotation(XMConvertToRadians(20.0f), 0.0f, 0.0f);
 
 	p_base_.Setting();
 
@@ -48,10 +51,13 @@ void PlayerManager::Update(const float deltaTime) {
 	if (Press.DushStateKey()) {
 		p_base_.Dush(deltaTime);
 	}
+	
 	//攻撃(近接)
+
 	
 	//攻撃(射撃)
 	
+
 	//ジャンプ
 	if (!p_base_.GetJump()) {
 		if (Press.JumpEventKey()) {

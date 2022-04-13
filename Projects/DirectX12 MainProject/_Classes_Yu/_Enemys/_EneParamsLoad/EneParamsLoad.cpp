@@ -22,7 +22,5 @@ void EneParamsLoad::LoadParams() {
 		&number_.BACKSTEP_DISTANCE
 	);
 
-	number_.MOVE_SPEED = 0.01f;
-
 	fclose(_file);
 }
