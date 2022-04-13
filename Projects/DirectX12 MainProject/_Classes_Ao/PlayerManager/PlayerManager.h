@@ -28,5 +28,17 @@ private:
 
 	DX9::CAMERA camera;
 
+	//ジャンプ 関数
+	bool jump_flag;
+	float jump_time;
+	float jump_start_v_;
+	//1/2
+	const float half = 0.5f;
+	//重力加速度
+	const float gravity_ = 170.0f;
+	//初速
+	const float V0 = 30.5f;
+
+
 
 };

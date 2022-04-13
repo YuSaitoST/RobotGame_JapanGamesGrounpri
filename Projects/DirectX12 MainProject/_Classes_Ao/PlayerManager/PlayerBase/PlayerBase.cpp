@@ -70,7 +70,7 @@ void PlayerBase::Setting() {
 	player_model->SetRotation(0.0f, XMConvertToRadians(180.0f), 0.0f);
 	player_pos = player_model->GetPosition();
 
-	auto pos = player_model->GetPosition();
+	std::max(std::min(0.0f, player_pos.y), 1000.0f);
 	
 
 }
