@@ -31,7 +31,7 @@ void PlayerBase::Initialize() {
 
 void PlayerBase::LoadModel() {
 	player_model = DX9::SkinnedModel::CreateFromFile(DXTK->Device9, L"Player\\SwordManEX\\armor_red2_0210b.X");
-	player_model->SetScale(0.5f);
+	player_model->SetScale(0.1f);
 	
 	font = DX9::SpriteFont::CreateDefaultFont(DXTK->Device9);
 
@@ -71,11 +71,8 @@ void PlayerBase::Setting() {
 	player_pos = player_model->GetPosition();
 
 	auto pos = player_model->GetPosition();
-	pos = SimpleMath::Vector3(
-		std::clamp(pos.x, -10.0f, 10.0f),
-		std::clamp(pos.y,   0.0f, 10.0f),
-		std::clamp(pos.z, -10.0f, 10.0f)
-	);
+	
+
 }
 
 void PlayerBase::Move_Front(const float deltaTime) {

@@ -7,7 +7,7 @@ void CameraManager::Initialize() {
 }
 
 void CameraManager::Update() {
-	camera->SetPosition(player_.GetPlayer_Pos());
+	//camera->SetPosition(player_.GetPlayer_Pos());
 }
 
 void CameraManager::Render() {
