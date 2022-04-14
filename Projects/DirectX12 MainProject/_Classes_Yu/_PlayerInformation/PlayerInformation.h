@@ -2,7 +2,7 @@
 
 #include "Base/pch.h"
 #include "Base/dxtk.h"
-#include "_Classes_Ao/PlayerManager/PlayerBase/PlayerBase.h"
+#include "_Classes_Yu/_CellList/_Object/AttackState.h"
 
 #define PlayerInfo PlayerInformation::GetInctance()
 
@@ -15,19 +15,21 @@ public:
 		return inctance;
 	}
 
+	void SetMenber(Vector3* pos, AttackState* ATstate) { position_ = pos; attackState_ = ATstate; }
 	void SetMenber(Vector3* pos) { position_ = pos; }
 	Vector3* GetPositionPointer() const { return position_; }
 
-	AttackState NowAttackState() { return AttackState::None_Attack; }
-	Vector3 GetDirection(Vector3 myPos) { return VectorNomalized(GetPosition() - myPos); }
-	float GetDistance(Vector3 myPos) { return std::fabsf((GetPosition() - myPos).Length()); }
+	AttackState NowAttackState() { return *attackState_; }
+	Vector3 GetDirection(Vector3 myPos) { return VectorNomalized(*GetPosition() - myPos); }
+	float GetDistance(Vector3 myPos) { return std::fabsf((*GetPosition() - myPos).Length()); }
 
 private:
 	PlayerInformation() {}
 	virtual ~PlayerInformation() {}
 
-	Vector3 GetPosition() { return Vector3::Zero; }
+	Vector3* GetPosition() { return position_; }
 	Vector3 VectorNomalized(Vector3 vec) { vec.Normalize(); return vec; }
 
-	Vector3* position_;
+	Vector3*		position_;
+	AttackState*	attackState_;
 };

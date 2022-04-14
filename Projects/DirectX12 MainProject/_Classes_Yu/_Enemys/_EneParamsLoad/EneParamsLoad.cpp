@@ -14,15 +14,21 @@ void EneParamsLoad::LoadParams() {
 	char _dummyLine[256];
 	fgets(_dummyLine, 255, _file);
 
-	fscanf_s(_file, "%f,%f,%f,%f,%f", 
+	fscanf_s(_file, "%f,%f,%f,%f,%f,%f", 
 		&number_.DISTANCE_APPROACHING_PLAYER, 
 		&number_.SHORTEST_DISTANCE, 
 		&number_.MOVE_SPEED,
 		&number_.BACKSTEP_SPEED,
+		&number_.BACKSTEP_INITIALVELOCITY,
 		&number_.BACKSTEP_DISTANCE
 	);
 
-	number_.MOVE_SPEED = 0.01f;
+	const float* ma = &number_.DISTANCE_APPROACHING_PLAYER;
+	const float* mb = &number_.SHORTEST_DISTANCE;
+	const float* mc = &number_.MOVE_SPEED;
+	const float* md = &number_.BACKSTEP_SPEED;
+	const float* me = &number_.BACKSTEP_INITIALVELOCITY;
+	const float* mf = &number_.BACKSTEP_DISTANCE;
 
 	fclose(_file);
 }

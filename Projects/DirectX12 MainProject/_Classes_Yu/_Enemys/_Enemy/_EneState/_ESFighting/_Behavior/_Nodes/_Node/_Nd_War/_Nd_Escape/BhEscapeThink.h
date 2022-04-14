@@ -17,5 +17,5 @@ private:
 	BhBackStep* nd_vsShoot_;
 
 	Action lastAction_;
-	AttackState lastActionState_;
+	AttackState playerAttackState_;
 };

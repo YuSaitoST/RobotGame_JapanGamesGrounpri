@@ -6,6 +6,7 @@
 #include "_EneState/_ESSpone/ESSpone.h"
 #include "_EneState/_ESStandby/ESStandby.h"
 #include "_EneState/_ESFighting/ESFighting.h"
+#include "_Classes_Yu/_DeltaTime/DeltaTime.h"
 
 enum Action;
 class Enemy final : public ObjectBase {
@@ -25,6 +26,7 @@ public:
 
 	Vector3* GetPosP() { return &pos_; }
 
+	void Rotate(const float radian);
 	Action Move(Vector3 forward);
 	Action Thruster();
 	Action BackStep();
@@ -38,5 +40,8 @@ private:
 	ESFighting st_fighting_;
 	bool isHitPlayer_;
 
-	float amountOfBackStep_;
+	float timeDelta_;
+	float jumpTime_;
+
+	const float GRAVITY = 9.80665f;
 };
