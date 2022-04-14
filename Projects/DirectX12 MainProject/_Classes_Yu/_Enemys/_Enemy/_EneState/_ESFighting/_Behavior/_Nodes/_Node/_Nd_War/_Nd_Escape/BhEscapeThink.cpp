@@ -7,7 +7,7 @@ BhEscapeThink::BhEscapeThink() {
 	nd_vsShoot_ = new BhBackStep();
 
 	lastAction_ = FAILIRE;
-	lastActionState_ = AttackState::None_Attack;
+	playerAttackState_ = AttackState::None_Attack;
 }
 
 BhEscapeThink::~BhEscapeThink() {
@@ -20,22 +20,19 @@ Action BhEscapeThink::Behavior(const int myID) {
 	// ‹ßÚUŒ‚‚©ŽËŒ‚UŒ‚‚©‚Å•ªŠò‚·‚é
 
 	if (lastAction_ == REPEAT) {
-		if (lastActionState_ == AttackState::Adjacent)
+		if (playerAttackState_ == AttackState::Adjacent)
 			lastAction_ = nd_vsAdj_->Behavior(myID);
-		else if (lastActionState_ == AttackState::Shooting)
+		else if (playerAttackState_ == AttackState::Shooting)
 			lastAction_ = nd_vsShoot_->Behavior(myID);
 
 		return lastAction_;
 	}
 
-	lastActionState_ = PlayerInfo.NowAttackState();
+	playerAttackState_ = PlayerInfo.NowAttackState();
 
-	//auto dis = PlayerInfo::GetDistance(EnemyManager::Sertch(myID)->myPosition());
-
-	if (lastActionState_ == AttackState::Adjacent)
-	//if(ENParams.SHORTEST_DISTANCE<dis&&dis<ENParams.DISTANCE_APPROACHING_PLAYER)
+	if (playerAttackState_ == AttackState::Adjacent)
 		lastAction_ = nd_vsAdj_->Behavior(myID);
-	else if (lastActionState_ == AttackState::Shooting)
+	else if (playerAttackState_ == AttackState::Shooting)
 		lastAction_ = nd_vsShoot_->Behavior(myID);
 	else
 		lastAction_ = FAILIRE;

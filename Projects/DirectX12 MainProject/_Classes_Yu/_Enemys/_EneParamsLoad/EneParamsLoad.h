@@ -11,6 +11,7 @@ public:
 		float SHORTEST_DISTANCE;
 		float MOVE_SPEED;
 		float BACKSTEP_SPEED;
+		float BACKSTEP_INITIALVELOCITY;
 		float BACKSTEP_DISTANCE;
 	};
 

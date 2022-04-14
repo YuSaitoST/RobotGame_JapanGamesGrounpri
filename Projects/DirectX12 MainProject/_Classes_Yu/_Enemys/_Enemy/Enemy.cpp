@@ -17,8 +17,6 @@ Enemy::Enemy(Vector3 pos, float r) {
 	forward_ = Vector3(0.0f, 0.0f, -1.0f);
 	isHitPlayer_ = false;
 
-	amountOfBackStep_ = 0.0f;
-
 	timeDelta_ = 0.0f;
 	jumpTime_ = 0.0f;
 }
@@ -37,12 +35,12 @@ void Enemy::Update(const float deltaTime) {
 	ObjectBase* hitObj = IsHitObject();
 	isHitPlayer_ = (hitObj != nullptr) ? (hitObj->myObjectType() == OBJ_TYPE::PLAYER) : false;
 
-	//state_->Update(id_my_);
-	BackStep();
+	state_->Update(id_my_);
 }
 
 void Enemy::Render(DX9::SKINNEDMODEL& model) {
 	model->SetPosition(pos_);
+	model->SetRotation(rotate_);
 	model->Draw();
 }
 
@@ -56,8 +54,26 @@ void Enemy::SwitchState(ENE_STATE state) {
 	}
 }
 
+void Enemy::Rotate(const float radian) {
+	//const SimpleMath::Vector2 _pad = Press.MoveDirection(index);
+
+	//direction_.x = _pad.x * std::sqrtf(1.0f - 0.5f * _pad.x * _pad.y);
+	//direction_.y = _pad.y * std::sqrtf(1.0f - 0.5f * _pad.x * _pad.y);
+	//direction_.z = 0;
+
+	//prevForward_ = Vector3::Lerp(prevForward_, direction_, deltaTime * 1.0f);
+	//rotate_x_ = atan2f(prevForward_.y, prevForward_.x);
+
+	//forward_ = 
+	//	(prevForward_ != SimpleMath::Vector3::Zero) ? 
+	//	SimpleMath::Vector2(prevForward_.x, prevForward_.y) : 
+	//	forward_;
+}
+
 Action Enemy::Move(Vector3 forward) {
-	pos_ += forward * ENParams.MOVE_SPEED;
+	forward_ = forward;
+	pos_ += forward_ * ENParams.MOVE_SPEED;
+	Rotate(0.0f);
 	return SUCSESS;
 }
 
@@ -71,17 +87,16 @@ Action Enemy::BackStep() {
 
 	// ˆÚ“®ŒvŽZ
 	pos_ += -forward_ * ENParams.BACKSTEP_SPEED;
-	pos_.y += 3.0f * jumpTime_ - 0.5f * GRAVITY * jumpTime_ * jumpTime_;
+	pos_.y = ENParams.BACKSTEP_INITIALVELOCITY * jumpTime_ - 0.5f * GRAVITY * jumpTime_ * jumpTime_;
 
-	// ˆÚ“®—ÊŒvŽZ(x-z‚Í‚¢‚ç‚È‚¢‚ÆŽv‚¤)
+	// ˆÚ“®—ÊŒvŽZ
 	const Vector2 nowPosXZ(pos_.x, pos_.z);
-	amountOfBackStep_ += std::fabsf((nowPosXZ - oldPosXZ).Length());
 	pos_.y = std::min(std::max(0.0f, pos_.y), 5.0f);
 
 	const bool isFine = (pos_.y == 0.0f);
 
 	if (isFine)
-		amountOfBackStep_ = 0.0f;
+		jumpTime_ = 0.0f;
 
 	return isFine ? SUCSESS : REPEAT;
 }

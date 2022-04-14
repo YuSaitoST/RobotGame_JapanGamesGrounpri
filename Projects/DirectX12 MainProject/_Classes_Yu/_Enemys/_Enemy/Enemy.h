@@ -26,6 +26,7 @@ public:
 
 	Vector3* GetPosP() { return &pos_; }
 
+	void Rotate(const float radian);
 	Action Move(Vector3 forward);
 	Action Thruster();
 	Action BackStep();
@@ -40,7 +41,6 @@ private:
 	bool isHitPlayer_;
 
 	float timeDelta_;
-	float amountOfBackStep_;
 	float jumpTime_;
 
 	const float GRAVITY = 9.80665f;
