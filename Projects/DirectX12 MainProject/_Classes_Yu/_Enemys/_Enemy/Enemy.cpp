@@ -19,6 +19,8 @@ Enemy::Enemy(Vector3 pos, float r) {
 
 	timeDelta_ = 0.0f;
 	jumpTime_ = 0.0f;
+
+	moveDirection_ = Vector3::Zero;
 }
 
 Enemy::~Enemy() {
@@ -40,7 +42,7 @@ void Enemy::Update(const float deltaTime) {
 
 void Enemy::Render(DX9::SKINNEDMODEL& model) {
 	model->SetPosition(pos_);
-	model->SetRotation(rotate_);
+	model->SetRotation(0.0f, rotateY_, 0.0f);
 	model->Draw();
 }
 
@@ -54,26 +56,15 @@ void Enemy::SwitchState(ENE_STATE state) {
 	}
 }
 
-void Enemy::Rotate(const float radian) {
-	//const SimpleMath::Vector2 _pad = Press.MoveDirection(index);
-
-	//direction_.x = _pad.x * std::sqrtf(1.0f - 0.5f * _pad.x * _pad.y);
-	//direction_.y = _pad.y * std::sqrtf(1.0f - 0.5f * _pad.x * _pad.y);
-	//direction_.z = 0;
-
-	//prevForward_ = Vector3::Lerp(prevForward_, direction_, deltaTime * 1.0f);
-	//rotate_x_ = atan2f(prevForward_.y, prevForward_.x);
-
-	//forward_ = 
-	//	(prevForward_ != SimpleMath::Vector3::Zero) ? 
-	//	SimpleMath::Vector2(prevForward_.x, prevForward_.y) : 
-	//	forward_;
+void Enemy::Rotate(const Vector3 targetDirection) {
+	forward_ = Vector3::Lerp(forward_, targetDirection, timeDelta_ * 1.0f);
+	rotateY_ = -atan2f(forward_.z, forward_.x) + 4.5f;
 }
 
-Action Enemy::Move(Vector3 forward) {
-	forward_ = forward;
+Action Enemy::Move(const Vector3 targetDirection) {
+	forward_ = targetDirection;
 	pos_ += forward_ * ENParams.MOVE_SPEED;
-	Rotate(0.0f);
+	Rotate(targetDirection);
 	return SUCSESS;
 }
 
@@ -81,12 +72,13 @@ Action Enemy::Thruster() {
 	return SUCSESS;
 }
 
-Action Enemy::BackStep() {
+Action Enemy::Step(Vector3 moveDirection) {
 	const Vector2 oldPosXZ(pos_.x, pos_.z);
+	moveDirection_ = moveDirection;
 	jumpTime_ += timeDelta_;
 
 	// ˆÚ“®ŒvŽZ
-	pos_ += -forward_ * ENParams.BACKSTEP_SPEED;
+	pos_ += moveDirection_ * ENParams.BACKSTEP_SPEED;
 	pos_.y = ENParams.BACKSTEP_INITIALVELOCITY * jumpTime_ - 0.5f * GRAVITY * jumpTime_ * jumpTime_;
 
 	// ˆÚ“®—ÊŒvŽZ
@@ -99,6 +91,15 @@ Action Enemy::BackStep() {
 		jumpTime_ = 0.0f;
 
 	return isFine ? SUCSESS : REPEAT;
+}
+
+Action Enemy::BackStep() {
+	return Step(-forward_);
+}
+
+Action Enemy::SideStep(const Vector3 targetDirection) {
+	Rotate(targetDirection);
+	return Step(Vector3(forward_.z, 0.0f, forward_.x));
 }
 
 Action Enemy::Adjacent() {

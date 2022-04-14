@@ -1,2 +1,2 @@
 ﻿Playerに気付く距離,Playerとの最短距離,移動速度,BackStep_xz軸速度,BackStep_y軸初速度,BackStep_移動距離
-100,10,7,0.3,4.5,5
+300,10,0.5,0.3,4.5,5

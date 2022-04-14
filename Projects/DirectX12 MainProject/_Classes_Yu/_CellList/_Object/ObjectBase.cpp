@@ -18,16 +18,15 @@ ObjectBase::~ObjectBase() {
 
 void ObjectBase::SetMember(OBJ_TYPE kind, Vector3 pos, float r) {
 	this->obj_type_		= kind;
-	this->pos_.x		= pos.x;
-	this->pos_.y		= pos.y;
+	this->pos_			= pos;
 	this->r_			= r;
 
 	if (this->cp_ == nullptr)
 		this->cp_		= new Cell(this);  // Š‘®‚·‚é‹óŠÔ‚ğŠ„‚è“–‚Ä‚é‚½‚ß
 
 	this->attackState_	= AttackState::None_Attack;
-	this->rotate_		= Vector3::Zero;
 	this->forward_		= Vector3::Zero;
+	this->rotateY_		= 0.0f;
 	this->collision_	= new bsCollBox();
 	this->id_my_		= -1;
 }
