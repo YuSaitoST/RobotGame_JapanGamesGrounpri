@@ -42,8 +42,8 @@ protected:
 	Cell*		cp_;			// Š‘®‹óŠÔ
 	bsCollBox*	collision_;		// “–‚½‚è”»’è(sphere)
 	Vector3		pos_;			// À•W
-	Vector3		rotate_;		// ‰ñ“]
 	Vector3		forward_;       // ³–Ê•ûŒü
+	float		rotateY_;		// ‰ñ“]
 	float		r_;             // ”¼Œa
 	int			id_my_;			// ©•ª‚ÌID
 };

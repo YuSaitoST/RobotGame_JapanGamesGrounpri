@@ -26,7 +26,6 @@ void EnemyManager::Initialize() {
 
 void EnemyManager::LoadAssets() {
 	model_ = DX9::SkinnedModel::CreateFromFile(DXTK->Device9, L"Player\\SwordManEX\\armor_red2_0210b.X");
-	model_->SetPosition(Vector3::Zero);
 	model_->SetScale(0.1f);
 }
 

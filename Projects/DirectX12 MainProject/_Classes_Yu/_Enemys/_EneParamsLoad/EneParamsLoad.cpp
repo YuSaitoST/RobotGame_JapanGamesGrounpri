@@ -23,6 +23,7 @@ void EneParamsLoad::LoadParams() {
 		&number_.BACKSTEP_DISTANCE
 	);
 
+	const float FLSIZE = sizeof(float);
 	const float* ma = &number_.DISTANCE_APPROACHING_PLAYER;
 	const float* mb = &number_.SHORTEST_DISTANCE;
 	const float* mc = &number_.MOVE_SPEED;

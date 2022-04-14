@@ -26,14 +26,17 @@ public:
 
 	Vector3* GetPosP() { return &pos_; }
 
-	void Rotate(const float radian);
-	Action Move(Vector3 forward);
+	Action Move(const Vector3 targetDirection);
 	Action Thruster();
 	Action BackStep();
+	Action SideStep(const Vector3 targetDirection);
 	Action Adjacent();
 	Action Shooting();
 
 private:
+	void Rotate(const Vector3 targetDirection);
+	Action Step(Vector3 moveDirection);
+
 	EneState* state_;
 	ESSpone st_spone_;
 	ESStandby st_standby_;
@@ -42,6 +45,8 @@ private:
 
 	float timeDelta_;
 	float jumpTime_;
+
+	Vector3 moveDirection_;
 
 	const float GRAVITY = 9.80665f;
 };

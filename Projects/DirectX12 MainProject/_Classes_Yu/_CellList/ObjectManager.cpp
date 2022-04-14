@@ -6,7 +6,7 @@ EnemyManager* ObjectManager::m_enemy_;
 ObjectManager::ObjectManager() {
 	m_enemy_ = new EnemyManager(1);
 
-	m_enemy_->PushList(Vector3(0.0f, 0.0f, 80.0f), 1.0f);
+	m_enemy_->PushList(Vector3(0.0f, 0.0f, 250.0f), 1.0f);
 }
 
 ObjectManager::~ObjectManager() {
