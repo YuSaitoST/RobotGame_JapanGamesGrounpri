@@ -16,6 +16,7 @@ public:
 	}
 
 	void SetMenber(Vector3* pos, AttackState* ATstate) { position_ = pos; attackState_ = ATstate; }
+	void SetMenber(Vector3* pos) { position_ = pos; }
 	Vector3* GetPositionPointer() const { return position_; }
 
 	AttackState NowAttackState() { return *attackState_; }

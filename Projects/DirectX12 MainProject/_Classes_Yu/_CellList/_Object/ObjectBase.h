@@ -2,7 +2,7 @@
 
 #include "Base/pch.h"
 #include "Base/dxtk.h"
-#include "bsCollSph.h"
+#include "bsCollBox.h"
 #include "AttackState.h"
 
 using namespace DirectX::SimpleMath;
@@ -40,7 +40,7 @@ protected:
 	OBJ_TYPE	obj_type_;		// オブジェクトの種類
 	AttackState attackState_;   // 攻撃状態
 	Cell*		cp_;			// 所属空間
-	bsCollSph*	collision_;		// 当たり判定(sphere)
+	bsCollBox*	collision_;		// 当たり判定(sphere)
 	Vector3		pos_;			// 座標
 	Vector3		rotate_;		// 回転
 	Vector3		forward_;       // 正面方向

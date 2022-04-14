@@ -28,11 +28,15 @@ void ObjectBase::SetMember(OBJ_TYPE kind, Vector3 pos, float r) {
 	this->attackState_	= AttackState::None_Attack;
 	this->rotate_		= Vector3::Zero;
 	this->forward_		= Vector3::Zero;
-	this->collision_	= new bsCollSph();
+	this->collision_	= new bsCollBox();
 	this->id_my_		= -1;
 }
 
 ObjectBase* ObjectBase::IsCollision(ObjectBase* m) {
+	// “¯‚¶í—Ş‚Ì•¨‘Ì“¯mA‚Ü‚½‚Í“¯‚¶ID‚Ì•¨‘Ì“¯m‚Å‚ÍÕ“Ë‚µ‚È‚¢
+	if ((obj_type_ == m->myObjectType()) || (id_my_ == m->myObjectID()))
+		return nullptr;
+
 	if (collision_->GetBounding().Intersects(m->collision_->GetBounding()))
 		return m;
 
