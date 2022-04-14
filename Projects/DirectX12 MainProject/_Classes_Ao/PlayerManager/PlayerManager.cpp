@@ -59,27 +59,27 @@ void PlayerManager::Update(const float deltaTime) {
 	
 
 	//ジャンプ
-	//if (!jump_flag) {
-	//	if (Press.JumpEventKey()) {
-	//		jump_flag = true;
-	//		jump_time = 0.0f;
-	//		jump_start_v_ = p_base_.GetModel()->GetPosition().y;
+	if (!jump_flag) {
+		if (Press.JumpEventKey()) {
+			jump_flag = true;
+			jump_time = 0;
+			jump_start_v_ = p_base_.GetModel()->GetPosition().y;
 
-	//	}
-	//}
+		}
+	}
 
-	//if (jump_flag) {
-	//	jump_time += deltaTime;
-	//	auto pos = p_base_.GetModel()->GetPosition();
-	//	pos.y = jump_start_v_ + V0 * jump_time - half * gravity_ * jump_time * jump_time;
-	//	p_base_.GetModel()->SetPosition(pos);
 
-	//	//ジャンプの終了判定
-	//	if (V0 * jump_time < gravity_ * jump_time * jump_time) {
-	//		jump_flag = false;
-	//		auto pl = 0;
-	//	}
-	//}
+	if (jump_flag) {
+
+		jump_time += deltaTime;
+		auto pos = p_base_.GetModel()->GetPosition();
+		pos.y = jump_start_v_ + V0 * jump_time - 0.5f * gravity_ * jump_time * jump_time;
+		p_base_.GetModel()->SetPosition(pos);
+
+		if (p_base_.GetModel()->GetPosition().y <= 0.01f) {
+			jump_flag = false;
+			}
+	}
 
 	
 }
