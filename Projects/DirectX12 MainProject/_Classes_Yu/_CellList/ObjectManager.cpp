@@ -1,11 +1,13 @@
 #include "ObjectManager.h"
+#include "_Classes_Yu/_Enemys/_EneParamsLoad/EneParamsLoad.h"
 
 CellList cellList = CellList{};
 EnemyManager* ObjectManager::m_enemy_;
 
 ObjectManager::ObjectManager() {
-	m_enemy_ = new EnemyManager(1);
+	EneParamsLoad::GetInstance().LoadParams();
 
+	m_enemy_ = new EnemyManager(1);
 	m_enemy_->PushList(Vector3(0.0f, 0.0f, 250.0f), 1.0f);
 }
 

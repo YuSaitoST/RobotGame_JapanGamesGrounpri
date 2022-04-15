@@ -5,13 +5,10 @@
 #include "Base/pch.h"
 #include "Base/dxtk.h"
 #include "SceneFactory.h"
-#include "_Classes_Yu/_Enemys/_EneParamsLoad/EneParamsLoad.h"
 
 // Initialize member variables.
 MainScene::MainScene()
 {
-	EneParamsLoad::GetInstance().LoadParams();
-
 	m_object_ = new ObjectManager();
 	field_ = new Fields();
 }
@@ -19,9 +16,6 @@ MainScene::MainScene()
 // Initialize a variable and audio resources.
 void MainScene::Initialize()
 {
-	//Camera.Initialize();
-
-
 	D3DLIGHT9 light_test_;
 	light_test_.Type = D3DLIGHT_DIRECTIONAL;
 	light_test_.Diffuse = DX9::Colors::Value(1.0f, 1.0f, 1.0f, 1.0f);

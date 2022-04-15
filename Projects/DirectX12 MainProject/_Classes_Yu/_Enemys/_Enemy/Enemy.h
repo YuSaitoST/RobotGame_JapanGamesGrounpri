@@ -1,12 +1,12 @@
 #pragma once
 
 #include "_Classes_Yu/_CellList/_Object/ObjectBase.h"
+#include "_Classes_Yu/_SoundPlayer/SoundPlayer.h"
 #include "_EneState/EneState.h"
 
 #include "_EneState/_ESSpone/ESSpone.h"
 #include "_EneState/_ESStandby/ESStandby.h"
 #include "_EneState/_ESFighting/ESFighting.h"
-#include "_Classes_Yu/_DeltaTime/DeltaTime.h"
 
 enum Action;
 class Enemy final : public ObjectBase {
@@ -35,7 +35,10 @@ public:
 
 private:
 	void Rotate(const Vector3 targetDirection);
-	Action Step(Vector3 moveDirection);
+	Action Step(const Vector3 moveDirection);
+
+	SoundPlayer* se_adjacent_;
+	SoundPlayer* se_shooting_;
 
 	EneState* state_;
 	ESSpone st_spone_;
@@ -49,4 +52,6 @@ private:
 	Vector3 moveDirection_;
 
 	const float GRAVITY = 9.80665f;
+	const std::wstring seNameAtk = L"_Sounds\\_SE\\_Attack\\SELab_useOnesSword1.wav";
+	const std::wstring seNameBem = L"_Sounds\\_SE\\_Attack\\SELab_beamCannon1.wav";
 };

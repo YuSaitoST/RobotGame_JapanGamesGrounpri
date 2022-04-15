@@ -2,7 +2,10 @@
 
 Enemy::Enemy() {
 	cp_ = nullptr;
-	SetMember(OBJ_TYPE::NONE_OBJ_ID, Vector3::Zero, 1.0f);
+	SetBaseMember(OBJ_TYPE::NONE_OBJ_ID, Vector3::Zero, 1.0f);
+
+	se_adjacent_ = new SoundPlayer();
+	se_shooting_ = new SoundPlayer();
 
 	state_ = nullptr;
 	isHitPlayer_ = false;
@@ -10,7 +13,10 @@ Enemy::Enemy() {
 
 Enemy::Enemy(Vector3 pos, float r) {
 	cp_ = nullptr;
-	SetMember(OBJ_TYPE::ENEMY, pos, r);
+	SetBaseMember(OBJ_TYPE::ENEMY, pos, r);
+
+	se_adjacent_ = new SoundPlayer();
+	se_shooting_ = new SoundPlayer();
 
 	SwitchState(SPONE);
 
@@ -24,11 +30,14 @@ Enemy::Enemy(Vector3 pos, float r) {
 }
 
 Enemy::~Enemy() {
-
+	delete se_shooting_;
+	delete se_adjacent_;
 }
 
 void Enemy::Initialize(const int id) {
 	id_my_ = id;
+	se_adjacent_->Initialize(seNameAtk.c_str(), SOUND_TYPE::SE);
+	se_shooting_->Initialize(seNameBem.c_str(), SOUND_TYPE::SE, ENParams.FREQUENCY_OF_SHOOTING);  // ‚±‚±‚ÌŠÔŠu‚ÍŽËŒ‚‚Ì•p“x‚É‡‚í‚¹‚Ä
 }
 
 void Enemy::Update(const float deltaTime) {
@@ -72,7 +81,7 @@ Action Enemy::Thruster() {
 	return SUCSESS;
 }
 
-Action Enemy::Step(Vector3 moveDirection) {
+Action Enemy::Step(const Vector3 moveDirection) {
 	const Vector2 oldPosXZ(pos_.x, pos_.z);
 	moveDirection_ = moveDirection;
 	jumpTime_ += timeDelta_;
@@ -103,9 +112,13 @@ Action Enemy::SideStep(const Vector3 targetDirection) {
 }
 
 Action Enemy::Adjacent() {
+	attackState_ = AttackState::Adjacent;
+	se_adjacent_->PlayOneShot();
 	return SUCSESS;
 }
 
 Action Enemy::Shooting() {
+	attackState_ = AttackState::Shooting;
+	se_shooting_->PlayRoopSE(timeDelta_);
 	return SUCSESS;
 }
