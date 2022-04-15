@@ -8,7 +8,7 @@
 
 using namespace DirectX;
 
-class PlayerBase //:public ObjectBase
+class PlayerBase :public ObjectBase
 {
 public:
 	PlayerBase();
@@ -58,6 +58,8 @@ private:
 	bool dush_flag;
 	float dush_start;
 	float dush_end;
+
+	bool overheart_flag;
 
 	//ƒWƒƒƒ“ƒv ŠÖ”
 	bool jump_flag;

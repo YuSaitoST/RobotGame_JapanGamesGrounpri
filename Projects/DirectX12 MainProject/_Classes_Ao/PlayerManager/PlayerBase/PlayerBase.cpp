@@ -70,7 +70,7 @@ void PlayerBase::Setting() {
 	player_model->SetRotation(0.0f, XMConvertToRadians(180.0f), 0.0f);
 	player_pos = player_model->GetPosition();
 
-	std::min(std::max(0.0f, player_pos.y), 0.0f);
+	
 	
 
 }
@@ -93,7 +93,7 @@ void PlayerBase::Move_Left(const float deltaTime) {
 
 void PlayerBase::Dush(const float deltaTime) {
 	if (dush_flag) {
-		dush_->Update(deltaTime);
+		
 	}
 }
 
