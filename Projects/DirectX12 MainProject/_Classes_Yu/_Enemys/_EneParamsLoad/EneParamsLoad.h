@@ -13,6 +13,8 @@ public:
 		float BACKSTEP_SPEED;
 		float BACKSTEP_INITIALVELOCITY;
 		float BACKSTEP_DISTANCE;
+		float RANGE_OF_SHOT;
+		float FREQUENCY_OF_SHOOTING;
 	};
 
 	static EneParamsLoad& GetInstance() {

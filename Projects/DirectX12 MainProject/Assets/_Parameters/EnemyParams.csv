@@ -1,2 +1,2 @@
-﻿Playerに気付く距離,Playerとの最短距離,移動速度,BackStep_xz軸速度,BackStep_y軸初速度,BackStep_移動距離
-300,10,0.5,0.3,4.5,5
+﻿Playerに気付く距離,Playerとの最短距離,移動速度,BackStep_xz軸速度,BackStep_y軸初速度,BackStep_移動距離,射撃_射程距離,射撃_攻撃頻度(秒間隔)
+300,10,0.5,0.3,4.5,5,200,0.65

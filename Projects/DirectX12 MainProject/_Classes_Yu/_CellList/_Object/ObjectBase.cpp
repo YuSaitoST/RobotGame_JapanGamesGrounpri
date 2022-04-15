@@ -2,11 +2,11 @@
 #include "_Classes_Yu/_CellList/_Cell/Cell.h"
 
 ObjectBase::ObjectBase() {
-	SetMember(NONE_OBJ_ID, Vector3::Zero, 0.0f);
+	SetBaseMember(NONE_OBJ_ID, Vector3::Zero, 0.0f);
 }
 
 ObjectBase::ObjectBase(OBJ_TYPE kind, Vector3 pos, float r) {
-	SetMember(kind, pos, r);
+	SetBaseMember(kind, pos, r);
 }
 
 ObjectBase::~ObjectBase() {
@@ -16,7 +16,7 @@ ObjectBase::~ObjectBase() {
 	}
 }
 
-void ObjectBase::SetMember(OBJ_TYPE kind, Vector3 pos, float r) {
+void ObjectBase::SetBaseMember(OBJ_TYPE kind, Vector3 pos, float r) {
 	this->obj_type_		= kind;
 	this->pos_			= pos;
 	this->r_			= r;

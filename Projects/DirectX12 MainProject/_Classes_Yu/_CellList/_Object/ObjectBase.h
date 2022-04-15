@@ -32,7 +32,7 @@ public:
 	int		 myObjectID() { return id_my_; };
 
 protected:
-	virtual void SetMember(OBJ_TYPE kind, Vector3 pos, float r);  // ƒƒ“ƒo•Ï”İ’è
+	virtual void SetBaseMember(OBJ_TYPE kind, Vector3 pos, float r);  // ƒƒ“ƒo•Ï”İ’è
 	
 	void UpdateToMorton();
 	ObjectBase* IsHitObject();

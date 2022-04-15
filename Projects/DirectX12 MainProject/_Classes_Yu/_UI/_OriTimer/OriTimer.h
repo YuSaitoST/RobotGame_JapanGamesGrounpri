@@ -5,13 +5,14 @@
 class OriTimer {
 public:
 	OriTimer(float countTime);
+	OriTimer(float countTime, float startTime);
 	virtual ~OriTimer() = default;
 
 	void Update(const float deltaTime);
 	void ResetCountTime() { time_ = max_; };
 
-	float NowTime() const { return time_; };
-	bool TimeOut() const { return (time_ <= 0.0f); };
+	inline float NowTime() const { return time_; };
+	inline bool TimeOut() const { return (time_ <= 0.0f); };
 
 private:
 	float				max_;

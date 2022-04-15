@@ -14,6 +14,7 @@ Root::~Root() {
 
 void Root::Update(const int myID) {
 	for (Node* node : nodeList_)
-		if (node->Behavior(myID) == Action::FAILIRE)
-			break;
+		node->Behavior(myID);
+		//if (node->Behavior(myID) == Action::FAILIRE)
+		//	break;
 }
