@@ -15,7 +15,7 @@ void EnemyManager::PushList(Vector3 position, float r) {
 	enemyList_.push_back(new Enemy(position, r));
 }
 
-Enemy* EnemyManager::Sertch(const int index) {
+Enemy* EnemyManager::Access(const int index) {
 	return enemyList_[index];
 }
 

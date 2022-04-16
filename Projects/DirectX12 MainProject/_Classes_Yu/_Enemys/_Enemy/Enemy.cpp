@@ -4,8 +4,10 @@ Enemy::Enemy() {
 	cp_ = nullptr;
 	SetBaseMember(OBJ_TYPE::NONE_OBJ_ID, Vector3::Zero, 1.0f);
 
+	se_running_	= new SoundPlayer();
 	se_adjacent_ = new SoundPlayer();
 	se_shooting_ = new SoundPlayer();
+	attackState_ = AttackState::None_Attack;
 
 	state_ = nullptr;
 	isHitPlayer_ = false;
@@ -15,8 +17,10 @@ Enemy::Enemy(Vector3 pos, float r) {
 	cp_ = nullptr;
 	SetBaseMember(OBJ_TYPE::ENEMY, pos, r);
 
+	se_running_ = new SoundPlayer();
 	se_adjacent_ = new SoundPlayer();
 	se_shooting_ = new SoundPlayer();
+	attackState_ = AttackState::None_Attack;
 
 	SwitchState(SPONE);
 
@@ -36,8 +40,9 @@ Enemy::~Enemy() {
 
 void Enemy::Initialize(const int id) {
 	id_my_ = id;
-	se_adjacent_->Initialize(seNameAtk.c_str(), SOUND_TYPE::SE);
-	se_shooting_->Initialize(seNameBem.c_str(), SOUND_TYPE::SE, ENParams.FREQUENCY_OF_SHOOTING);  // ‚±‚±‚ÌŠÔŠu‚ÍŽËŒ‚‚Ì•p“x‚É‡‚í‚¹‚Ä
+	se_running_->Initialize(seNameRun, SOUND_TYPE::SE, 10.0f);
+	se_adjacent_->Initialize(seNameAtk, SOUND_TYPE::SE, 0.5f);  // ‰¼‚Ì’lA˜A‘±UŒ‚‚È‚ç‰¹•Ï‚í‚é‚©‚à‚¾‚©‚ç‚±‚±‚ÌŽd—l‚ª•Ï‚í‚è‚»‚¤
+	se_shooting_->Initialize(seNameBem, SOUND_TYPE::SE, ENParams.FREQUENCY_OF_SHOOTING);  // ‚±‚±‚ÌŠÔŠu‚ÍŽËŒ‚‚Ì•p“x‚É‡‚í‚¹‚Ä
 }
 
 void Enemy::Update(const float deltaTime) {
@@ -74,6 +79,7 @@ Action Enemy::Move(const Vector3 targetDirection) {
 	forward_ = targetDirection;
 	pos_ += forward_ * ENParams.MOVE_SPEED;
 	Rotate(targetDirection);
+	se_running_->PlayRoopSE(timeDelta_);
 	return SUCSESS;
 }
 
@@ -87,8 +93,8 @@ Action Enemy::Step(const Vector3 moveDirection) {
 	jumpTime_ += timeDelta_;
 
 	// ˆÚ“®ŒvŽZ
-	pos_ += moveDirection_ * ENParams.BACKSTEP_SPEED;
-	pos_.y = ENParams.BACKSTEP_INITIALVELOCITY * jumpTime_ - 0.5f * GRAVITY * jumpTime_ * jumpTime_;
+	pos_ += moveDirection_ * ENParams.STEP_SPEED;
+	pos_.y = ENParams.STEP_INITIALVELOCITY * jumpTime_ - 0.5f * GRAVITY * jumpTime_ * jumpTime_;
 
 	// ˆÚ“®—ÊŒvŽZ
 	const Vector2 nowPosXZ(pos_.x, pos_.z);
@@ -113,7 +119,7 @@ Action Enemy::SideStep(const Vector3 targetDirection) {
 
 Action Enemy::Adjacent() {
 	attackState_ = AttackState::Adjacent;
-	se_adjacent_->PlayOneShot();
+	se_adjacent_->PlayRoopSE(timeDelta_);
 	return SUCSESS;
 }
 

@@ -9,7 +9,7 @@ public:
 	virtual ~EnemyManager();
 
 	void PushList(Vector3 position, float r);
-	static Enemy* Sertch(const int index);
+	static Enemy* Access(const int index);
 
 	void Initialize();
 	void LoadAssets();

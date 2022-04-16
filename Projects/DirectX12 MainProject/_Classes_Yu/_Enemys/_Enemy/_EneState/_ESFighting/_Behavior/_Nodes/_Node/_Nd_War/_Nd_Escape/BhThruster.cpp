@@ -10,5 +10,5 @@ BhThruster::~BhThruster() {
 }
 
 Action BhThruster::Behavior(const int myID) {
-	return EnemyManager::Sertch(myID)->Thruster();
+	return EnemyManager::Access(myID)->Thruster();
 }
