@@ -14,26 +14,30 @@ void EneParamsLoad::LoadParams() {
 	char _dummyLine[256];
 	fgets(_dummyLine, 255, _file);
 
-	fscanf_s(_file, "%f,%f,%f,%f,%f,%f,%f,%f", 
-		&number_.DISTANCE_APPROACHING_PLAYER, 
-		&number_.SHORTEST_DISTANCE, 
+	fscanf_s(_file, "%f,%f,%f,%f,%f,%f,%f,%f,%f,%f",
+		&number_.DISTANCE_APPROACHING_PLAYER,
+		&number_.SHORTEST_DISTANCE,
 		&number_.MOVE_SPEED,
-		&number_.BACKSTEP_SPEED,
-		&number_.BACKSTEP_INITIALVELOCITY,
-		&number_.BACKSTEP_DISTANCE,
+		&number_.STEP_SPEED,
+		&number_.STEP_INITIALVELOCITY,
+		&number_.STEP_DISTANCE,
 		&number_.RANGE_OF_SHOT,
-		&number_.FREQUENCY_OF_SHOOTING
+		&number_.FREQUENCY_OF_SHOOTING,
+		&number_.SWITCH_TO_MELEEATTACK,
+		&number_.MELEEATTACK_TO_DISTANCE
 	);
 
 	const float FLSIZE = sizeof(float);
 	const float* ma = &number_.DISTANCE_APPROACHING_PLAYER;
 	const float* mb = &number_.SHORTEST_DISTANCE;
 	const float* mc = &number_.MOVE_SPEED;
-	const float* md = &number_.BACKSTEP_SPEED;
-	const float* me = &number_.BACKSTEP_INITIALVELOCITY;
-	const float* mf = &number_.BACKSTEP_DISTANCE;
+	const float* md = &number_.STEP_SPEED;
+	const float* me = &number_.STEP_INITIALVELOCITY;
+	const float* mf = &number_.STEP_DISTANCE;
 	const float* mg = &number_.RANGE_OF_SHOT;
 	const float* mh = &number_.FREQUENCY_OF_SHOOTING;
+	const float* mi = &number_.SWITCH_TO_MELEEATTACK;
+	const float* mj = &number_.MELEEATTACK_TO_DISTANCE;
 
 	fclose(_file);
 }

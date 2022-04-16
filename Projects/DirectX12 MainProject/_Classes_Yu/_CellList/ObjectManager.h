@@ -16,7 +16,7 @@ public:
 	void RenderModels();
 	void RenderSprites();
 
-	static Enemy* GetEnemy(const int index) { return m_enemy_->Sertch(index); }
+	static Enemy* GetEnemy(const int index) { return m_enemy_->Access(index); }
 
 private:
 	static EnemyManager* m_enemy_;
