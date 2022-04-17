@@ -20,5 +20,5 @@ public:
 private:
 	DX9::CAMERA camera;
 
-	PlayerBase player_;
+	//PlayerBase player_;
 };

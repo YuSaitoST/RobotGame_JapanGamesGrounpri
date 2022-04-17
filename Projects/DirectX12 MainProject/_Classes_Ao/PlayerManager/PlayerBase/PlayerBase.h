@@ -26,7 +26,7 @@ public:
 	void Move_Left(const float deltaTime);
 
 
-	void Attack(const float deltaTime) {};
+	void Attack(const float deltaTime);
 	void Shot(const float deltaTime) {};
 	void Dush(const float deltaTime);
 	void Jump(const float deltaTime);
@@ -34,8 +34,24 @@ public:
 	void Render();
 	void _2D();
 
+	//アニメーション
+	void SetAnimation(DX9::SKINNEDMODEL& model, const int enableTrack);
+
+
 	DX9::SKINNEDMODEL& GetModel() { return player_model; }
 	SimpleMath::Vector3* GetPlayer_Pos() { return &player_pos; }
+
+	//攻撃
+
+	//攻撃
+	enum AtackMode
+	{
+		MeleeAttack, //近接攻撃
+		ShotAttack   //射撃
+	};
+	AtackMode attack_mode_state;
+	AtackMode AtackState() { return attack_mode_state; }
+
 	bool GetJump() { return jump_flag; }
 
 	//ブースト(加速)
@@ -49,6 +65,20 @@ private:
 
 	OBJ_TYPE player;
 	int player_tag = 0;
+
+	enum
+	{
+		STAND,
+		RUN,
+		ACT1,
+		ACT2,
+		FINISH,
+		REBOUND,
+		JUMP,
+		ROLL,
+		DAMAGE1,
+		MOTION_MAX
+	};
 
 	DX9::SPRITEFONT font;
 
@@ -71,6 +101,19 @@ private:
 	const float gravity_ = 170.0f;
 	//初速
 	const float V0 = 30.5f;
+
+
+	//近接攻撃 コンボ
+	//三連撃
+	enum  BURST_STATE
+	{
+		NOT_BURST,
+		FIRST,
+		SECOND,
+		THIRD
+	};
+	BURST_STATE burst_state_mode;
+
 
 
 private:

@@ -70,8 +70,11 @@ void PlayerBase::Setting() {
 	player_model->SetRotation(0.0f, XMConvertToRadians(180.0f), 0.0f);
 	player_pos = player_model->GetPosition();
 
-	
-	
+	//移動制限
+	player_pos.x = std::min(std::max(player_pos.x, 0.0f),  200.0f);
+	player_pos.y = std::min(std::max(player_pos.y, 0.0f), 10000.0f);
+	player_pos.z = std::min(std::max(player_pos.z, 0.0f),  200.0f);
+
 
 }
 
@@ -96,6 +99,82 @@ void PlayerBase::Dush(const float deltaTime) {
 		
 	}
 }
+
+//void PlayerBase::Attack(const float deltaTime) {
+//	switch (burst_state_mode)
+//	{
+//	case BURST_STATE::NOT_BURST:
+//		burst_state_mode = BURST_STATE::FIRST;
+//		break;
+//	case BURST_STATE::FIRST:
+//		SetAnimation(player_model, ACT1);
+//		first_burst_start += deltaTime;
+//
+//		attack_flag = true;
+//
+//		if (first_burst_start >= 0.15f && DXTK->KeyEvent->pressed.S) {
+//			first_burst_flag = true;
+//		}
+//		if (first_burst_start >= first_burst_end && first_burst_flag) {
+//			burst_state_mode = BURST_STATE::SECOND;
+//			model->SetTrackPosition(ACT1, 0.0);
+//			first_burst_start = 0.0f;
+//			first_burst_flag = false;
+//		}
+//		else if (first_burst_start >= first_burst_end) {
+//			burst_state_mode = BURST_STATE::NOT_BURST;
+//			model->SetTrackPosition(ACT1, 0.0);
+//			first_burst_start = 0.0f;
+//			first_burst_flag = false;
+//		}
+//
+//		break;
+//	case BURST_STATE::SECOND:
+//		SetAnimation(model, ACT2);
+//		second_burst_start += deltaTime;
+//
+//		attack_flag = true;
+//
+//
+//		if (second_burst_start >= 0.15f && DXTK->KeyEvent->pressed.S)
+//			second_burst_flag = true;
+//
+//		if (second_burst_start >= second_burst_end && second_burst_flag) {
+//			burst_state_mode = BURST_STATE::THIRD;
+//			model->SetTrackPosition(ACT2, 0.0);
+//
+//			second_burst_start = 0.0f;
+//			second_burst_flag = false;
+//		}
+//		else if (second_burst_start >= second_burst_end) {
+//			burst_state_mode = BURST_STATE::NOT_BURST;
+//			model->SetTrackPosition(ACT2, 0.0);
+//			second_burst_start = 0.0f;
+//			second_burst_flag = false;
+//		}
+//
+//		break;
+//	case BURST_STATE::THIRD:
+//		SetAnimation(model, ACT3);
+//		third_burst_start += deltaTime;
+//
+//		attack_flag = true;
+//
+//
+//		if (third_burst_start >= 0.15f && DXTK->KeyEvent->pressed.S)
+//			third_burst_flag = true;
+//
+//		if (third_burst_start >= third_burst_end) {
+//			burst_state_mode = BURST_STATE::NOT_BURST;
+//			model->SetTrackPosition(ACT3, 0.0);
+//			third_burst_start = 0.0f;
+//			third_burst_flag = false;
+//		}
+//
+//		break;
+//	}
+//
+//}
 
 
 void PlayerBase::Jump(const float deltaTime) {
@@ -131,4 +210,13 @@ void PlayerBase::_2D() {
 		DX9::Colors::Red,
 		L"座標　%f %f %f",player_pos.x, player_pos.y, player_pos.z
 	);
+}
+
+//指定されたモーションはTRUE,それ以外はFALSE
+void PlayerBase::SetAnimation(DX9::SKINNEDMODEL& model, const int enableTrack)
+{
+	for (int i = 0; i < MOTION_MAX; ++i) {
+		model->SetTrackEnable(i, FALSE);
+	}
+	model->SetTrackEnable(enableTrack, TRUE);
 }
