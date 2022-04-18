@@ -3,6 +3,8 @@
 #include<stdio.h>
 #include<cstdlib>
 
+#include "_Classes_Yu/_PlayerInformation/PlayerInformation.h"
+
 
 PlayerBase::PlayerBase() {
 	SetBaseMember(OBJ_TYPE::PLAYER, SimpleMath::Vector3::Zero, 1.0f);
@@ -49,7 +51,8 @@ void PlayerBase::Initialize(const int id) {
 	jump_time = 0.0f;
 	jump_start_v_ = 0.0f;
 
-	
+	PlayerInfo.SetMenber(&pos_, &attackState_);
+
 }
 
 
@@ -140,6 +143,7 @@ void PlayerBase::Attack(const float deltaTime) {
 		burst_state_mode = BURST_STATE::FIRST;
 		break;
 	case BURST_STATE::FIRST:
+		SetAnimation(player_model, ACT1);
 		frist_reception_time += deltaTime;
 
 		// Žó•tŽžŠÔ‚É‰Ÿ‚³‚ê‚Ä‚¢‚½‚çŽŸ‚ÌUŒ‚‚Ö
@@ -158,6 +162,7 @@ void PlayerBase::Attack(const float deltaTime) {
 
 		break;
 	case BURST_STATE::SECOND:
+		SetAnimation(player_model, ACT2);
 		second_reception_time += deltaTime;
 
 		// Žó•tŽžŠÔ‚É‰Ÿ‚³‚ê‚Ä‚¢‚½‚çŽŸ‚ÌUŒ‚‚Ö
@@ -176,6 +181,7 @@ void PlayerBase::Attack(const float deltaTime) {
 
 		break;
 	case BURST_STATE::THIRD:
+		SetAnimation(player_model, ACT1);
 		third_reception_time += deltaTime;
 		//I‚í‚è
 		if (third_reception_time >= third_reception_max) {

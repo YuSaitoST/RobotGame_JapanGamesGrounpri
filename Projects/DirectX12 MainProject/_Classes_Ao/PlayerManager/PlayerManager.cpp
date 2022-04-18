@@ -8,7 +8,6 @@ void PlayerManager::Initialize() {
 
 	p_base_.Initialize(0);
 	// プレイヤーのposのポインタ
-	PlayerInfo.SetMenber(p_base_.GetPlayer_Pos());
 	
 }
 
