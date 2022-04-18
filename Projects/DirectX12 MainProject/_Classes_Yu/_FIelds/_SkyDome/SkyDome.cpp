@@ -6,6 +6,6 @@ void SkyDome::LoadAsset() {
 }
 
 void SkyDome::Render(const DirectX::SimpleMath::Vector3 pos) {
-	model_->SetPosition(pos);
+	model_->SetPosition(pos.x, 0.0f, pos.z);
 	model_->Draw();
 }
