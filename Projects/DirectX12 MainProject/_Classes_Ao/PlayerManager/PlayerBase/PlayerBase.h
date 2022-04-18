@@ -22,10 +22,7 @@ public:
 	void Setting();
 	void Update(const float deltaTime);
 
-	void Move_Front(const float deltaTime);
-	void Move_Back(const float deltaTime);
-	void Move_Right(const float deltaTime);
-	void Move_Left(const float deltaTime);
+	void Move(const float deltaTime);
 
 
 	void Attack(const float deltaTime);

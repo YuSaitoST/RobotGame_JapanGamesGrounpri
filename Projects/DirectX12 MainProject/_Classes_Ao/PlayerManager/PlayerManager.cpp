@@ -26,25 +26,7 @@ void PlayerManager::Update(const float deltaTime) {
 	p_base_.Setting();
 
 	//移動
-	//前
-	if (Press.MovePlayerStateUp()) {
-		p_base_.Move_Front(deltaTime);
-	}
-
-	//後ろ
-	if (Press.MovePlayerStateDown()) {
-		p_base_.Move_Back(deltaTime);
-	}
-
-	//右
-	if (Press.MovePlayerStateRight()) {
-		p_base_.Move_Right(deltaTime);
-	}
-
-	//左
-	if (Press.MovePlayerStateLeft()) {
-		p_base_.Move_Left(deltaTime);
-	}
+	p_base_.Move(deltaTime);
 
 	//ダッシュ
 	if (Press.DushStateKey()) {
@@ -53,12 +35,11 @@ void PlayerManager::Update(const float deltaTime) {
 	
 
 	//攻撃(近接)
-	p_base_.Attack(deltaTime);
-	if (p_base_.BurstState() == PlayerBase::BURST_STATE::NOT_BURST) {
-		if (Press.AtackEventKey()) {
-			p_base_.Attack(deltaTime);
-		}
+	//p_base_.Attack(deltaTime);
+	if (Press.AtackEventKey()) {
+		p_base_.Attack(deltaTime);
 	}
+	
 	if (p_base_.BurstState() == PlayerBase::BURST_STATE::FIRST &&
 		p_base_.GetFristReceptionTime() <= 1.0f) {
 		if (Press.AtackEventKey()) {

@@ -4,6 +4,7 @@
 #include<cstdlib>
 
 #include "_Classes_Yu/_PlayerInformation/PlayerInformation.h"
+#include "_Classes_Yu/_InputClasses/UseKeyCheck.h"
 
 
 PlayerBase::PlayerBase() {
@@ -50,6 +51,23 @@ void PlayerBase::Initialize(const int id) {
 	jump_flag = false;
 	jump_time = 0.0f;
 	jump_start_v_ = 0.0f;
+
+	//
+	frist_reception_time = 0.0f; //受付時間初期値
+	frist_reception_max = 1.0f;  //受付時間最大値
+	frist_check_flag = false;    //次に攻撃に移る
+
+   //二撃目
+	second_reception_time = 0.0f; //受付時間初期値
+	second_reception_max = 1.0f;  //受付時間最大値
+	second_check_flag = false;    //次に攻撃に移る
+
+
+   //三撃目
+	third_reception_time = 0.0f; //受付時間初期値
+	third_reception_max = 1.0f;  //受付時間最大値
+	third_check_flag = false;    //最後終わるまで攻撃不可
+
 
 	PlayerInfo.SetMenber(&pos_, &attackState_);
 
@@ -112,21 +130,12 @@ void PlayerBase::Update(const float deltaTime) {
 	UpdateToMorton();
 }
 
-void PlayerBase::Move_Front(const float deltaTime) {
-	player_model->Move(0.0f, 0.0f, -speed * deltaTime);
+void PlayerBase::Move(const float deltaTime) {
+	forward_ = Vector3(-Press.DirectionKey().x, 0.0f, Press.DirectionKey().y);
+	Vector3 amountMove = forward_ * speed * deltaTime;
+	player_model->Move(amountMove);
 }
 
-void PlayerBase::Move_Back(const float deltaTime) {
-	player_model->Move(0.0f, 0.0f, speed * deltaTime);
-}
-
-void PlayerBase::Move_Right(const float deltaTime) {
-	player_model->Move(-speed * deltaTime, 0.0f, 0.0f);
-}
-
-void PlayerBase::Move_Left(const float deltaTime) {
-	player_model->Move(speed * deltaTime, 0.0f, 0.0f);
-}
 
 void PlayerBase::Dush(const float deltaTime) {
 	if (dush_flag) {
@@ -140,6 +149,7 @@ void PlayerBase::Attack(const float deltaTime) {
 	switch (burst_state_mode)
 	{
 	case BURST_STATE::NOT_BURST:
+		
 		burst_state_mode = BURST_STATE::FIRST;
 		break;
 	case BURST_STATE::FIRST:

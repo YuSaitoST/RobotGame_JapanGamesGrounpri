@@ -26,6 +26,8 @@ public:
 	bool MoveStateLeft();
 	bool MoveStateRight();
 
+	Vector2 DirectionKey();
+
 private:
 	UseKeyCheck() {}
 	virtual ~UseKeyCheck() {}

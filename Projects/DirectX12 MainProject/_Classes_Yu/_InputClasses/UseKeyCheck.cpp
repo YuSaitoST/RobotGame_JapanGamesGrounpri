@@ -46,3 +46,7 @@ bool UseKeyCheck::MoveStateLeft() {
 bool UseKeyCheck::MoveStateRight() {
 	return key_.StateArrowKey(ARROW_KEY::K_RIGHT) || pad_.StateOnOffKey(0, PAD::P_RIGHT);
 }
+
+Vector2 UseKeyCheck::DirectionKey() {
+	return key_.StateDirection();
+}
