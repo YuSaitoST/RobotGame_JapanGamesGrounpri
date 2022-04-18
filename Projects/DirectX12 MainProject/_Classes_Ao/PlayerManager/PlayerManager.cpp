@@ -6,14 +6,14 @@ void PlayerManager::Initialize() {
 	camera->SetPerspectiveFieldOfView(XMConvertToRadians(45.0f), 16.0f / 9.0f, 1.0f, 10000.0f);
 	DXTK->Direct3D9->SetCamera(camera);
 
-	p_base_.Initialize();
+	p_base_.Initialize(0);
 	// プレイヤーのposのポインタ
 	PlayerInfo.SetMenber(p_base_.GetPlayer_Pos());
 	
 }
 
 void PlayerManager::LoadModel() {
-	p_base_.LoadModel();
+	p_base_.LoadAssets(L"Player\\SwordManEX\\armor_red2_0210b.X");
 }
 
 void PlayerManager::Update(const float deltaTime) {
@@ -52,11 +52,32 @@ void PlayerManager::Update(const float deltaTime) {
 		p_base_.Dush(deltaTime);
 	}
 	
+
 	//攻撃(近接)
+	p_base_.Attack(deltaTime);
+	if (p_base_.BurstState() == PlayerBase::BURST_STATE::NOT_BURST) {
+		if (Press.AtackEventKey()) {
+			p_base_.Attack(deltaTime);
+		}
+	}
+	if (p_base_.BurstState() == PlayerBase::BURST_STATE::FIRST &&
+		p_base_.GetFristReceptionTime() <= 1.0f) {
+		if (Press.AtackEventKey()) {
+			p_base_.FristCheckFlag();
+		}
+	}
+	if (p_base_.BurstState() == PlayerBase::BURST_STATE::SECOND &&
+		p_base_.GetSecondReceptionTime() <= 1.0f) {
+		if (Press.AtackEventKey()) {
+			p_base_.SecondCheckFlag();
+		}
+	}
 
 	
 	//攻撃(射撃)
-	
+	if (Press.ShotEventKey()) {
+		p_base_.Shot(deltaTime);
+	}
 
 	//ジャンプ
 	if (!jump_flag) {
@@ -91,5 +112,5 @@ void PlayerManager::Render() {
 }
 
 void PlayerManager::_2D() {
-	p_base_.Render();
+	p_base_.UIRender();
 }

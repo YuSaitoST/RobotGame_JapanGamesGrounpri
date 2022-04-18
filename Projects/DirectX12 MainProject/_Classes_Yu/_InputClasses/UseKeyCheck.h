@@ -21,6 +21,7 @@ public:
 	bool JumpEventKey();
 
 	bool AtackEventKey();
+	bool ShotEventKey();
 
 	bool MoveStateLeft();
 	bool MoveStateRight();

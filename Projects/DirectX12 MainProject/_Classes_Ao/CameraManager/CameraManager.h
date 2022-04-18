@@ -10,8 +10,8 @@ using namespace DirectX;
 class CameraManager
 {
 public:
-	CameraManager();
-	~CameraManager();
+	CameraManager(){};
+	~CameraManager(){};
 
 	void Initialize();
 	void Update();

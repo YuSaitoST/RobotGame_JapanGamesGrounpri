@@ -14,11 +14,13 @@ public:
 	PlayerBase();
 	~PlayerBase() {};
 
-	void Initialize();
-	void LoadModel();
+	void Initialize(const int id);
+
+	void LoadAssets(std::wstring file_name);
 	void LoadEffect();
 
 	void Setting();
+	void Update(const float deltaTime);
 
 	void Move_Front(const float deltaTime);
 	void Move_Back(const float deltaTime);
@@ -27,21 +29,19 @@ public:
 
 
 	void Attack(const float deltaTime);
-	void Shot(const float deltaTime) {};
+	void Shot(const float deltaTime);
 	void Dush(const float deltaTime);
 	void Jump(const float deltaTime);
 
 	void Render();
-	void _2D();
-
+	void Render(DX9::SKINNEDMODEL& model);
+	void UIRender();
 	//アニメーション
 	void SetAnimation(DX9::SKINNEDMODEL& model, const int enableTrack);
 
 
 	DX9::SKINNEDMODEL& GetModel() { return player_model; }
-	SimpleMath::Vector3* GetPlayer_Pos() { return &player_pos; }
-
-	//攻撃
+	SimpleMath::Vector3* GetPlayer_Pos() { return &pos_; }
 
 	//攻撃
 	enum AtackMode
@@ -52,6 +52,29 @@ public:
 	AtackMode attack_mode_state;
 	AtackMode AtackState() { return attack_mode_state; }
 
+	//近接攻撃 コンボ
+    //三連撃
+	enum  BURST_STATE
+	{
+		NOT_BURST,
+		FIRST,
+		SECOND,
+		THIRD
+	};
+	BURST_STATE burst_state_mode;
+	BURST_STATE BurstState() { return burst_state_mode; }
+
+	//コンボ　受付時間 関数
+	float GetFristReceptionTime() { return frist_reception_time; }
+	float GetSecondReceptionTime() { return second_reception_time; }
+	float GetThirdReceptionTime() { return third_reception_time; }
+
+	//コンボ　入力　関数
+	bool FristCheckFlag() { return frist_check_flag; }     //次に攻撃に移る
+	bool SecondCheckFlag() { return second_check_flag; }      //次に攻撃に移る
+	bool ThirdCheckFlag() { return third_check_flag; }     //最後終わるまで攻撃不可
+
+
 	bool GetJump() { return jump_flag; }
 
 	//ブースト(加速)
@@ -61,10 +84,7 @@ public:
 
 private:
 	DX9::SKINNEDMODEL player_model;
-	SimpleMath::Vector3 player_pos = SimpleMath::Vector3(0.0f, 0.0f, 0.0f);
 
-	OBJ_TYPE player;
-	int player_tag = 0;
 
 	enum
 	{
@@ -104,16 +124,23 @@ private:
 
 
 	//近接攻撃 コンボ
-	//三連撃
-	enum  BURST_STATE
-	{
-		NOT_BURST,
-		FIRST,
-		SECOND,
-		THIRD
-	};
-	BURST_STATE burst_state_mode;
+	//一撃目
+	float frist_reception_time; //受付時間初期値
+	float frist_reception_max;  //受付時間最大値
+	bool  frist_check_flag;     //次に攻撃に移る
 
+	//二撃目
+	float second_reception_time; //受付時間初期値
+	float second_reception_max;   //受付時間最大値
+	bool  second_check_flag;      //次に攻撃に移る
+
+
+	//三撃目
+	float third_reception_time; //受付時間初期値
+	float third_reception_max;  //受付時間最大値
+	bool  third_check_flag;     //最後終わるまで攻撃不可
+
+	//射撃攻撃
 
 
 private:

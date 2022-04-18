@@ -35,7 +35,9 @@ bool UseKeyCheck::AtackEventKey() {
 	return key_.EventCharaKey('A');
 }
 
-
+bool UseKeyCheck::ShotEventKey() {
+	return key_.EventCharaKey('Z');
+}
 
 bool UseKeyCheck::MoveStateLeft() {
 	return key_.StateArrowKey(ARROW_KEY::K_LEFT) || pad_.StateOnOffKey(0, PAD::P_LEFT);
