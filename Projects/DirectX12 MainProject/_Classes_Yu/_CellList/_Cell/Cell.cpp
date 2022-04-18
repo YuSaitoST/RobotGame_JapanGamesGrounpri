@@ -15,7 +15,7 @@ Cell::Cell(ObjectBase* m) {
 	MsIndex_	= -1;
 	mp_			= m;
 	next_		= prev_ = this;
-	MoverToMorton(*mp_, level_, LsIndex_, MsIndex_);
+	//MoverToMorton(*mp_, level_, LsIndex_, MsIndex_);
 }
 
 Cell::~Cell() {
@@ -77,8 +77,8 @@ int Cell::PointToMorton(Vector2 pos) {
 	const int _CN = (int)std::pow(2, CellList::N);
 
 	// 格子の一辺の長さ
-	const float _sx = 1280.0f / _CN;
-	const float _sy = 720.0f / _CN;
+	const float _sx = 2000.0f / _CN;
+	const float _sy = 2000.0f / _CN;
 
 	// 格子の座標
 	const int _kx = (int)(pos.x / _sx);
@@ -93,9 +93,12 @@ int Cell::PointToMorton(Vector2 pos) {
 }
 
 void Cell::MoverToMorton(ObjectBase& m, int& L, int& I, int& M) {
+	// 補正
+	Vector3 _pos = m.myPosition() + Vector3(1000.0f, 0.0f, 1000.0f);
+
 	// 左前、右後の座標(原点が左上の場合の式)
-	Vector2 _UL = Vector2(m.myPosition().x - m.myRadian(), m.myPosition().z + m.myRadian());
-	Vector2 _UR = Vector2(m.myPosition().x + m.myRadian(), m.myPosition().z - m.myRadian());
+	Vector2 _UL = Vector2(_pos.x - m.myRadian(), _pos.z + m.myRadian());
+	Vector2 _UR = Vector2(_pos.x + m.myRadian(), _pos.z - m.myRadian());
 
 	// それぞれのモートンを代入
 	int _mUL = PointToMorton(_UL);

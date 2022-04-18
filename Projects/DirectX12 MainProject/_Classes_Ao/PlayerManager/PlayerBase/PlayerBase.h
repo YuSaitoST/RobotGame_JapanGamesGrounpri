@@ -12,7 +12,7 @@ class PlayerBase :public ObjectBase
 {
 public:
 	PlayerBase();
-	~PlayerBase() {};
+	virtual ~PlayerBase() {};
 
 	void Initialize(const int id);
 

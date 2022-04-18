@@ -12,7 +12,7 @@ class PlayerManager
 {
 public:
 	PlayerManager(){};
-	~PlayerManager(){};
+	virtual ~PlayerManager(){};
 
 	void Initialize();
 	void LoadModel();

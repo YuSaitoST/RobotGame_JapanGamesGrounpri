@@ -11,7 +11,6 @@
 enum Action;
 class Enemy final : public ObjectBase {
 public:
-	Enemy();
 	Enemy(Vector3 pos, float r);
 	virtual ~Enemy();
 
@@ -35,6 +34,8 @@ public:
 	Action Shooting();
 
 private:
+	void SetMember();
+
 	void Rotate(const Vector3 targetDirection);
 	Action Step(const Vector3 moveDirection);
 

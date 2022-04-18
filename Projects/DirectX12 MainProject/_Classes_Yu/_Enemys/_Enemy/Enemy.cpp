@@ -1,36 +1,11 @@
 #include "Enemy.h"
 
-Enemy::Enemy() {
-	cp_ = nullptr;
-	SetBaseMember(OBJ_TYPE::NONE_OBJ_ID, Vector3::Zero, 1.0f);
-
-	se_running_	= new SoundPlayer();
-	se_adjacent_ = new SoundPlayer();
-	se_shooting_ = new SoundPlayer();
-	attackState_ = AttackState::None_Attack;
-
-	state_ = nullptr;
-	isHitPlayer_ = false;
-}
-
-Enemy::Enemy(Vector3 pos, float r) {
+Enemy::Enemy(Vector3 pos, float r) : timeDelta_(0.0f), jumpTime_(0.0f) {
 	cp_ = nullptr;
 	SetBaseMember(OBJ_TYPE::ENEMY, pos, r);
-
-	se_running_ = new SoundPlayer();
-	se_adjacent_ = new SoundPlayer();
-	se_shooting_ = new SoundPlayer();
-	attackState_ = AttackState::None_Attack;
+	SetMember();
 
 	SwitchState(SPONE);
-
-	forward_ = Vector3(0.0f, 0.0f, -1.0f);
-	isHitPlayer_ = false;
-
-	timeDelta_ = 0.0f;
-	jumpTime_ = 0.0f;
-
-	moveDirection_ = Vector3::Zero;
 }
 
 Enemy::~Enemy() {
@@ -52,12 +27,24 @@ void Enemy::Update(const float deltaTime) {
 	isHitPlayer_ = (hitObj != nullptr) ? (hitObj->myObjectType() == OBJ_TYPE::PLAYER) : false;
 
 	state_->Update(id_my_);
+
+	UpdateToMorton();
 }
 
 void Enemy::Render(DX9::SKINNEDMODEL& model) {
 	model->SetPosition(pos_);
 	model->SetRotation(0.0f, rotateY_, 0.0f);
 	model->Draw();
+}
+
+void Enemy::SetMember() {
+	se_running_		= new SoundPlayer();
+	se_adjacent_	= new SoundPlayer();
+	se_shooting_	= new SoundPlayer();
+	attackState_	= AttackState::None_Attack;
+	isHitPlayer_	= false;
+	forward_		= Vector3(0.0f, 0.0f, -1.0f);
+	moveDirection_	= Vector3::Zero;
 }
 
 void Enemy::SwitchState(ENE_STATE state) {
@@ -88,8 +75,9 @@ Action Enemy::Thruster() {
 }
 
 Action Enemy::Step(const Vector3 moveDirection) {
-	const Vector2 oldPosXZ(pos_.x, pos_.z);
-	moveDirection_ = moveDirection;
+	if (jumpTime_ == 0.0f)
+		moveDirection_ = moveDirection;
+
 	jumpTime_ += timeDelta_;
 
 	// ˆÚ“®ŒvŽZ
