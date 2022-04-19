@@ -16,6 +16,7 @@ void PlayerManager::LoadModel() {
 }
 
 void PlayerManager::Update(const float deltaTime) {
+	p_base_.Update(deltaTime);
 	camera->SetPosition(
 		p_base_.GetModel()->GetPosition().x + 2.0f,
 		p_base_.GetModel()->GetPosition().y + 5.5f,
@@ -23,7 +24,6 @@ void PlayerManager::Update(const float deltaTime) {
 	);
 	camera->SetRotation(XMConvertToRadians(20.0f), 0.0f, 0.0f);
 
-	p_base_.Setting();
 
 	//ˆÚ“®
 	p_base_.Move(deltaTime);
@@ -32,14 +32,14 @@ void PlayerManager::Update(const float deltaTime) {
 	if (Press.DushStateKey()) {
 		p_base_.Dush(deltaTime);
 	}
-	
+
 
 	//UŒ‚(‹ßÚ)
 	//p_base_.Attack(deltaTime);
 	if (Press.AtackEventKey()) {
 		p_base_.Attack(deltaTime);
 	}
-	
+
 	if (p_base_.BurstState() == PlayerBase::BURST_STATE::FIRST &&
 		p_base_.GetFristReceptionTime() <= 1.0f) {
 		if (Press.AtackEventKey()) {
@@ -53,36 +53,17 @@ void PlayerManager::Update(const float deltaTime) {
 		}
 	}
 
-	
+
 	//UŒ‚(ËŒ‚)
 	if (Press.ShotEventKey()) {
 		p_base_.Shot(deltaTime);
 	}
 
 	//ƒWƒƒƒ“ƒv
-	if (!jump_flag) {
-		if (Press.JumpEventKey()) {
-			jump_flag = true;
-			jump_time = 0;
-			jump_start_v_ = p_base_.GetModel()->GetPosition().y;
-
-		}
-	}
+	p_base_.Jump(deltaTime);
 
 
-	if (jump_flag) {
-
-		jump_time += deltaTime;
-		auto pos = p_base_.GetModel()->GetPosition();
-		pos.y = jump_start_v_ + V0 * jump_time - 0.5f * gravity_ * jump_time * jump_time;
-		p_base_.GetModel()->SetPosition(pos);
-
-		if (p_base_.GetModel()->GetPosition().y <= 0.01f) {
-			jump_flag = false;
-			}
-	}
-
-	
+	p_base_.Setting(deltaTime);
 }
 
 void PlayerManager::Render() {

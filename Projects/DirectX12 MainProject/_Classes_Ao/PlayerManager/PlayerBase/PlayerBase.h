@@ -19,7 +19,7 @@ public:
 	void LoadAssets(std::wstring file_name);
 	void LoadEffect();
 
-	void Setting();
+	void Setting(const float deltaTime);
 	void Update(const float deltaTime);
 
 	void Move(const float deltaTime);
@@ -109,15 +109,15 @@ private:
 	bool overheart_flag;
 
 	//ジャンプ 関数
-	bool jump_flag;
-	float jump_time;
-	float jump_start_v_;
+	bool jump_flag = false;
+	float jump_time = 0.0f;
+	float jump_start_v_ = 0.0f;
 	//1/2
-	const float half = 0.5f;
+	float half = 0.5f;
 	//重力加速度
-	const float gravity_ = 170.0f;
+	float gravity_ = 50.0f;
 	//初速
-	const float V0 = 30.5f;
+	float V0 = 40.0f;
 
 
 	//近接攻撃 コンボ

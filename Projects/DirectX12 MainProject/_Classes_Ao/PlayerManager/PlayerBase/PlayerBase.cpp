@@ -19,26 +19,33 @@ PlayerBase::PlayerBase() {
 	jump_flag = false;
 	jump_time = 0.0f;
 	jump_start_v_ = 0.0f;
+	//1/2
+	half = 0.0f;
+	//重力加速度
+	gravity_ = 0.0f;
+	//初速
+	V0 = 0.0f;
 
 
 	//近接攻撃 コンボ
+	burst_state_mode = BURST_STATE::NOT_BURST;
 	//一撃目
-	 frist_reception_time=0.0f; //受付時間初期値
-	 frist_reception_max=0.0f;  //受付時間最大値
-	 frist_check_flag=false;     //次に攻撃に移る
+	frist_reception_time = 0.0f; //受付時間初期値
+	frist_reception_max = 0.0f;  //受付時間最大値
+	frist_check_flag = false;     //次に攻撃に移る
 
-	//二撃目
-	 second_reception_time=0.0f; //受付時間初期値
-	 second_reception_max=0.0f;   //受付時間最大値
-	 second_check_flag=false;      //次に攻撃に移る
+   //二撃目
+	second_reception_time = 0.0f; //受付時間初期値
+	second_reception_max = 0.0f;   //受付時間最大値
+	second_check_flag = false;      //次に攻撃に移る
 
 
-	//三撃目
-	 third_reception_time=0.0f; //受付時間初期値
-	 third_reception_max=0.0f;  //受付時間最大値
-	 third_check_flag=false;     //最後終わるまで攻撃不可
+   //三撃目
+	third_reception_time = 0.0f; //受付時間初期値
+	third_reception_max = 0.0f;  //受付時間最大値
+	third_check_flag = false;     //最後終わるまで攻撃不可
 
-	 
+
 
 }
 
@@ -48,22 +55,32 @@ void PlayerBase::Initialize(const int id) {
 	jump_flag = false;
 	speed = 60.0f;
 
+	//ジャンプ 関数
 	jump_flag = false;
 	jump_time = 0.0f;
 	jump_start_v_ = 0.0f;
+	//1/2
+	half = 0.5f;
+	//重力加速度
+	gravity_ = 50.0f;
+	//初速
+	V0 = 40.0f;
 
-	//
+	//近接攻撃 コンボ
+	burst_state_mode = BURST_STATE::NOT_BURST;
+
+	//一撃目
 	frist_reception_time = 0.0f; //受付時間初期値
-	frist_reception_max = 1.0f;  //受付時間最大値
+	frist_reception_max = 3.0f;  //受付時間最大値
 	frist_check_flag = false;    //次に攻撃に移る
 
-   //二撃目
+    //二撃目
 	second_reception_time = 0.0f; //受付時間初期値
-	second_reception_max = 1.0f;  //受付時間最大値
+	second_reception_max = 3.0f;  //受付時間最大値
 	second_check_flag = false;    //次に攻撃に移る
 
 
-   //三撃目
+    //三撃目
 	third_reception_time = 0.0f; //受付時間初期値
 	third_reception_max = 1.0f;  //受付時間最大値
 	third_check_flag = false;    //最後終わるまで攻撃不可
@@ -111,22 +128,24 @@ void LoadCsv() {
 
 }
 
-void PlayerBase::Setting() {
+void PlayerBase::Setting(const float deltaTime) {
 	player_model->SetRotation(0.0f, XMConvertToRadians(180.0f), 0.0f);
 	pos_ = player_model->GetPosition();
 
 	//移動制限
-	pos_.x = std::min(std::max(pos_.x, 0.0f),  200.0f);
-	pos_.y = std::min(std::max(pos_.y, 0.0f), 10000.0f);
-	pos_.z = std::min(std::max(pos_.z, 0.0f),  200.0f);
+	pos_ = SimpleMath::Vector3(
+		pos_.x = std::min(std::max(0.0f, pos_.x), 200.0f),
+		pos_.y = std::min(std::max(0.0f, pos_.y), 10000.0f),
+		pos_.z = std::min(std::max(0.0f, pos_.z), 200.0f)
+	);
 
-
+	player_model->AdvanceTime(deltaTime);
 }
 
 void PlayerBase::Update(const float deltaTime) {
 	SetAnimation(player_model, STAND);
 
-	player_model->AdvanceTime(deltaTime);
+	
 	UpdateToMorton();
 }
 
@@ -149,12 +168,18 @@ void PlayerBase::Attack(const float deltaTime) {
 	switch (burst_state_mode)
 	{
 	case BURST_STATE::NOT_BURST:
-		
-		burst_state_mode = BURST_STATE::FIRST;
+		if (Press.AtackEventKey())
+			burst_state_mode = BURST_STATE::FIRST;
 		break;
 	case BURST_STATE::FIRST:
 		SetAnimation(player_model, ACT1);
 		frist_reception_time += deltaTime;
+
+		//受付時間内に攻撃ボタンを押したらフラグが立ち次の攻撃に移る
+		if (frist_reception_time <= frist_reception_max && 
+			Press.AtackEventKey()) {
+			frist_check_flag = true;
+		}
 
 		// 受付時間に押されていたら次の攻撃へ
 		if (frist_reception_time >= frist_reception_max && frist_check_flag) {
@@ -174,6 +199,10 @@ void PlayerBase::Attack(const float deltaTime) {
 	case BURST_STATE::SECOND:
 		SetAnimation(player_model, ACT2);
 		second_reception_time += deltaTime;
+
+		if (second_reception_time <= second_reception_max) {
+
+		}
 
 		// 受付時間に押されていたら次の攻撃へ
 		if (second_reception_time >= second_reception_max && second_check_flag) {
@@ -210,22 +239,25 @@ void PlayerBase::Shot(const float deltaTime) {
 }
 
 void PlayerBase::Jump(const float deltaTime) {
+	//ジャンプ
 	if (!jump_flag) {
-		jump_flag = true;
-		jump_time = 0.0f;
-		jump_start_v_ = player_model->Position.y;
-	}
+		if (Press.JumpEventKey()) {
+			jump_flag = true;
+			jump_time = 0;
+			jump_start_v_ = player_model->Position.y;
 
+		}
+	}
 	if (jump_flag) {
+
 		jump_time += deltaTime;
 		auto pos = player_model->GetPosition();
-		pos.y = jump_start_v_ + V0 * jump_time - half * gravity_ * jump_time * jump_time;
+		pos.y = jump_start_v_ + V0 * jump_time - 0.5f * gravity_ * jump_time * jump_time;
 		player_model->SetPosition(pos);
-		
-		//ジャンプの終了判定
-		if (V0 * jump_time < gravity_ * jump_time * jump_time) {
+
+
+		if (player_model->GetPosition().y <= 0.0f) {
 			jump_flag = false;
-			auto pl = 0;
 		}
 	}
 
