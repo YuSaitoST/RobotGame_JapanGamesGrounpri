@@ -29,30 +29,12 @@ void PlayerManager::Update(const float deltaTime) {
 	p_base_.Move(deltaTime);
 
 	//ƒ_ƒbƒVƒ…
-	if (Press.DushStateKey()) {
-		p_base_.Dush(deltaTime);
-	}
+	p_base_.Dush(deltaTime);
+	
 
 
 	//UŒ‚(‹ßÚ)
-	//p_base_.Attack(deltaTime);
-	if (Press.AtackEventKey()) {
-		p_base_.Attack(deltaTime);
-	}
-
-	if (p_base_.BurstState() == PlayerBase::BURST_STATE::FIRST &&
-		p_base_.GetFristReceptionTime() <= 1.0f) {
-		if (Press.AtackEventKey()) {
-			p_base_.FristCheckFlag();
-		}
-	}
-	if (p_base_.BurstState() == PlayerBase::BURST_STATE::SECOND &&
-		p_base_.GetSecondReceptionTime() <= 1.0f) {
-		if (Press.AtackEventKey()) {
-			p_base_.SecondCheckFlag();
-		}
-	}
-
+	p_base_.Attack(deltaTime);
 
 	//UŒ‚(ËŒ‚)
 	if (Press.ShotEventKey()) {

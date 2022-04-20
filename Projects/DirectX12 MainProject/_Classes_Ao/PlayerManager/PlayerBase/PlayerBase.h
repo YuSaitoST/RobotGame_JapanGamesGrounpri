@@ -59,25 +59,10 @@ public:
 		THIRD
 	};
 	BURST_STATE burst_state_mode;
-	BURST_STATE BurstState() { return burst_state_mode; }
 
-	//コンボ　受付時間 関数
-	float GetFristReceptionTime() { return frist_reception_time; }
-	float GetSecondReceptionTime() { return second_reception_time; }
-	float GetThirdReceptionTime() { return third_reception_time; }
-
-	//コンボ　入力　関数
-	bool FristCheckFlag() { return frist_check_flag; }     //次に攻撃に移る
-	bool SecondCheckFlag() { return second_check_flag; }      //次に攻撃に移る
-	bool ThirdCheckFlag() { return third_check_flag; }     //最後終わるまで攻撃不可
 
 
 	bool GetJump() { return jump_flag; }
-
-	//ブースト(加速)
-	bool GetDushFlag() { return dush_flag; }
-	float GetDushStart() { return dush_start; }
-	float GetDushEnd() { return dush_end; }
 
 private:
 	DX9::SKINNEDMODEL player_model;
@@ -98,15 +83,15 @@ private:
 	};
 
 	DX9::SPRITEFONT font;
+	DX9::SPRITEFONT debag_font;
+	DX9::SPRITEFONT time_font;
 
 	float speed;
 
-	//ダッシュ 関数
-	bool dush_flag;
-	float dush_start;
-	float dush_end;
-
-	bool overheart_flag;
+	//ダッシュ 関数 系統
+	int overheart_zero;//オーバーヒートの初期値
+	int overheart_max; //オーバーヒートの最大値
+	bool overheart_flag; //オーバーヒートのフラグ
 
 	//ジャンプ 関数
 	bool jump_flag = false;
@@ -136,13 +121,5 @@ private:
 	float third_reception_time; //受付時間初期値
 	float third_reception_max;  //受付時間最大値
 	bool  third_check_flag;     //最後終わるまで攻撃不可
-
-	//射撃攻撃
-
-
-private:
-	//他クラスから呼び出す
-	Dush_* dush_;
-
 
 };
