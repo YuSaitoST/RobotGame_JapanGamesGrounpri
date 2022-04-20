@@ -29,12 +29,13 @@ void Enemy::Update(const float deltaTime) {
 	state_->Update(id_my_);
 
 	UpdateToMorton();
+
+	model_->SetPosition(pos_);
+	model_->SetRotation(0.0f, rotateY_, 0.0f);
 }
 
-void Enemy::Render(DX9::SKINNEDMODEL& model) {
-	model->SetPosition(pos_);
-	model->SetRotation(0.0f, rotateY_, 0.0f);
-	model->Draw();
+void Enemy::Render() {
+	model_->Draw();
 }
 
 void Enemy::SetMember() {

@@ -15,11 +15,12 @@ public:
 	virtual ~Enemy();
 
 	virtual void Initialize(const int id);
+	virtual void LoadAssets() {};
 	virtual void LoadAssets(std::wstring file_name) {}
 	virtual void Update(const float deltaTime);
-	virtual void Render() {}
-	virtual void Render(DX9::SKINNEDMODEL& model);
-	virtual void UIRender() {}
+	virtual void Render();
+	virtual void Render(DX9::MODEL& model) {}
+	virtual void UIRender() {};
 
 	void SwitchState(ENE_STATE state);
 	void ResetAttackState() { attackState_ = AttackState::None_Attack; }
@@ -47,6 +48,9 @@ private:
 	ESSpone st_spone_;
 	ESStandby st_standby_;
 	ESFighting st_fighting_;
+
+	DX9::SKINNEDMODEL model_;
+
 	bool isHitPlayer_;
 
 	float timeDelta_;

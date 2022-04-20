@@ -17,10 +17,11 @@ public:
 	virtual ~ObjectBase();
 
 	virtual void Initialize(const int id) = 0;
+	virtual void LoadAssets() = 0;
 	virtual void LoadAssets(std::wstring file_name) = 0;
 	virtual void Update(const float deltaTime) = 0;
 	virtual void Render() = 0;
-	virtual void Render(DX9::SKINNEDMODEL& model) = 0;
+	virtual void Render(DX9::MODEL& model) = 0;
 	virtual void UIRender() = 0;
 
 	virtual ObjectBase* IsCollision(ObjectBase* m);  // Õ“Ë”»’è(Bounding‚ğ—p‚¢‚½‚à‚Ì)
