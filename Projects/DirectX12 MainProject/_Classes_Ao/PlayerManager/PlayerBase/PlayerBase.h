@@ -15,7 +15,7 @@ public:
 	virtual ~PlayerBase() {};
 
 	void Initialize(const int id);
-
+	void LoadAssets();
 	void LoadAssets(std::wstring file_name);
 	void LoadEffect();
 
@@ -31,7 +31,7 @@ public:
 	void Jump(const float deltaTime);
 
 	void Render();
-	void Render(DX9::SKINNEDMODEL& model);
+	void Render(DX9::MODEL& model);
 	void UIRender();
 	//アニメーション
 	void SetAnimation(DX9::SKINNEDMODEL& model, const int enableTrack);

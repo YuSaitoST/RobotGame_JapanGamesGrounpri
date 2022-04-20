@@ -109,7 +109,6 @@ void PlayerBase::Initialize(const int id) {
 
 }
 
-
 void PlayerBase::LoadAssets(std::wstring file_name) {
 	player_model = DX9::SkinnedModel::CreateFromFile(DXTK->Device9, L"Player\\SwordManEX\\armor_red2_0210b.X");
 	player_model->SetScale(0.1f);
@@ -319,7 +318,7 @@ void PlayerBase::Render() {
 	player_model->Draw();
 }
 
-void PlayerBase::Render(DX9::SKINNEDMODEL& model) {
+void PlayerBase::Render(DX9::MODEL& model) {
 	player_model->Draw();
 }
 
