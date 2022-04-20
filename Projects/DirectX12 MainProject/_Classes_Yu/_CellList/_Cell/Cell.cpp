@@ -16,7 +16,7 @@ Cell::Cell(ObjectBase* m) {
 	MsIndex_	= -1;
 	mp_			= m;
 	next_		= prev_ = this;
-	//MoverToMorton(*mp_, level_, LsIndex_, MsIndex_);
+	MoverToMorton(*mp_, level_, LsIndex_, MsIndex_);
 }
 
 Cell::~Cell() {
@@ -94,8 +94,7 @@ int Cell::PointToMorton(Vector2 pos) {
 }
 
 void Cell::MoverToMorton(ObjectBase& m, int& L, int& I, int& M) {
-	// 補正
-	Vector3 _pos = m.myPosition() + Vector3(1000.0f, 0.0f, 1000.0f);
+	Vector3 _pos = m.myPosition();
 
 	// 左前、右後の座標(原点が左上の場合の式)
 	Vector2 _UL = Vector2(_pos.x - m.myRadian(), _pos.z + m.myRadian());

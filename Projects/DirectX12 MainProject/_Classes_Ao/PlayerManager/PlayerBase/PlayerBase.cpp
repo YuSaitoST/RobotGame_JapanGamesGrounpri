@@ -9,6 +9,7 @@
 
 
 PlayerBase::PlayerBase() {
+	cp_ = nullptr;
 	SetBaseMember(OBJ_TYPE::PLAYER, SimpleMath::Vector3::Zero, 1.0f);
 
 	player_model = nullptr;

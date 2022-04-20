@@ -16,7 +16,7 @@ public:
 	}
 
 	Number GetNumber() const { return param_->GetNumber(); }
-	inline float GetFieldFalfScale() const { return field_halfDistance_ * 0.5f; }
+	inline float GetFieldFalfScale() const { return field_halfDistance_; }
 
 private:
 	ConstiateParam();
