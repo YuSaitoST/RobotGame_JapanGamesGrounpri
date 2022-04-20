@@ -20,6 +20,11 @@ void Enemy::Initialize(const int id) {
 	se_shooting_->Initialize(seNameBem, SOUND_TYPE::SE, ENParams.FREQUENCY_OF_SHOOTING);  // ‚±‚±‚ÌŠÔŠu‚ÍŽËŒ‚‚Ì•p“x‚É‡‚í‚¹‚Ä
 }
 
+void Enemy::LoadAssets(std::wstring file_name) {
+	model_ = DX9::SkinnedModel::CreateFromFile(DXTK->Device9, file_name.c_str());
+	model_->SetScale(0.1f);
+}
+
 void Enemy::Update(const float deltaTime) {
 	timeDelta_ = deltaTime;
 

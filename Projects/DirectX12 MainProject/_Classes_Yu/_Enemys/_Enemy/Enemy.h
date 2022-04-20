@@ -16,7 +16,7 @@ public:
 
 	virtual void Initialize(const int id);
 	virtual void LoadAssets() {};
-	virtual void LoadAssets(std::wstring file_name) {}
+	virtual void LoadAssets(std::wstring file_name);
 	virtual void Update(const float deltaTime);
 	virtual void Render();
 	virtual void Render(DX9::MODEL& model) {}

@@ -18,5 +18,4 @@ public:
 
 private:
 	static std::vector<Enemy*> enemyList_;
-	DX9::SKINNEDMODEL model_;
 };

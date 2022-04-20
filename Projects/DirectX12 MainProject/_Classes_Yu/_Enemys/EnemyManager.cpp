@@ -25,8 +25,8 @@ void EnemyManager::Initialize() {
 }
 
 void EnemyManager::LoadAssets() {
-	model_ = DX9::SkinnedModel::CreateFromFile(DXTK->Device9, L"Player\\SwordManEX\\armor_red2_0210b.X");
-	model_->SetScale(0.1f);
+	for (int _i = 0; _i < enemyList_.size(); ++_i)
+		enemyList_[_i]->LoadAssets(L"Player\\SwordManEX\\armor_red2_0210b.X");
 }
 
 void EnemyManager::Update(const float deltaTime) {
@@ -36,5 +36,5 @@ void EnemyManager::Update(const float deltaTime) {
 
 void EnemyManager::Render() {
 	for (Enemy* enemy : enemyList_)
-		enemy->Render(model_);
+		enemy->Render();
 }

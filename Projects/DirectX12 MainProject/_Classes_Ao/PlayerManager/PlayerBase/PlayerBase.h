@@ -15,7 +15,7 @@ public:
 	virtual ~PlayerBase() {};
 
 	void Initialize(const int id);
-	void LoadAssets();
+	void LoadAssets() {}
 	void LoadAssets(std::wstring file_name);
 	void LoadEffect();
 
