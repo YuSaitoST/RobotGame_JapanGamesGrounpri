@@ -55,9 +55,6 @@ PlayerBase::PlayerBase() {
 	third_reception_time = 0.0f; //受付時間初期値
 	third_reception_max = 0.0f;  //受付時間最大値
 	third_check_flag = false;     //最後終わるまで攻撃不可
-
-
-
 }
 
 void PlayerBase::Initialize(const int id) {
@@ -200,25 +197,28 @@ void PlayerBase::Dush(const float deltaTime) {
 	}
 
 	//オーバーヒート中
-	if (overheart_flag)
+	if (overheart_flag) {
 		overheart_time += deltaTime;
-	if (overheart_time >= overheart_max) {
-		overheart_flag = false;
-		overheart_time = 0.0f;
+		if (overheart_time >= overheart_max) {
+			overheart_flag = false;
+			Boost_max = 100;
+			overheart_time = 0.0f;
+		}
 	}
-
 
 	Boost_max = std::clamp(Boost_max, 0, 100);
 }
 
 //近接攻撃
 void PlayerBase::Attack(const float deltaTime) {
-	attackState_ = AttackState::Adjacent;
+	
 	switch (burst_state_mode)
 	{
 	case BURST_STATE::NOT_BURST:
-		if (Press.AtackEventKey())
+		if (Press.AtackEventKey()) {
 			burst_state_mode = BURST_STATE::FIRST;
+			attackState_ = AttackState::Adjacent;
+		}
 		break;
 	case BURST_STATE::FIRST:
 		
@@ -242,6 +242,7 @@ void PlayerBase::Attack(const float deltaTime) {
 			frist_reception_time = 0.0f;
 			frist_check_flag = false;
 			burst_state_mode = BURST_STATE::NOT_BURST;
+			attackState_ = AttackState::None_Attack;
 		}
 
 		break;
@@ -267,6 +268,7 @@ void PlayerBase::Attack(const float deltaTime) {
 			second_reception_time = 0.0f;
 			second_check_flag = false;
 			burst_state_mode = BURST_STATE::NOT_BURST;
+			attackState_ = AttackState::None_Attack;
 		}
 
 		break;
@@ -278,7 +280,7 @@ void PlayerBase::Attack(const float deltaTime) {
 			third_reception_time = 0.0f;
 			third_reception_time = false;
 			burst_state_mode = BURST_STATE::NOT_BURST;
-
+			attackState_ = AttackState::None_Attack;
 		}
 		break;
 	}
@@ -287,6 +289,7 @@ void PlayerBase::Attack(const float deltaTime) {
 
 void PlayerBase::Shot(const float deltaTime) {
 	attackState_ = AttackState::Shooting;
+	attackState_ = AttackState::None_Attack;
 }
 
 void PlayerBase::Jump(const float deltaTime) {
@@ -407,7 +410,7 @@ void PlayerBase::UIRender() {
 			debag_font.Get(),
 			SimpleMath::Vector2(0.0f, 160.0f),
 			DX9::Colors::Blue,
-			L"オーバーヒート解除まで残り %f 秒",(int)overheart_time
+			L"オーバーヒート解除まで残り %f 秒",overheart_time
 		);
 	}
 	else
