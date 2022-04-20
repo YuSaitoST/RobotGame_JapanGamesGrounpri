@@ -1,5 +1,6 @@
 #include "Cell.h"
 #include "_Classes_Yu/_CellList/ObjectManager.h"
+#include "_Classes_Yu/_FIelds/ConstiateParam.h"
 
 Cell::Cell() {
 	level_		= -1;
@@ -77,8 +78,8 @@ int Cell::PointToMorton(Vector2 pos) {
 	const int _CN = (int)std::pow(2, CellList::N);
 
 	// äiéqÇÃàÍï”ÇÃí∑Ç≥
-	const float _sx = 2000.0f / _CN;
-	const float _sy = 2000.0f / _CN;
+	const float _sx = FLParams.LENGHT_OF_A_SIDE / _CN;
+	const float _sy = FLParams.LENGHT_OF_A_SIDE / _CN;
 
 	// äiéqÇÃç¿ïW
 	const int _kx = (int)(pos.x / _sx);

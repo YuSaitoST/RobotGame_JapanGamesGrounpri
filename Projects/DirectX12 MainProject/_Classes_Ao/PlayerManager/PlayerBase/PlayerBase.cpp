@@ -135,12 +135,13 @@ void PlayerBase::Setting(const float deltaTime) {
 	
 	//ˆÚ“®§ŒÀ
 	pos_ = SimpleMath::Vector3(
-		pos_.x = std::min(std::max(-FLParams.GetFieldFalfScale(), pos_.x), FLParams.GetFieldFalfScale()),
+		pos_.x = std::min(std::max(0.0f, pos_.x), FLParams.LENGHT_OF_A_SIDE),
 		pos_.y = std::min(std::max(0.0f, pos_.y), 10000.0f),
-		pos_.z = std::min(std::max(-FLParams.GetFieldFalfScale(), pos_.z), FLParams.GetFieldFalfScale())
+		pos_.z = std::min(std::max(0.0f, pos_.z), FLParams.LENGHT_OF_A_SIDE)
 	);
 
 	player_model->AdvanceTime(deltaTime);
+	player_model->SetPosition(pos_);
 }
 
 void PlayerBase::Update(const float deltaTime) {

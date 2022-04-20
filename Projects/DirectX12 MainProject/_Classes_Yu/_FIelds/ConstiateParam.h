@@ -6,25 +6,23 @@
 
 class ConstiateParam {
 public:
+	const float LENGHT_OF_A_SIDE = 800.0f;
+
+public:
 	static ConstiateParam& GetInstance() {
-		static ConstiateParam instance_;
-		return instance_;
+		if (instance_ == 0)
+			instance_ = new ConstiateParam();
+		return *instance_;
 	}
 
-	Number GetNumber() const { return param_.GetNumber(); }
-	float GetFieldFalfScale() const { return field_halfDistance_ * 0.5f; }
+	Number GetNumber() const { return param_->GetNumber(); }
+	inline float GetFieldFalfScale() const { return field_halfDistance_ * 0.5f; }
 
 private:
-	ConstiateParam() : field_halfDistance_(0.0f) {
-		LoadCSV();
-		field_halfDistance_ = GetNumber().SCALE * FIELD_SCALE;
-	}
-	virtual ~ConstiateParam() {}
+	ConstiateParam();
+	virtual ~ConstiateParam();
 
-	void LoadCSV() { param_.LoadParams(); }
-
-	FieldParamsLoad param_;
+	static ConstiateParam* instance_;
+	FieldParamsLoad* param_;
 	float field_halfDistance_;
-
-	const float FIELD_SCALE = 200.0f;
 };
