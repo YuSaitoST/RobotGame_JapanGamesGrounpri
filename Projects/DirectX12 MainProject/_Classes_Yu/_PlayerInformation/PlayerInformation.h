@@ -16,10 +16,8 @@ public:
 	}
 
 	void SetMenber(Vector3* pos, AttackState* ATstate) { position_ = pos; attackState_ = ATstate; }
-	void SetMenber(Vector3* pos) { position_ = pos; }
 
-	//AttackState NowAttackState() { return *attackState_; }
-	AttackState NowAttackState() { return AttackState::None_Attack; }
+	AttackState NowAttackState() { return *attackState_; }
 	Vector3* GetPosition() { return position_; }
 	Vector3 GetDirection(Vector3 myPos) { return VectorNomalized(*GetPosition() - myPos); }
 	float GetDistance(Vector3 myPos) { return std::fabsf((*GetPosition() - myPos).Length()); }

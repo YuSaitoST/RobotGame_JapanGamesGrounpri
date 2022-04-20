@@ -32,6 +32,7 @@ void Enemy::Update(const float deltaTime) {
 	isHitPlayer_ = (hitObj != nullptr) ? (hitObj->myObjectType() == OBJ_TYPE::PLAYER) : false;
 
 	state_->Update(id_my_);
+	pos_.y = 0.0f;
 
 	UpdateToMorton();
 

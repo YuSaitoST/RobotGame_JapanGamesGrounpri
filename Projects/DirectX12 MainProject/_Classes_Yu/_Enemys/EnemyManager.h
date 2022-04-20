@@ -8,7 +8,6 @@ public:
 	EnemyManager(const int enemyNum);
 	virtual ~EnemyManager();
 
-	void PushList(Vector3 position, float r);
 	static Enemy* Access(const int index);
 
 	void Initialize();

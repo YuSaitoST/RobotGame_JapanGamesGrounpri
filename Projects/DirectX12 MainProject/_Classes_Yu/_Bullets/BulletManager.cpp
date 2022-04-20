@@ -1,6 +1,8 @@
 #include "BulletManager.h"
 #include "_Bullet/Bullet.h"
 
+std::vector<Bullet*> BulletManager::bulletList_;
+
 BulletManager::BulletManager() {
 	bulletList_.reserve(10);
 

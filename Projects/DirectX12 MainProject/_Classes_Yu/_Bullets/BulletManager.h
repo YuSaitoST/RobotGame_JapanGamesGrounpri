@@ -14,9 +14,9 @@ public:
 	void Update(const float deltaTime);
 	void Render();
 
-	void Shooting(int ownerID, DirectX::SimpleMath::Vector3 pos, float rotY);
+	static void Shooting(int ownerID, DirectX::SimpleMath::Vector3 pos, float rotY);
 
 private:
 	DX9::MODEL model_;  // ’eƒ‚ƒfƒ‹
-	std::vector<Bullet*> bulletList_;
+	static std::vector<Bullet*> bulletList_;
 };

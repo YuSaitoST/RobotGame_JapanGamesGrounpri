@@ -4,15 +4,14 @@ std::vector<Enemy*> EnemyManager::enemyList_;
 
 EnemyManager::EnemyManager(const int enemyNum) {
 	enemyList_.reserve(enemyNum);
+
+	for (int _i = 0; _i < enemyNum; ++_i)
+		enemyList_.push_back(new Enemy(Vector3(0.0f, 0.0f, 250.0f), 1.0f));
 }
 
 EnemyManager::~EnemyManager() {
 	for (int _i = enemyList_.size() - 1; 0 <= _i; --_i)
 		delete enemyList_[_i];
-}
-
-void EnemyManager::PushList(Vector3 position, float r) {
-	enemyList_.push_back(new Enemy(position, r));
 }
 
 Enemy* EnemyManager::Access(const int index) {
