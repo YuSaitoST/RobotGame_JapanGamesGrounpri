@@ -6,14 +6,14 @@ ObjectBase::ObjectBase() {
 }
 
 ObjectBase::ObjectBase(OBJ_TYPE kind, Vector3 pos, float r) {
-	//SetBaseMember(kind, pos, r);
+	SetBaseMember(kind, pos, r);
 }
 
 ObjectBase::~ObjectBase() {
-	//if (cp_ != nullptr) {
-	//	cp_->Remove();
-	//	delete cp_;
-	//}
+	if (cp_ != nullptr) {
+		cp_->Remove();
+		delete cp_;
+	}
 }
 
 void ObjectBase::SetBaseMember(OBJ_TYPE kind, Vector3 pos, float r) {
@@ -32,20 +32,20 @@ void ObjectBase::SetBaseMember(OBJ_TYPE kind, Vector3 pos, float r) {
 }
 
 ObjectBase* ObjectBase::IsCollision(ObjectBase* m) {
-	//// “¯‚¶Ží—Þ‚Ì•¨‘Ì“¯ŽmA‚Ü‚½‚Í“¯‚¶ID‚Ì•¨‘Ì“¯Žm‚Å‚ÍÕ“Ë‚µ‚È‚¢
-	//if ((obj_type_ == m->myObjectType()) || (id_my_ == m->myObjectID()))
-	//	return nullptr;
+	// “¯‚¶Ží—Þ‚Ì•¨‘Ì“¯ŽmA‚Ü‚½‚Í“¯‚¶ID‚Ì•¨‘Ì“¯Žm‚Å‚ÍÕ“Ë‚µ‚È‚¢
+	if ((obj_type_ == m->myObjectType()) || (id_my_ == m->myObjectID()))
+		return nullptr;
 
-	//if (collision_->GetBounding().Intersects(m->collision_->GetBounding()))
-	//	return m;
+	if (collision_->GetBounding().Intersects(m->collision_->GetBounding()))
+		return m;
 
 	return nullptr;
 }
 
 void ObjectBase::UpdateToMorton() {
-	//// ‘¶Ý‚·‚é‚È‚çAŠ‘®‹óŠÔ‚ÌXV‚ð‚·‚é
-	//if (cp_ != nullptr)
-	//	cp_->UpdateToMorton();
+	// ‘¶Ý‚·‚é‚È‚çAŠ‘®‹óŠÔ‚ÌXV‚ð‚·‚é
+	if (cp_ != nullptr)
+		cp_->UpdateToMorton();
 }
 
 ObjectBase* ObjectBase::IsHitObject() {

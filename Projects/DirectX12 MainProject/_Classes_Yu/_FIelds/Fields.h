@@ -15,4 +15,7 @@ public:
 private:
 	SkyDome* skyDome_;
 	DX9::MODEL model_;
+
+	DX9::TEXTURE bump_;
+	DX9::SHADER shader_;
 };

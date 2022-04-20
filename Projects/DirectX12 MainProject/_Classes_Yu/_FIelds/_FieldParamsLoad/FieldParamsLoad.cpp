@@ -2,8 +2,6 @@
 #include <stdio.h>
 #include <cstdlib>
 
-FieldParamsLoad* FieldParamsLoad::instance_ = 0;
-
 void FieldParamsLoad::LoadParams() {
 	FILE* _file;
 

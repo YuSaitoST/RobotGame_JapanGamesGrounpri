@@ -3,11 +3,13 @@
 #include<stdio.h>
 #include<cstdlib>
 
+#include "_Classes_Yu/_FIelds/ConstiateParam.h"
 #include "_Classes_Yu/_PlayerInformation/PlayerInformation.h"
 #include "_Classes_Yu/_InputClasses/UseKeyCheck.h"
 
 
 PlayerBase::PlayerBase() {
+	cp_ = nullptr;
 	SetBaseMember(OBJ_TYPE::PLAYER, SimpleMath::Vector3::Zero, 1.0f);
 
 	player_model = nullptr;
@@ -143,15 +145,16 @@ void LoadCsv() {
 void PlayerBase::Setting(const float deltaTime) {
 	player_model->SetRotation(0.0f, XMConvertToRadians(180.0f), 0.0f);
 	pos_ = player_model->GetPosition();
-
+	
 	//ˆÚ“®§ŒÀ
 	pos_ = SimpleMath::Vector3(
-		pos_.x = std::min(std::max(0.0f, pos_.x), 200.0f),
+		pos_.x = std::min(std::max(0.0f, pos_.x), FLParams.LENGHT_OF_A_SIDE),
 		pos_.y = std::min(std::max(0.0f, pos_.y), 10000.0f),
-		pos_.z = std::min(std::max(0.0f, pos_.z), 200.0f)
+		pos_.z = std::min(std::max(0.0f, pos_.z), FLParams.LENGHT_OF_A_SIDE)
 	);
 
 	player_model->AdvanceTime(deltaTime);
+	player_model->SetPosition(pos_);
 }
 
 void PlayerBase::Update(const float deltaTime) {
