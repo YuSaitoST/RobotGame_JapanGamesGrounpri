@@ -89,9 +89,14 @@ private:
 	float speed;
 
 	//ダッシュ 関数 系統
-	int overheart_zero;//オーバーヒートの初期値
-	int overheart_max; //オーバーヒートの最大値
+	//ブースト時の変数
+	int Boost_zero;//ブーストの初期値
+	int Boost_max; //ブーストの最大値
+
+	//オーバーヒート時の変数
 	bool overheart_flag; //オーバーヒートのフラグ
+	float overheart_time;//オーバーヒートしている時間 初期値
+	float overheart_max; //オーバーヒートしている時間 最大値
 
 	//ジャンプ 関数
 	bool jump_flag = false;

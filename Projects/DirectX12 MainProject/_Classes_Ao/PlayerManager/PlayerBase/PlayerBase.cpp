@@ -20,7 +20,10 @@ PlayerBase::PlayerBase() {
 	//ダッシュ 関数
 	Boost_zero = 0;//オーバーヒートの初期値
 	Boost_max  = 0; //オーバーヒートの最大値
+	//オーバーヒート時の変数
 	overheart_flag = false; //オーバーヒートのフラグ
+	overheart_time = 0.0f;//オーバーヒートしている時間 初期値
+	overheart_max = 0.0f; //オーバーヒートしている時間 最大値
 
 
 	//ジャンプ 関数
@@ -65,7 +68,10 @@ void PlayerBase::Initialize(const int id) {
 	//ダッシュ 関数
 	Boost_zero = 0;     //オーバーヒートの初期値
 	Boost_max  = 100;   //オーバーヒートの最大値
-	overheart_flag = false; //オーバーヒートのフラグ
+	//オーバーヒート時の変数
+	overheart_flag=false; //オーバーヒートのフラグ
+	overheart_time=0.0f;//オーバーヒートしている時間 初期値
+	overheart_max=3.0f; //オーバーヒートしている時間 最大値
 
 
 	//ジャンプ 関数
@@ -404,7 +410,15 @@ void PlayerBase::UIRender() {
 			DX9::Colors::Blue,
 			L"オーバーヒート解除まで残り %f 秒",(int)overheart_time
 		);
-
+	}
+	else
+	{
+		DX9::SpriteBatch->DrawString(
+			debag_font.Get(),
+			SimpleMath::Vector2(0.0f, 130.0f),
+			DX9::Colors::Blue,
+			L"オーバーヒート OFF"
+		);
 	}
 }
 
