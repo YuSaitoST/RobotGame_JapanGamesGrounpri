@@ -40,6 +40,7 @@ private:
 	void Rotate(const Vector3 targetDirection);
 	Action Step(const Vector3 moveDirection);
 
+	OriTimer* shotInterval_;
 	SoundPlayer* se_running_;
 	SoundPlayer* se_adjacent_;
 	SoundPlayer* se_shooting_;
@@ -58,7 +59,7 @@ private:
 
 	Vector3 moveDirection_;
 
-	const float GRAVITY = 9.80665f;
+	const float GRAVITY = 9.8f;
 	const std::wstring seNameRun = L"_Sounds\\_SE\\SELab_RunningOnAsphalt1.wav";
 	const std::wstring seNameAtk = L"_Sounds\\_SE\\_Attack\\SELab_useOnesSword1.wav";
 	const std::wstring seNameBem = L"_Sounds\\_SE\\_Attack\\SELab_beamCannon1.wav";

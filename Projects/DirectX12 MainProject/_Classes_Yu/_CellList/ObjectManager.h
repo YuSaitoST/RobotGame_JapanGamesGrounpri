@@ -4,6 +4,8 @@
 #include "_Classes_Yu/_Enemys/EnemyManager.h"
 #include "_Classes_Yu/_Bullets/BulletManager.h"
 
+using namespace DirectX::SimpleMath;
+
 extern CellList cellList;
 
 class ObjectManager {
@@ -18,7 +20,7 @@ public:
 	void RenderSprites();
 
 	static Enemy* GetEnemy(const int index) { return m_enemy_->Access(index); }
-	static void SetShooting(int ownerID, DirectX::SimpleMath::Vector3 pos, float rotY) { BulletManager::Shooting(ownerID, pos, rotY); }
+	static void SetShooting(int ownerID, Vector3 pos, Vector3 forward, float rotY) { BulletManager::Shooting(ownerID, pos, forward, rotY); }
 
 private:
 	static EnemyManager* m_enemy_;

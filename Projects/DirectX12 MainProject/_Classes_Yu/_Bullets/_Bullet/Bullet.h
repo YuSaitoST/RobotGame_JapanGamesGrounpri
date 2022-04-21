@@ -17,10 +17,8 @@ public:
 
 	inline bool IsBeenShot() const { return isShot_; }
 
-	void Shoot(int ownerID, Vector3 pos, float rotY);
+	void Shoot(int ownerID, Vector3 pos, Vector3 forward, float rotY);
 
 private:
-	void SetFlyForward();
-
 	bool isShot_;
 };

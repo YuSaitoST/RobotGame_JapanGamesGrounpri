@@ -1,4 +1,5 @@
 #include "Enemy.h"
+#include "_Classes_Yu/_CellList/ObjectManager.h"
 
 Enemy::Enemy(Vector3 pos, float r) : timeDelta_(0.0f), jumpTime_(0.0f) {
 	cp_ = nullptr;
@@ -11,6 +12,8 @@ Enemy::Enemy(Vector3 pos, float r) : timeDelta_(0.0f), jumpTime_(0.0f) {
 Enemy::~Enemy() {
 	delete se_shooting_;
 	delete se_adjacent_;
+	delete se_running_;
+	delete shotInterval_;
 }
 
 void Enemy::Initialize(const int id) {
@@ -45,6 +48,7 @@ void Enemy::Render() {
 }
 
 void Enemy::SetMember() {
+	shotInterval_	= new OriTimer(ENParams.FREQUENCY_OF_SHOOTING, 0.0f);
 	se_running_		= new SoundPlayer();
 	se_adjacent_	= new SoundPlayer();
 	se_shooting_	= new SoundPlayer();
@@ -119,7 +123,14 @@ Action Enemy::Adjacent() {
 }
 
 Action Enemy::Shooting() {
-	attackState_ = AttackState::Shooting;
+	if (shotInterval_->NowTime() == 0.0f) {
+		attackState_ = AttackState::Shooting;
+		ObjectManager::SetShooting(id_my_, pos_, forward_, rotateY_);
+		shotInterval_->ResetCountTime();
+	}
+
+	shotInterval_->Update(timeDelta_);
 	se_shooting_->PlayRoopSE(timeDelta_);
-	return SUCSESS;
+
+	return (shotInterval_->TimeOut()) ? SUCSESS : REPEAT;
 }
