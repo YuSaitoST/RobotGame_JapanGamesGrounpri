@@ -48,6 +48,7 @@ void Enemy::Render() {
 }
 
 void Enemy::SetMember() {
+	hp_				= new HPGauge(10);
 	shotInterval_	= new OriTimer(ENParams.FREQUENCY_OF_SHOOTING, 0.0f);
 	se_running_		= new SoundPlayer();
 	se_adjacent_	= new SoundPlayer();

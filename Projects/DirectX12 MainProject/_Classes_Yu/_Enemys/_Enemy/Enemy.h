@@ -2,6 +2,7 @@
 
 #include "_Classes_Yu/_CellList/_Object/ObjectBase.h"
 #include "_Classes_Yu/_SoundPlayer/SoundPlayer.h"
+#include "_Classes_Yu/_HPGauge/HPGauge.h"
 #include "_EneState/EneState.h"
 
 #include "_EneState/_ESSpone/ESSpone.h"
@@ -40,6 +41,7 @@ private:
 	void Rotate(const Vector3 targetDirection);
 	Action Step(const Vector3 moveDirection);
 
+	HPGauge* hp_;
 	OriTimer* shotInterval_;
 	SoundPlayer* se_running_;
 	SoundPlayer* se_adjacent_;

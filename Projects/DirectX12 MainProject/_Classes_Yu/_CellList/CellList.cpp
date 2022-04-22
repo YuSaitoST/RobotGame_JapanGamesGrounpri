@@ -30,10 +30,8 @@ ObjectBase* CellList::IsCollision(int index, ObjectBase* m) {
 
 		_mp_opponent = m->IsCollision(_cp->mp_);
 
-		if (_mp_opponent != nullptr && m != _mp_opponent) {
-			// îªíËéÊÇËÇΩÇ≠Ç»Ç¢ëgÇ›çáÇÌÇπÇÕÇ±Ç±Ç≈îªï Ç∑ÇÈÇ∆Ç¢Ç¢Ç©Ç‡
+		if (_mp_opponent != nullptr && m != _mp_opponent)
 			return _mp_opponent;
-		}
 
 		_cp = _np;
 	}

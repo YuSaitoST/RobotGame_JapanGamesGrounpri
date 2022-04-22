@@ -33,7 +33,9 @@ void ObjectBase::SetBaseMember(OBJ_TYPE kind, Vector3 pos, float r) {
 
 ObjectBase* ObjectBase::IsCollision(ObjectBase* m) {
 	// “¯‚¶Ží—Þ‚Ì•¨‘Ì“¯ŽmA‚Ü‚½‚Í“¯‚¶ID‚Ì•¨‘Ì“¯Žm‚Å‚ÍÕ“Ë‚µ‚È‚¢
-	if ((obj_type_ == m->myObjectType()) || (id_my_ == m->myObjectID()))
+	if ((OBJ_TYPE::WEAPON != m->myObjectType()))
+		return nullptr;
+	if (id_my_ == m->myObjectID())
 		return nullptr;
 
 	if (collision_->GetBounding().Intersects(m->collision_->GetBounding()))
