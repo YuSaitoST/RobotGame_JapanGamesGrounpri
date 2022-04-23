@@ -14,7 +14,7 @@ BhWarSelector::~BhWarSelector() {
 }
 
 Action BhWarSelector::Behavior(const int myID) {
-	Action nowAction = (nd_escape_->Behavior(myID) != FAILIRE) ? SUCSESS : nd_random_->Behavior(myID);
+	Action nowAction = (nd_escape_->Behavior(myID) != FAILIRE) ? FAILIRE : nd_random_->Behavior(myID);
 
 	if (nowAction == FAILIRE)
 		EnemyManager::Access(myID)->ResetAttackState();

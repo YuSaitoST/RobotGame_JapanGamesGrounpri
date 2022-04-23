@@ -3,7 +3,7 @@
 #include "Base/pch.h"
 #include "Base/dxtk.h"
 
-#include "_Classes_Yu/_Enemys/_EneParamsLoad/EneParamsLoad.h"
+#include "_Classes_Yu/_Enemys/_EneParamsLoad/_EneStandardParamsLoad/EneStandardParamsLoad.h"
 #include "_Classes_Yu/_Enemys/_Instructor/EneInstructor.h"
 #include "_Classes_Yu/_PlayerInformation/PlayerInformation.h"
 

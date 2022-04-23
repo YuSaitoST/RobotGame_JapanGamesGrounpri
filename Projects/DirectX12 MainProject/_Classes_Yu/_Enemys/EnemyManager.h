@@ -16,5 +16,6 @@ public:
 	void Render();
 
 private:
+	enum LEVELS { ONE = 0, TWO = 1, THREE = 2 };
 	static std::vector<Enemy*> enemyList_;
 };

@@ -1,4 +1,5 @@
 #include "EnemyManager.h"
+#include "_EneParamsLoad/_EnesPositionLoad/EnesPositionLoad.h"
 
 std::vector<Enemy*> EnemyManager::enemyList_;
 
@@ -6,7 +7,7 @@ EnemyManager::EnemyManager(const int enemyNum) {
 	enemyList_.reserve(enemyNum);
 
 	for (int _i = 0; _i < enemyNum; ++_i)
-		enemyList_.push_back(new Enemy(Vector3(0.0f, 0.0f, 250.0f), 1.0f));
+		enemyList_.push_back(new Enemy((int)LEVELS::ONE, ENPos.GetPosition(_i), 1.0f));
 }
 
 EnemyManager::~EnemyManager() {

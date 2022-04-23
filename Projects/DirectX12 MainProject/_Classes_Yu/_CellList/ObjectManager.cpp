@@ -1,11 +1,15 @@
 #include "ObjectManager.h"
-#include "_Classes_Yu/_Enemys/_EneParamsLoad/EneParamsLoad.h"
+#include "_Classes_Yu/_Enemys/_EneParamsLoad/_EneStandardParamsLoad/EneStandardParamsLoad.h"
+#include "_Classes_Yu/_Enemys/_EneParamsLoad/_EneLvParamsLoad/EneLvParamsLoad.h"
+#include "_Classes_Yu/_Enemys/_EneParamsLoad/_EnesPositionLoad/EnesPositionLoad.h"
 
 CellList cellList = CellList{};
 EnemyManager* ObjectManager::m_enemy_;
 
 ObjectManager::ObjectManager() {
-	EneParamsLoad::GetInstance().LoadParams();
+	EneStandardParamsLoad::GetInstance().LoadParams();
+	//EneLvParamsLoad::GetInstance().LoadParams();
+	EnesPositionLoad::GetInstance().LoadParams();
 
 	m_enemy_	= new EnemyManager(1);
 	m_bullet_	= new BulletManager();

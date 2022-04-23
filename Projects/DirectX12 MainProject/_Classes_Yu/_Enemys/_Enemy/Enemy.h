@@ -4,15 +4,15 @@
 #include "_Classes_Yu/_SoundPlayer/SoundPlayer.h"
 #include "_Classes_Yu/_HPGauge/HPGauge.h"
 #include "_EneState/EneState.h"
+#include "_Classes_Yu/_Enemys/_EneParamsLoad/_EneStandardParamsLoad/EneStandardParamsLoad.h"
 
-#include "_EneState/_ESSpone/ESSpone.h"
 #include "_EneState/_ESStandby/ESStandby.h"
 #include "_EneState/_ESFighting/ESFighting.h"
 
 enum Action;
 class Enemy final : public ObjectBase {
 public:
-	Enemy(Vector3 pos, float r);
+	Enemy(int level, Vector3 pos, float r);
 	virtual ~Enemy();
 
 	virtual void Initialize(const int id);
@@ -27,6 +27,8 @@ public:
 	void ResetAttackState() { attackState_ = AttackState::None_Attack; }
 
 	Vector3* GetPosP() { return &pos_; }
+	int myLevel() const { return level_; }
+	bool IsInAction() const { return isInAction_; }
 
 	Action Move(const Vector3 targetDirection);
 	Action Thruster();
@@ -42,18 +44,19 @@ private:
 	Action Step(const Vector3 moveDirection);
 
 	HPGauge* hp_;
-	OriTimer* shotInterval_;
+	OriTimer* actionInterval_;
 	SoundPlayer* se_running_;
 	SoundPlayer* se_adjacent_;
 	SoundPlayer* se_shooting_;
 
 	EneState* state_;
-	ESSpone st_spone_;
 	ESStandby st_standby_;
 	ESFighting st_fighting_;
 
 	DX9::SKINNEDMODEL model_;
 
+	int level_;
+	bool isInAction_;
 	bool isHitPlayer_;
 
 	float timeDelta_;

@@ -1,26 +1,30 @@
 #include "Enemy.h"
 #include "_Classes_Yu/_CellList/ObjectManager.h"
 
-Enemy::Enemy(Vector3 pos, float r) : timeDelta_(0.0f), jumpTime_(0.0f) {
+Enemy::Enemy(int level, Vector3 pos, float r) : level_(level), isInAction_(false), timeDelta_(0.0f), jumpTime_(0.0f) {
 	cp_ = nullptr;
 	SetBaseMember(OBJ_TYPE::ENEMY, pos, r);
 	SetMember();
 
-	SwitchState(SPONE);
+	SwitchState(STANDBY);
 }
 
 Enemy::~Enemy() {
 	delete se_shooting_;
 	delete se_adjacent_;
 	delete se_running_;
-	delete shotInterval_;
+	delete actionInterval_;
+	delete hp_;
 }
 
 void Enemy::Initialize(const int id) {
 	id_my_ = id;
+	st_standby_.Initialize(id_my_);
 	se_running_->Initialize(seNameRun, SOUND_TYPE::SE, 10.0f);
 	se_adjacent_->Initialize(seNameAtk, SOUND_TYPE::SE, 0.5f);  // 仮の値、連続攻撃なら音変わるかもだからここの仕様が変わりそう
 	se_shooting_->Initialize(seNameBem, SOUND_TYPE::SE, ENParams.FREQUENCY_OF_SHOOTING);  // ここの間隔は射撃の頻度に合わせて
+
+	forward_ = Vector3(0.0f, 0.0f, -1.0f);
 }
 
 void Enemy::LoadAssets(std::wstring file_name) {
@@ -31,12 +35,13 @@ void Enemy::LoadAssets(std::wstring file_name) {
 void Enemy::Update(const float deltaTime) {
 	timeDelta_ = deltaTime;
 
-	ObjectBase* hitObj = IsHitObject();
-	isHitPlayer_ = (hitObj != nullptr) ? (hitObj->myObjectType() == OBJ_TYPE::PLAYER) : false;
+	if (IsHitObject() != nullptr) {
+		// ダメージ処理
+		SwitchState(STAN);
+	}
 
 	state_->Update(id_my_);
-	pos_.y = 0.0f;
-
+	
 	UpdateToMorton();
 
 	model_->SetPosition(pos_);
@@ -49,7 +54,7 @@ void Enemy::Render() {
 
 void Enemy::SetMember() {
 	hp_				= new HPGauge(10);
-	shotInterval_	= new OriTimer(ENParams.FREQUENCY_OF_SHOOTING, 0.0f);
+	actionInterval_	= new OriTimer(ENParams.FREQUENCY_OF_SHOOTING, 0.0f);
 	se_running_		= new SoundPlayer();
 	se_adjacent_	= new SoundPlayer();
 	se_shooting_	= new SoundPlayer();
@@ -61,7 +66,6 @@ void Enemy::SetMember() {
 
 void Enemy::SwitchState(ENE_STATE state) {
 	switch (state) {
-		case SPONE		: state_ = &st_spone_;		break;
 		case STANDBY	: state_ = &st_standby_;	break;
 		case FIGHTING	: state_ = &st_fighting_;	break;
 		case STAN:break;
@@ -87,8 +91,10 @@ Action Enemy::Thruster() {
 }
 
 Action Enemy::Step(const Vector3 moveDirection) {
-	if (jumpTime_ == 0.0f)
+	if (jumpTime_ == 0.0f) {
+		isInAction_ = true;
 		moveDirection_ = moveDirection;
+	}
 
 	jumpTime_ += timeDelta_;
 
@@ -102,8 +108,10 @@ Action Enemy::Step(const Vector3 moveDirection) {
 
 	const bool isFine = (pos_.y == 0.0f);
 
-	if (isFine)
+	if (isFine) {
 		jumpTime_ = 0.0f;
+		isInAction_ = false;
+	}
 
 	return isFine ? SUCSESS : REPEAT;
 }
@@ -113,8 +121,7 @@ Action Enemy::BackStep() {
 }
 
 Action Enemy::SideStep(const Vector3 targetDirection) {
-	Rotate(targetDirection);
-	return Step(Vector3(forward_.z, 0.0f, forward_.x));
+	return Step(XMFLOAT3(targetDirection.z, 0.0f, targetDirection.x));
 }
 
 Action Enemy::Adjacent() {
@@ -124,14 +131,14 @@ Action Enemy::Adjacent() {
 }
 
 Action Enemy::Shooting() {
-	if (shotInterval_->NowTime() == 0.0f) {
+	if (actionInterval_->NowTime() == 0.0f) {
 		attackState_ = AttackState::Shooting;
 		ObjectManager::SetShooting(id_my_, pos_, forward_, rotateY_);
-		shotInterval_->ResetCountTime();
+		actionInterval_->ResetCountTime();
 	}
 
-	shotInterval_->Update(timeDelta_);
+	actionInterval_->Update(timeDelta_);
 	se_shooting_->PlayRoopSE(timeDelta_);
 
-	return (shotInterval_->TimeOut()) ? SUCSESS : REPEAT;
+	return (actionInterval_->TimeOut()) ? SUCSESS : REPEAT;
 }

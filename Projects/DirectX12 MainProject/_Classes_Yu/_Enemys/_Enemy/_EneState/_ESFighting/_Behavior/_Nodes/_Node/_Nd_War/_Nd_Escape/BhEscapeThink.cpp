@@ -5,12 +5,14 @@
 BhEscapeThink::BhEscapeThink() {
 	nd_vsAdj_ = new BhRandSelector(new BhThruster(), new BhBackStep());
 	nd_vsShoot_ = new BhBackStep();
+	interval_ = new OriTimer(2.0f);
 
 	lastAction_ = FAILIRE;
 	playerAttackState_ = AttackState::None_Attack;
 }
 
 BhEscapeThink::~BhEscapeThink() {
+	delete interval_;
 	delete nd_vsShoot_;
 	delete nd_vsAdj_;
 }
