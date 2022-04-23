@@ -6,9 +6,12 @@
 #include "_Classes_Yu/_FIelds/ConstiateParam.h"
 #include "_Classes_Yu/_PlayerInformation/PlayerInformation.h"
 #include "_Classes_Yu/_InputClasses/UseKeyCheck.h"
+#include "_Classes_Yu/_CellList/ObjectManager.h"
+#include "_Classes_Yu/_FieldOutCheck/FieldOutCheck.h"
 
 
 PlayerBase::PlayerBase() {
+	LoadCsv();
 	cp_ = nullptr;
 	SetBaseMember(OBJ_TYPE::PLAYER, SimpleMath::Vector3::Zero, 1.0f);
 
@@ -18,8 +21,8 @@ PlayerBase::PlayerBase() {
 	speed = 0.0f;
 
 	//ダッシュ 関数
-	Boost_zero = 0;//オーバーヒートの初期値
-	Boost_max  = 0; //オーバーヒートの最大値
+	boost_zero = 0;//オーバーヒートの初期値
+	boost_max  = 0; //オーバーヒートの最大値
 	//オーバーヒート時の変数
 	overheart_flag = false; //オーバーヒートのフラグ
 	overheart_time = 0.0f;//オーバーヒートしている時間 初期値
@@ -55,16 +58,17 @@ PlayerBase::PlayerBase() {
 	third_reception_time = 0.0f; //受付時間初期値
 	third_reception_max = 0.0f;  //受付時間最大値
 	third_check_flag = false;     //最後終わるまで攻撃不可
+
+	
 }
 
 void PlayerBase::Initialize(const int id) {
-
-	pos_ = SimpleMath::Vector3(0.0f, 0.0f, 0.0f);
-	speed = 60.0f;
+	
+	pos_ = SimpleMath::Vector3(pos_.x, 0.0f, pos_.z);
 
 	//ダッシュ 関数
-	Boost_zero = 0;     //オーバーヒートの初期値
-	Boost_max  = 100;   //オーバーヒートの最大値
+	boost_zero = 0;     //オーバーヒートの初期値
+	boost_max  = 100;   //オーバーヒートの最大値
 	//オーバーヒート時の変数
 	overheart_flag=false; //オーバーヒートのフラグ
 	overheart_time=0.0f;//オーバーヒートしている時間 初期値
@@ -118,15 +122,16 @@ void PlayerBase::LoadEffect() {
 
 }
 
-void LoadCsv() {
+void PlayerBase::LoadCsv() {
 	FILE* file;  // csv入れる変数
  /*
 	_wfopen_sでファイルを開く、L"r"は開き方の指定(今回は読み込み)
 	変数に代入するのは、読み込めたかのチェックのため
  */
 
-	auto a = _wfopen_s(&file, L"PlayerParams.csv", L"r");
-	if (a == 0);// ファイルが開けない場合例外で落とす
+	auto a = _wfopen_s(&file, L"_Parameters\\PlayerParams.csv", L"r");
+	if (a != 0)// ファイルが開けない場合例外で落とす
+		abort();
  // * assertだとデバッグ時にしか機能しないため、abort()かretun exceptionの方がよき
 
  // PLや他のPGになんの値か説明する部分を読み込む(ローカル変数に入れるだけ)
@@ -137,7 +142,7 @@ void LoadCsv() {
    本命の値代入、%iはint型、%fはfloat型、%sはstring型
    その後に、.hで定義した変数の参照を渡す
 	*/
-	//fscanf_s(file, "%i,%f,%s", &interger, &floatnum, &str);
+	fscanf_s(file, "%f,%f,%f,%f", &player_spped, &boost_dush, &pos_.x, &pos_.z);
 
 	// ファイルを閉じる
 	fclose(file);
@@ -147,13 +152,10 @@ void LoadCsv() {
 void PlayerBase::Setting(const float deltaTime) {
 	player_model->SetRotation(0.0f, XMConvertToRadians(180.0f), 0.0f);
 	pos_ = player_model->GetPosition();
-	
-	//移動制限
-	pos_ = SimpleMath::Vector3(
-		pos_.x = std::min(std::max(0.0f, pos_.x), FLParams.LENGHT_OF_A_SIDE),
-		pos_.y = std::min(std::max(0.0f, pos_.y), 10000.0f),
-		pos_.z = std::min(std::max(0.0f, pos_.z), FLParams.LENGHT_OF_A_SIDE)
-	);
+
+	//移動制限	
+	Field::ClampPosition(pos_);
+	Field::IsOut(pos_);
 
 	player_model->AdvanceTime(deltaTime);
 	player_model->SetPosition(pos_);
@@ -181,17 +183,17 @@ void PlayerBase::Dush(const float deltaTime) {
 	if (!overheart_flag) {
 		//ダッシュを押している間だけスピードUP
 		if (Press.DushStateKey()) {
-			speed = 120.0f;	
-			Boost_max -= 1 * deltaTime;
+			speed = boost_dush;
+			boost_max -= 1 * deltaTime;
 		}
 		else {
 			//離したらブーストゲージ回復
-			speed = 60.0f;
-			Boost_max += 2;
+			speed = player_spped;
+			boost_max += 2;
 		}
 
-		if (Boost_max == Boost_zero) {
-			speed = 60.0f;
+		if (boost_max == boost_zero) {
+			speed = player_spped;
 			overheart_flag = true;
 		}
 	}
@@ -201,12 +203,12 @@ void PlayerBase::Dush(const float deltaTime) {
 		overheart_time += deltaTime;
 		if (overheart_time >= overheart_max) {
 			overheart_flag = false;
-			Boost_max = 100;
+			boost_max = 100;
 			overheart_time = 0.0f;
 		}
 	}
 
-	Boost_max = std::clamp(Boost_max, 0, 100);
+	boost_max = std::clamp(boost_max, 0, 100);
 }
 
 //近接攻撃
@@ -289,6 +291,7 @@ void PlayerBase::Attack(const float deltaTime) {
 
 void PlayerBase::Shot(const float deltaTime) {
 	attackState_ = AttackState::Shooting;
+	ObjectManager::SetShooting(id_my_, pos_, forward_, rotateY_);
 	attackState_ = AttackState::None_Attack;
 }
 
@@ -339,7 +342,7 @@ void PlayerBase::UIRender() {
 			debag_font.Get(),
 			SimpleMath::Vector2(0.0f, 30.0f),
 			DX9::Colors::Blue,
-			L"0"
+			L"連撃 0"
 		);
 	}
 	else if (burst_state_mode == BURST_STATE::FIRST) {
@@ -347,7 +350,7 @@ void PlayerBase::UIRender() {
 			debag_font.Get(),
 			SimpleMath::Vector2(0.0f, 30.0f),
 			DX9::Colors::Blue,
-			L"1"
+			L"連撃 1連撃目"
 		);
 
 		DX9::SpriteBatch->DrawString(
@@ -362,7 +365,7 @@ void PlayerBase::UIRender() {
 			debag_font.Get(),
 			SimpleMath::Vector2(0.0f, 30.0f),
 			DX9::Colors::Blue,
-			L"2"
+			L"連撃 2連撃目"
 		);
 
 		DX9::SpriteBatch->DrawString(
@@ -378,7 +381,7 @@ void PlayerBase::UIRender() {
 			debag_font.Get(),
 			SimpleMath::Vector2(0.0f, 30.0f),
 			DX9::Colors::Blue,
-			L"3"
+			L"連撃 3連撃目"
 		);
 
 
@@ -395,7 +398,7 @@ void PlayerBase::UIRender() {
 		debag_font.Get(),
 		SimpleMath::Vector2(0.0f, 100.0f),
 		DX9::Colors::Green,
-		L"ブーストゲージ %d", Boost_max
+		L"ブーストゲージ %d", boost_max
 	);
 
 	if (overheart_flag) {

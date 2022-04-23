@@ -50,3 +50,10 @@ bool UseKeyCheck::MoveStateRight() {
 Vector2 UseKeyCheck::DirectionKey() {
 	return key_.StateDirection();
 }
+
+bool UseKeyCheck::RotateLeftCameraKey() {
+	return key_.StateCharaKey('W');
+}
+bool UseKeyCheck::RotateRightCameraKey() {
+	return key_.StateCharaKey('Q');
+}

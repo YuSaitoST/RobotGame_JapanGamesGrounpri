@@ -19,6 +19,8 @@ public:
 	void LoadAssets(std::wstring file_name);
 	void LoadEffect();
 
+	void LoadCsv();
+
 	void Setting(const float deltaTime);
 	void Update(const float deltaTime);
 
@@ -67,7 +69,6 @@ public:
 private:
 	DX9::SKINNEDMODEL player_model;
 
-
 	enum
 	{
 		STAND,
@@ -86,12 +87,15 @@ private:
 	DX9::SPRITEFONT debag_font;
 	DX9::SPRITEFONT time_font;
 
+	float player_spped;
 	float speed;
+	
 
 	//ダッシュ 関数 系統
 	//ブースト時の変数
-	int Boost_zero;//ブーストの初期値
-	int Boost_max; //ブーストの最大値
+	int   boost_zero;//ブーストの初期値
+	int   boost_max; //ブーストの最大値
+	float boost_dush;//ブースト時の速度
 
 	//オーバーヒート時の変数
 	bool overheart_flag; //オーバーヒートのフラグ
