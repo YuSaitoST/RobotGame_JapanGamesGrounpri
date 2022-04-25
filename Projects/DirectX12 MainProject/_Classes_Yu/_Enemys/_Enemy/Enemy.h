@@ -4,10 +4,11 @@
 #include "_Classes_Yu/_SoundPlayer/SoundPlayer.h"
 #include "_Classes_Yu/_HPGauge/HPGauge.h"
 #include "_EneState/EneState.h"
-#include "_Classes_Yu/_Enemys/_EneParamsLoad/_EneStandardParamsLoad/EneStandardParamsLoad.h"
 
 #include "_EneState/_ESStandby/ESStandby.h"
 #include "_EneState/_ESFighting/ESFighting.h"
+#include "_EneState/_ESStan/ESStan.h"
+#include "_EneState/_ESDown/ESDown.h"
 
 enum Action;
 class Enemy final : public ObjectBase {
@@ -24,6 +25,7 @@ public:
 	virtual void UIRender() {};
 
 	void SwitchState(ENE_STATE state);
+	void HitCheck();
 	void ResetAttackState() { attackState_ = AttackState::None_Attack; }
 
 	Vector3* GetPosP() { return &pos_; }
@@ -52,11 +54,14 @@ private:
 	EneState* state_;
 	ESStandby st_standby_;
 	ESFighting st_fighting_;
+	ESStan st_stan_;
+	ESDown st_down_;
 
 	DX9::SKINNEDMODEL model_;
 
 	int level_;
 	bool isInAction_;
+	bool isStepFine_;
 	bool isHitPlayer_;
 
 	float timeDelta_;

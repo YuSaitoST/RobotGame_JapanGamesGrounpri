@@ -1,8 +1,8 @@
 #pragma once
 
-#include "_Classes_Yu/_CellList/_Object/ObjectBase.h"
+#include "_Classes_Yu/_CellList/_Object/WeaponBase.h"
 
-class Bullet final : public ObjectBase {
+class Bullet final : public WeaponBase {
 public:
 	Bullet();
 	virtual ~Bullet() {}
@@ -17,7 +17,7 @@ public:
 
 	inline bool IsBeenShot() const { return isShot_; }
 
-	void Shoot(int ownerID, Vector3 pos, Vector3 forward, float rotY);
+	void Shoot(int ownerID, int damage, Vector3 pos, Vector3 forward, float rotY);
 
 private:
 	bool isShot_;

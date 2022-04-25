@@ -22,9 +22,10 @@ void Bullet::Render(DX9::MODEL& model) {
 	model->SetPosition(pos_);
 }
 
-void Bullet::Shoot(int ownerID, Vector3 pos, Vector3 forward, float rotY) {
+void Bullet::Shoot(int ownerID, int damage, Vector3 pos, Vector3 forward, float rotY) {
 	isShot_		= true;
 	id_my_		= ownerID;
+	damage_		= damage;
 	pos_		= Vector3(pos.x, 1.5f, pos.z);
 	rotateY_	= rotY;
 	forward_	= forward;

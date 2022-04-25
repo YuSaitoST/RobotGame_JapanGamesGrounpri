@@ -16,7 +16,7 @@ public:
 	void Update(const float deltaTime);
 	void Render();
 
-	static void Shooting(int ownerID, Vector3 pos, Vector3 forward, float rotY);
+	static void Shooting(int ownerID, int damage, Vector3 pos, Vector3 forward, float rotY);
 
 private:
 	DX9::MODEL model_;  // ’eƒ‚ƒfƒ‹

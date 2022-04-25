@@ -1,7 +1,11 @@
 #include "Enemy.h"
 #include "_Classes_Yu/_CellList/ObjectManager.h"
+#include "_Classes_Yu/_Enemys/_EneParamsLoad/_EneStandardParamsLoad/EneStandardParamsLoad.h"
+#include "_Classes_Yu/_Enemys/_EneParamsLoad/_EneLvParamsLoad/EneLvParamsLoad.h"
+#include "_Classes_Yu/_FieldOutCheck/FieldOutCheck.h"
+#include "_Classes_Yu/_CellList/_Object/WeaponBase.h"
 
-Enemy::Enemy(int level, Vector3 pos, float r) : level_(level), isInAction_(false), timeDelta_(0.0f), jumpTime_(0.0f) {
+Enemy::Enemy(int level, Vector3 pos, float r) : level_(level), isInAction_(false), isStepFine_(false), timeDelta_(0.0f), jumpTime_(0.0f) {
 	cp_ = nullptr;
 	SetBaseMember(OBJ_TYPE::ENEMY, pos, r);
 	SetMember();
@@ -35,13 +39,10 @@ void Enemy::LoadAssets(std::wstring file_name) {
 void Enemy::Update(const float deltaTime) {
 	timeDelta_ = deltaTime;
 
-	if (IsHitObject() != nullptr) {
-		// ダメージ処理
-		SwitchState(STAN);
-	}
-
 	state_->Update(id_my_);
 	
+	Field::ClampPosition(pos_);
+
 	UpdateToMorton();
 
 	model_->SetPosition(pos_);
@@ -53,7 +54,7 @@ void Enemy::Render() {
 }
 
 void Enemy::SetMember() {
-	hp_				= new HPGauge(10);
+	hp_				= new HPGauge(ENLParams.HP[level_]);
 	actionInterval_	= new OriTimer(ENParams.FREQUENCY_OF_SHOOTING, 0.0f);
 	se_running_		= new SoundPlayer();
 	se_adjacent_	= new SoundPlayer();
@@ -68,8 +69,21 @@ void Enemy::SwitchState(ENE_STATE state) {
 	switch (state) {
 		case STANDBY	: state_ = &st_standby_;	break;
 		case FIGHTING	: state_ = &st_fighting_;	break;
-		case STAN:break;
-		case DOWN:break;
+		case STAN		: state_ = &st_stan_;		break;
+		case DOWN		: state_ = &st_down_;		break;
+		default			: assert(!"Enemy : 異常な状態");
+	}
+}
+
+void Enemy::HitCheck() {
+	ObjectBase* _obj = IsHitObject();
+	if (_obj != nullptr) {
+		WeaponBase* _weapon = dynamic_cast<WeaponBase*>(_obj);
+		hp_->TakeDamage(_weapon->GetDamage());
+		if (0 < hp_->GetHP())
+			SwitchState(STAN);
+		else
+			SwitchState(DOWN);
 	}
 }
 
@@ -80,7 +94,8 @@ void Enemy::Rotate(const Vector3 targetDirection) {
 
 Action Enemy::Move(const Vector3 targetDirection) {
 	forward_ = targetDirection;
-	pos_ += forward_ * ENParams.MOVE_SPEED;
+	pos_ += forward_ * ENLParams.SPEED_OF_ACTION[level_];
+	pos_.y = 0.0f;
 	Rotate(targetDirection);
 	se_running_->PlayRoopSE(timeDelta_);
 	return SUCSESS;
@@ -99,7 +114,7 @@ Action Enemy::Step(const Vector3 moveDirection) {
 	jumpTime_ += timeDelta_;
 
 	// 移動計算
-	pos_ += moveDirection_ * ENParams.STEP_SPEED;
+	pos_ += moveDirection_ * ENLParams.SPEED_OF_ACTION[level_];
 	pos_.y = ENParams.STEP_INITIALVELOCITY * jumpTime_ - 0.5f * GRAVITY * jumpTime_ * jumpTime_;
 
 	// 移動量計算
@@ -111,13 +126,25 @@ Action Enemy::Step(const Vector3 moveDirection) {
 	if (isFine) {
 		jumpTime_ = 0.0f;
 		isInAction_ = false;
+		isStepFine_ = true;
 	}
 
 	return isFine ? SUCSESS : REPEAT;
 }
 
 Action Enemy::BackStep() {
-	return Step(-forward_);
+	if (!isStepFine_)
+		Step(-forward_);
+	else
+		actionInterval_->Update(timeDelta_);
+
+	if (actionInterval_->TimeOut()) {
+		actionInterval_->ResetCountTime();
+		isStepFine_ = false;
+		return SUCSESS;
+	}
+
+	return REPEAT;
 }
 
 Action Enemy::SideStep(const Vector3 targetDirection) {
@@ -133,7 +160,7 @@ Action Enemy::Adjacent() {
 Action Enemy::Shooting() {
 	if (actionInterval_->NowTime() == 0.0f) {
 		attackState_ = AttackState::Shooting;
-		ObjectManager::SetShooting(id_my_, pos_, forward_, rotateY_);
+		ObjectManager::SetShooting(id_my_, ENLParams.DAMAGE_SHO[level_], pos_, forward_, rotateY_);
 		actionInterval_->ResetCountTime();
 	}
 

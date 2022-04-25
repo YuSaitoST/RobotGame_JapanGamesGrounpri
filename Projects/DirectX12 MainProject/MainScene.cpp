@@ -5,6 +5,7 @@
 #include "Base/pch.h"
 #include "Base/dxtk.h"
 #include "SceneFactory.h"
+#include "_Classes_Yu/_DeltaTime/DeltaTime.h"
 
 // Initialize member variables.
 MainScene::MainScene()
@@ -90,6 +91,7 @@ NextScene MainScene::Update(const float deltaTime)
 	// TODO: Add your game logic here.
 
 	Press.Accepts();
+	DeltaTime::Update(deltaTime);
 	m_object_->Update(deltaTime);
 	player_.Update(deltaTime);
 

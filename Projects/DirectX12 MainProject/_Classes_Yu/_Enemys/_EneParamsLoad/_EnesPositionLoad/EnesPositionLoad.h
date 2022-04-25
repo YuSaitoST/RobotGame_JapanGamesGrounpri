@@ -26,5 +26,5 @@ private:
 	XMFLOAT3 Split(std::string& param);
 
 	static EnesPositionLoad* instance_;
-	XMFLOAT3 pos_[14];
+	XMFLOAT3 pos_[15];
 };

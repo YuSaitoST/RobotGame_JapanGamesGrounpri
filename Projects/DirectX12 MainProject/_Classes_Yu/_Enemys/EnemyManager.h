@@ -4,6 +4,9 @@
 #include "_Classes_Yu/_Enemys/_Enemy/Enemy.h"
 
 class EnemyManager {
+private:
+	enum LEVELS_NUM { LV1 = 9, LV2 = 4, LV3 = 1 };
+
 public:
 	EnemyManager(const int enemyNum);
 	virtual ~EnemyManager();
@@ -16,6 +19,5 @@ public:
 	void Render();
 
 private:
-	enum LEVELS { ONE = 0, TWO = 1, THREE = 2 };
 	static std::vector<Enemy*> enemyList_;
 };
