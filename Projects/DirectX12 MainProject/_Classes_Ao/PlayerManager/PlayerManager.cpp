@@ -7,22 +7,31 @@ void PlayerManager::Initialize() {
 	DXTK->Direct3D9->SetCamera(camera);
 
 	p_base_.Initialize(0);
-	// プレイヤーのposのポインタ
 	
 }
 
 void PlayerManager::LoadModel() {
 	p_base_.LoadAssets(L"Player\\SwordManEX\\armor_red2_0210b.X");
+
+
+
 }
 
 void PlayerManager::Update(const float deltaTime) {
 	p_base_.Update(deltaTime);
+
 	camera->SetPosition(
 		p_base_.GetModel()->GetPosition().x + 2.0f,
 		p_base_.GetModel()->GetPosition().y + 5.5f,
 		p_base_.GetModel()->GetPosition().z - 6.0f
 	);
+
 	camera->SetRotation(XMConvertToRadians(20.0f), 0.0f, 0.0f);
+
+	if (Press.RotateRightCameraKey())
+		camera->Rotate(0.0f, XMConvertToRadians(-90.0f) * deltaTime, 0.0f);
+	if (Press.RotateLeftCameraKey())
+		camera->Rotate(0.0f, XMConvertToRadians(90.0f) * deltaTime, 0.0f);
 
 
 	//移動
