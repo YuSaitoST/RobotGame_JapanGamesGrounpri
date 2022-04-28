@@ -11,8 +11,6 @@ public:
 		float MOB_LEFT_END[2];
 		float DISTANCE_APPROACHING_PLAYER;
 		float SHORTEST_DISTANCE;
-		float MOVE_SPEED;
-		float STEP_SPEED;
 		float STEP_INITIALVELOCITY;
 		float STEP_DISTANCE;
 		float RANGE_OF_SHOT;

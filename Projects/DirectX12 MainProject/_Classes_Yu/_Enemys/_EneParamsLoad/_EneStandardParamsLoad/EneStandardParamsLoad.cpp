@@ -23,8 +23,6 @@ void EneStandardParamsLoad::LoadParams() {
 		&number_.MOB_LEFT_END[1],
 		&number_.DISTANCE_APPROACHING_PLAYER,
 		&number_.SHORTEST_DISTANCE,
-		&number_.MOVE_SPEED,
-		&number_.STEP_SPEED,
 		&number_.STEP_INITIALVELOCITY,
 		&number_.STEP_DISTANCE,
 		&number_.RANGE_OF_SHOT,
@@ -36,7 +34,7 @@ void EneStandardParamsLoad::LoadParams() {
 	// 構造体を配列で扱い、ループでチェックする
 	float* ptr = (float*)&number_;
 	ptr += 4;
-	for (int i = 4; i < 12; ++i) {
+	for (int i = 4; i < 10; ++i) {
 		if (*ptr <= 0.0f)
 			std::abort();
 		ptr++;

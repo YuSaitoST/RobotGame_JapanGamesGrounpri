@@ -13,7 +13,7 @@ void FieldParamsLoad::LoadParams() {
 	fgets(_dummyLine, 255, _file);
 
 	fscanf_s(_file, "%f",
-		&number_.SCALE
+		&number_.HP
 	);
 
 	// 構造体を配列で扱い、ループでチェックする

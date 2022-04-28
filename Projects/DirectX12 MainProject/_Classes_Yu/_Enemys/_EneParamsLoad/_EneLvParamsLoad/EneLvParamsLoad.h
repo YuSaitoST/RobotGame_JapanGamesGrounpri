@@ -4,16 +4,17 @@
 
 #define ENLParams EneLvParamsLoad::GetInstance().GetNumber()
 
-enum LEVELS { ONE = 0, TWO = 1, THREE = 2 };
+enum LEVELS { ONE = 0, TWO = 1};
 
 class EneLvParamsLoad {
 public:
 	struct Number {
 		int HP[3];
-		float SPEED_OF_ACTION[3];
-		float SPEED_OF_BULLET[3];
-		float DAMAGE_ADJ[3];
-		float DAMAGE_SHO[3];
+		float SPEED_OF_ACTION[2];
+		float SPEED_OF_STEP[2];
+		float SPEED_OF_BULLET[2];
+		float DAMAGE_ADJ[2];
+		float DAMAGE_SHO[2];
 	};
 
 	static EneLvParamsLoad& GetInstance() {

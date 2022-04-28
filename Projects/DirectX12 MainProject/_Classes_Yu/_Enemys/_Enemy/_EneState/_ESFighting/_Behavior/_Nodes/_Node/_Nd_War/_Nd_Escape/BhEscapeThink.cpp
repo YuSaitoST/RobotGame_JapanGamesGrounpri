@@ -1,14 +1,14 @@
 #include "BhEscapeThink.h"
-#include "_Classes_Yu/_Enemys/_Enemy/_EneState/_ESFighting/_Behavior/_Nodes/_Node/_Nd_War/_Nd_Escape/BhThruster.h"
 #include "_Classes_Yu/_Enemys/EnemyManager.h"
 
 BhEscapeThink::BhEscapeThink() {
-	nd_vsAdj_ = new BhRandSelector(new BhThruster(), new BhBackStep());
-	nd_vsShoot_ = new BhBackStep();
-	interval_ = new OriTimer(2.0f);
+	nd_vsAdj_	= new BhRandSelector(new BhSideStep(), new BhBackStep());
+	nd_vsShoot_ = new BhSideStep();
+	interval_	= new OriTimer(2.0f);
 
 	lastAction_ = FAILIRE;
 	playerAttackState_ = AttackState::None_Attack;
+	stepCount_ = 0;
 }
 
 BhEscapeThink::~BhEscapeThink() {
@@ -18,26 +18,37 @@ BhEscapeThink::~BhEscapeThink() {
 }
 
 Action BhEscapeThink::Behavior(const int myID) {
-	// Playerが攻撃しているなら
-	// 近接攻撃か射撃攻撃かで分岐する
-
-	if (lastAction_ == REPEAT) {
-		if (playerAttackState_ == AttackState::Adjacent)
-			lastAction_ = nd_vsAdj_->Behavior(myID);
-		else if (playerAttackState_ == AttackState::Shooting)
-			lastAction_ = nd_vsShoot_->Behavior(myID);
-
-		return lastAction_;
+	// 連続ステップが終了したら
+	if (2 <= stepCount_) {
+		stepCount_ = 0;
+		return lastAction_ = FAILIRE;
 	}
+
+	lastAction_ = Act(myID);
+
+	// ステップ回数をカウント
+	if (lastAction_ == SUCSESS) {
+		lastAction_ = REPEAT;
+		stepCount_ += 1;
+	}
+
+	return lastAction_;
+}
+
+Action BhEscapeThink::Thinks(const int myID) {
+	if (playerAttackState_ == AttackState::Adjacent)
+		return nd_vsAdj_->Behavior(myID);
+	else if (playerAttackState_ == AttackState::Shooting)
+		return nd_vsShoot_->Behavior(myID);
+	else
+		return FAILIRE;
+}
+
+Action BhEscapeThink::Act(const int myID) {
+	if (lastAction_ == REPEAT)
+		return Thinks(myID);
 
 	playerAttackState_ = PlayerInfo.NowAttackState();
 
-	if (playerAttackState_ == AttackState::Adjacent)
-		lastAction_ = nd_vsAdj_->Behavior(myID);
-	else if (playerAttackState_ == AttackState::Shooting)
-		lastAction_ = nd_vsShoot_->Behavior(myID);
-	else
-		lastAction_ = FAILIRE;
-
-	return lastAction_;
+	return Thinks(myID);
 }

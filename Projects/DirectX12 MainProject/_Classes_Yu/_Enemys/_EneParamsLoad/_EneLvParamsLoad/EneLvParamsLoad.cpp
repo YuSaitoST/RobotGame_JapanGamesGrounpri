@@ -24,6 +24,7 @@ void EneLvParamsLoad::LoadParams() {
 
 	Split(_str, number_.HP);
 	Split(_str, number_.SPEED_OF_ACTION);
+	Split(_str, number_.SPEED_OF_STEP);
 	Split(_str, number_.SPEED_OF_BULLET);
 	Split(_str, number_.DAMAGE_ADJ);
 	Split(_str, number_.DAMAGE_SHO);
@@ -37,10 +38,7 @@ void EneLvParamsLoad::Split(std::string& str, int(&list)[]) {
 	str.erase(0, _clpos + 1);
 	_clpos = str.find_first_of(':');
 	list[LEVELS::TWO] = std::stoi(str.substr(0, _clpos));
-	str.erase(0, _clpos + 1);
-	_clpos = str.find_first_of(':');
 	const int _cnpos = str.find_first_of(',');
-	list[LEVELS::THREE] = std::stoi(str.substr(0, _cnpos));
 	str.erase(0, _cnpos + 1);
 }
 
@@ -50,9 +48,6 @@ void EneLvParamsLoad::Split(std::string& str, float(&list)[]) {
 	str.erase(0, _clpos + 1);
 	_clpos = str.find_first_of(':');
 	list[LEVELS::TWO] = std::stof(str.substr(0, _clpos));
-	str.erase(0, _clpos + 1);
-	_clpos = str.find_first_of(':');
 	const int _cnpos = str.find_first_of(',');
-	list[LEVELS::THREE] = std::stof(str.substr(0, _cnpos));
 	str.erase(0, _cnpos + 1);
 }

@@ -5,10 +5,10 @@
 
 class EnemyManager {
 private:
-	enum LEVELS_NUM { LV1 = 9, LV2 = 4, LV3 = 1 };
+	enum LEVELS_NUM { LV1 = 1, LV2 = 0 };
 
 public:
-	EnemyManager(const int enemyNum);
+	EnemyManager();
 	virtual ~EnemyManager();
 
 	static Enemy* Access(const int index);

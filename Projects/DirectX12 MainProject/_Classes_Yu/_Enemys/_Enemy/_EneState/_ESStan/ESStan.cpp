@@ -11,8 +11,10 @@ ESStan::~ESStan() {
 }
 
 void ESStan::Update(const int myID) {
+	Enemy* enemy = EnemyManager::Access(myID);
+	enemy->HitCheck();
 	timer_->Update(DeltaTime::dt());
 
 	if (timer_->TimeOut())
-		EnemyManager::Access(myID)->SwitchState(ENE_STATE::FIGHTING);
+		enemy->SwitchState(ENE_STATE::FIGHTING);
 }

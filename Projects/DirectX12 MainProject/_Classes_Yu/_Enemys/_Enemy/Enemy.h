@@ -4,11 +4,7 @@
 #include "_Classes_Yu/_SoundPlayer/SoundPlayer.h"
 #include "_Classes_Yu/_HPGauge/HPGauge.h"
 #include "_EneState/EneState.h"
-
-#include "_EneState/_ESStandby/ESStandby.h"
-#include "_EneState/_ESFighting/ESFighting.h"
-#include "_EneState/_ESStan/ESStan.h"
-#include "_EneState/_ESDown/ESDown.h"
+#include "_EneState/SwitchState.h"
 
 enum Action;
 class Enemy final : public ObjectBase {
@@ -30,7 +26,7 @@ public:
 
 	Vector3* GetPosP() { return &pos_; }
 	int myLevel() const { return level_; }
-	bool IsInAction() const { return isInAction_; }
+	bool IsInAction() const { return isInStep_; }
 
 	Action Move(const Vector3 targetDirection);
 	Action Thruster();
@@ -44,6 +40,7 @@ private:
 
 	void Rotate(const Vector3 targetDirection);
 	Action Step(const Vector3 moveDirection);
+	Action Slide(const Vector3 moveDirection);
 
 	HPGauge* hp_;
 	OriTimer* actionInterval_;
@@ -52,22 +49,21 @@ private:
 	SoundPlayer* se_shooting_;
 
 	EneState* state_;
-	ESStandby st_standby_;
-	ESFighting st_fighting_;
-	ESStan st_stan_;
-	ESDown st_down_;
+	SwitchStates* m_state_;
 
 	DX9::SKINNEDMODEL model_;
 
 	int level_;
-	bool isInAction_;
-	bool isStepFine_;
+	bool isInStep_;
 	bool isHitPlayer_;
 
 	float timeDelta_;
 	float jumpTime_;
 
 	Vector3 moveDirection_;
+	Vector3 moveStartCoordinate_;
+
+	Action lastAction_;
 
 	const float GRAVITY = 9.8f;
 	const std::wstring seNameRun = L"_Sounds\\_SE\\SELab_RunningOnAsphalt1.wav";
