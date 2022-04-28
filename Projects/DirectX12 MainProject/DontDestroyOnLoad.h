@@ -3,6 +3,7 @@
 //
 
 #pragma once
+#include "_Classes_Yu/_UI/_TotalScore/TotalScore.h"
 
 #define DontDestroy DontDestroyOnLoad::GetInstance()
 
@@ -34,7 +35,7 @@ private:
 
 
 public:
-
+	TotalScore score_;
 
 
 };
