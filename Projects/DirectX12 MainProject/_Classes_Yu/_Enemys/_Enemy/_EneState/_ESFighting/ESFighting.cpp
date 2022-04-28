@@ -11,4 +11,6 @@ ESFighting::~ESFighting() {
 
 void ESFighting::Update(const int myID) {
 	root_->Update(myID);
+
+	EnemyManager::Access(myID)->HitCheck();
 }

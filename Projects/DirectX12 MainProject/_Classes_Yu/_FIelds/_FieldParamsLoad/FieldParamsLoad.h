@@ -1,7 +1,7 @@
 #pragma once
 
 struct Number {
-	float SCALE;
+	float HP;
 };
 
 class FieldParamsLoad {

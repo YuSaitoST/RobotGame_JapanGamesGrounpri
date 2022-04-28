@@ -7,7 +7,7 @@ Bullet::Bullet() : isShot_(false) {
 }
 
 void Bullet::Update(const float deltaTime) {
-	pos_ += forward_  * 70.0f * deltaTime;
+	pos_ += forward_  * 90.0f * deltaTime;
 
 	if (Field::IsOut(pos_)) {
 		pos_ = Vector3::Zero;
@@ -22,10 +22,11 @@ void Bullet::Render(DX9::MODEL& model) {
 	model->SetPosition(pos_);
 }
 
-void Bullet::Shoot(int ownerID, Vector3 pos, Vector3 forward, float rotY) {
+void Bullet::Shoot(int ownerID, int damage, Vector3 pos, Vector3 forward, float rotY) {
 	isShot_		= true;
 	id_my_		= ownerID;
-	pos_		= Vector3(pos.x, 1.5f, pos.z);
+	damage_		= damage;
+	pos_		= Vector3(pos.x, 2.0f, pos.z);
 	rotateY_	= rotY;
 	forward_	= forward;
 }

@@ -1,16 +1,16 @@
 #pragma once
 
-#define ENParams EneParamsLoad::GetInstance().GetNumber()
+#define ENParams EneStandardParamsLoad::GetInstance().GetNumber()
 
-enum ENE_STATE { SPONE, STANDBY, FIGHTING, STAN, DOWN };
+enum ENE_STATE { STANDBY, FIGHTING, STAN, DOWN };
 
-class EneParamsLoad {
+class EneStandardParamsLoad {
 public:
 	struct Number {
+		float MOB_RIGHT_END[2];
+		float MOB_LEFT_END[2];
 		float DISTANCE_APPROACHING_PLAYER;
 		float SHORTEST_DISTANCE;
-		float MOVE_SPEED;
-		float STEP_SPEED;
 		float STEP_INITIALVELOCITY;
 		float STEP_DISTANCE;
 		float RANGE_OF_SHOT;
@@ -19,9 +19,9 @@ public:
 		float MELEEATTACK_TO_DISTANCE;
 	};
 
-	static EneParamsLoad& GetInstance() {
+	static EneStandardParamsLoad& GetInstance() {
 		if (instance_ == 0)
-			instance_ = new EneParamsLoad();
+			instance_ = new EneStandardParamsLoad();
 
 		return *instance_;
 	}
@@ -30,9 +30,9 @@ public:
 	Number GetNumber() const { return number_; }
 
 private:
-	EneParamsLoad() : number_{} {}
-	virtual ~EneParamsLoad() {}
+	EneStandardParamsLoad() : number_{} {}
+	virtual ~EneStandardParamsLoad() {}
 
-	static EneParamsLoad* instance_;
+	static EneStandardParamsLoad* instance_;
 	Number number_;
 };

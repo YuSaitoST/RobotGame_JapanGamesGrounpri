@@ -26,11 +26,11 @@ void BulletManager::Render() {
 			bt->Render(model_);
 }  // ’eƒ‚ƒfƒ‹‚ÆAŽå‚É‘Î‰ž‚µ‚½texture‚ð“n‚·
 
-void BulletManager::Shooting(int ownerID, DirectX::SimpleMath::Vector3 pos, DirectX::SimpleMath::Vector3 forward, float rotY) {
+void BulletManager::Shooting(int ownerID, int damage, DirectX::SimpleMath::Vector3 pos, DirectX::SimpleMath::Vector3 forward, float rotY) {
 	bool completion = false;
 	for (Bullet* bt : bulletList_) {
 		if (!bt->IsBeenShot()) {
-			bt->Shoot(ownerID, pos, forward, rotY);
+			bt->Shoot(ownerID, damage, pos, forward, rotY);
 			completion = true;
 			break;
 		}
@@ -38,6 +38,6 @@ void BulletManager::Shooting(int ownerID, DirectX::SimpleMath::Vector3 pos, Dire
 
 	if (!completion) {
 		bulletList_.push_back(new Bullet());
-		bulletList_.back()->Shoot(ownerID, pos, forward, rotY);
+		bulletList_.back()->Shoot(ownerID, damage, pos, forward, rotY);
 	}
 }

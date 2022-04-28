@@ -1,19 +1,26 @@
 #include "Enemy.h"
 #include "_Classes_Yu/_CellList/ObjectManager.h"
+#include "_Classes_Yu/_Enemys/_EneParamsLoad/_EneStandardParamsLoad/EneStandardParamsLoad.h"
+#include "_Classes_Yu/_Enemys/_EneParamsLoad/_EneLvParamsLoad/EneLvParamsLoad.h"
+#include "_Classes_Yu/_FieldOutCheck/FieldOutCheck.h"
+#include "_Classes_Yu/_CellList/_Object/WeaponBase.h"
+#include "DontDestroyOnLoad.h"
 
-Enemy::Enemy(Vector3 pos, float r) : timeDelta_(0.0f), jumpTime_(0.0f) {
+Enemy::Enemy(int level, Vector3 pos, float r) : level_(level), isInStep_(false), timeDelta_(0.0f), jumpTime_(0.0f) {
 	cp_ = nullptr;
 	SetBaseMember(OBJ_TYPE::ENEMY, pos, r);
 	SetMember();
 
-	SwitchState(SPONE);
+	SwitchState(STANDBY);
 }
 
 Enemy::~Enemy() {
+	delete m_state_;
 	delete se_shooting_;
 	delete se_adjacent_;
 	delete se_running_;
-	delete shotInterval_;
+	delete actionInterval_;
+	delete hp_;
 }
 
 void Enemy::Initialize(const int id) {
@@ -21,6 +28,10 @@ void Enemy::Initialize(const int id) {
 	se_running_->Initialize(seNameRun, SOUND_TYPE::SE, 10.0f);
 	se_adjacent_->Initialize(seNameAtk, SOUND_TYPE::SE, 0.5f);  // ‰¼‚Ì’lA˜A‘±UŒ‚‚È‚ç‰¹•Ï‚í‚é‚©‚à‚¾‚©‚ç‚±‚±‚ÌŽd—l‚ª•Ï‚í‚è‚»‚¤
 	se_shooting_->Initialize(seNameBem, SOUND_TYPE::SE, ENParams.FREQUENCY_OF_SHOOTING);  // ‚±‚±‚ÌŠÔŠu‚ÍŽËŒ‚‚Ì•p“x‚É‡‚í‚¹‚Ä
+
+	m_state_->Initialize(id_my_);
+
+	forward_ = Vector3(0.0f, 0.0f, -1.0f);
 }
 
 void Enemy::LoadAssets(std::wstring file_name) {
@@ -31,11 +42,9 @@ void Enemy::LoadAssets(std::wstring file_name) {
 void Enemy::Update(const float deltaTime) {
 	timeDelta_ = deltaTime;
 
-	ObjectBase* hitObj = IsHitObject();
-	isHitPlayer_ = (hitObj != nullptr) ? (hitObj->myObjectType() == OBJ_TYPE::PLAYER) : false;
-
 	state_->Update(id_my_);
-	pos_.y = 0.0f;
+	
+	Field::ClampPosition(pos_);
 
 	UpdateToMorton();
 
@@ -48,24 +57,35 @@ void Enemy::Render() {
 }
 
 void Enemy::SetMember() {
-	hp_				= new HPGauge(10);
-	shotInterval_	= new OriTimer(ENParams.FREQUENCY_OF_SHOOTING, 0.0f);
+	hp_				= new HPGauge(ENLParams.HP[level_]);
+	actionInterval_	= new OriTimer(ENParams.FREQUENCY_OF_SHOOTING, 0.0f);
 	se_running_		= new SoundPlayer();
 	se_adjacent_	= new SoundPlayer();
 	se_shooting_	= new SoundPlayer();
+	m_state_		= new SwitchStates();
 	attackState_	= AttackState::None_Attack;
 	isHitPlayer_	= false;
 	forward_		= Vector3(0.0f, 0.0f, -1.0f);
 	moveDirection_	= Vector3::Zero;
+	moveStartCoordinate_ = Vector3::Zero;
+	lastAction_		= Action::FAILIRE;
 }
 
 void Enemy::SwitchState(ENE_STATE state) {
-	switch (state) {
-		case SPONE		: state_ = &st_spone_;		break;
-		case STANDBY	: state_ = &st_standby_;	break;
-		case FIGHTING	: state_ = &st_fighting_;	break;
-		case STAN:break;
-		case DOWN:break;
+	state_ = m_state_->Get(state);
+}
+
+void Enemy::HitCheck() {
+	ObjectBase* _obj = IsHitObject();
+	if (_obj != nullptr) {
+		WeaponBase* _weapon = dynamic_cast<WeaponBase*>(_obj);
+		hp_->TakeDamage(_weapon->GetDamage());
+		if (0 < hp_->GetHP())
+			SwitchState(STAN);
+		else {
+			DontDestroy->score_.Addition(SCORE::BREAK_ENEMY);
+			SwitchState(DOWN);
+		}
 	}
 }
 
@@ -75,11 +95,24 @@ void Enemy::Rotate(const Vector3 targetDirection) {
 }
 
 Action Enemy::Move(const Vector3 targetDirection) {
+	if (moveStartCoordinate_ == Vector3::Zero) {
+		moveStartCoordinate_ = pos_;
+	}
+
 	forward_ = targetDirection;
-	pos_ += forward_ * ENParams.MOVE_SPEED;
+	pos_ += forward_ * ENLParams.SPEED_OF_ACTION[level_];
+	//pos_.y = 0.0f;
 	Rotate(targetDirection);
 	se_running_->PlayRoopSE(timeDelta_);
-	return SUCSESS;
+
+	const float _moveDistance = std::fabsf((moveStartCoordinate_ - pos_).Length());
+
+	if (25.0f <= _moveDistance) {
+		moveStartCoordinate_ = Vector3::Zero;
+		return SUCSESS;
+	}
+	else
+		return REPEAT;
 }
 
 Action Enemy::Thruster() {
@@ -87,25 +120,46 @@ Action Enemy::Thruster() {
 }
 
 Action Enemy::Step(const Vector3 moveDirection) {
-	if (jumpTime_ == 0.0f)
+	if (jumpTime_ == 0.0f) {
 		moveDirection_ = moveDirection;
+		isInStep_ = true;
+	}
 
 	jumpTime_ += timeDelta_;
 
 	// ˆÚ“®ŒvŽZ
-	pos_ += moveDirection_ * ENParams.STEP_SPEED;
+	pos_ += moveDirection_ * ENLParams.SPEED_OF_STEP[level_];
 	pos_.y = ENParams.STEP_INITIALVELOCITY * jumpTime_ - 0.5f * GRAVITY * jumpTime_ * jumpTime_;
 
-	// ˆÚ“®—ÊŒvŽZ
-	const Vector2 nowPosXZ(pos_.x, pos_.z);
 	pos_.y = std::min(std::max(0.0f, pos_.y), 5.0f);
 
 	const bool isFine = (pos_.y == 0.0f);
 
-	if (isFine)
+	if (isFine) {
 		jumpTime_ = 0.0f;
+		isInStep_ = false;
+	}
 
 	return isFine ? SUCSESS : REPEAT;
+}
+
+Action Enemy::Slide(const Vector3 moveDirection) {
+	if (moveStartCoordinate_ == Vector3::Zero) {
+		moveStartCoordinate_ = pos_;
+		moveDirection_ = moveDirection;
+	}
+
+	pos_ += moveDirection_ * ENLParams.SPEED_OF_ACTION[level_];
+	Rotate(XMFLOAT3(moveDirection.z, 0.0f, moveDirection.x));
+
+	const float _moveDistance = std::fabsf((moveStartCoordinate_ - pos_).Length());
+
+	if (8.0f <= _moveDistance) {
+		moveStartCoordinate_ = Vector3::Zero;
+		return SUCSESS;
+	}
+
+	return REPEAT;
 }
 
 Action Enemy::BackStep() {
@@ -113,8 +167,7 @@ Action Enemy::BackStep() {
 }
 
 Action Enemy::SideStep(const Vector3 targetDirection) {
-	Rotate(targetDirection);
-	return Step(Vector3(forward_.z, 0.0f, forward_.x));
+	return Step(XMFLOAT3(targetDirection.z, 0.0f, targetDirection.x));
 }
 
 Action Enemy::Adjacent() {
@@ -124,14 +177,14 @@ Action Enemy::Adjacent() {
 }
 
 Action Enemy::Shooting() {
-	if (shotInterval_->NowTime() == 0.0f) {
+	if (actionInterval_->NowTime() == 0.0f) {
 		attackState_ = AttackState::Shooting;
-		ObjectManager::SetShooting(id_my_, pos_, forward_, rotateY_);
-		shotInterval_->ResetCountTime();
+		ObjectManager::SetShooting(id_my_, ENLParams.DAMAGE_SHO[level_], pos_, forward_, rotateY_);
+		actionInterval_->ResetCountTime();
 	}
 
-	shotInterval_->Update(timeDelta_);
+	actionInterval_->Update(timeDelta_);
 	se_shooting_->PlayRoopSE(timeDelta_);
 
-	return (shotInterval_->TimeOut()) ? SUCSESS : REPEAT;
+	return (actionInterval_->TimeOut()) ? SUCSESS : REPEAT;
 }

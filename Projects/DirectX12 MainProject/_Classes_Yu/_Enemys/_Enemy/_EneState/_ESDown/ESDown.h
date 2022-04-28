@@ -2,10 +2,10 @@
 
 #include "_Classes_Yu/_Enemys/_Enemy/_EneState/EneState.h"
 
-class ESSpone : public EneState {
+class ESDown final : public EneState {
 public:
-	ESSpone() {}
-	virtual ~ESSpone() {}
+	ESDown() {}
+	virtual ~ESDown() {}
 
 	virtual void Update(const int myID) override;
 };

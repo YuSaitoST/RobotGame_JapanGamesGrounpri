@@ -4,8 +4,11 @@
 #include "_Classes_Yu/_Enemys/_Enemy/Enemy.h"
 
 class EnemyManager {
+private:
+	enum LEVELS_NUM { LV1 = 1, LV2 = 0 };
+
 public:
-	EnemyManager(const int enemyNum);
+	EnemyManager();
 	virtual ~EnemyManager();
 
 	static Enemy* Access(const int index);

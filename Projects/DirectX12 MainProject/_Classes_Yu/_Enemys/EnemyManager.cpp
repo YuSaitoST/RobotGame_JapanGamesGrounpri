@@ -1,12 +1,19 @@
 #include "EnemyManager.h"
+#include "_Classes_Yu/_Enemys/_EneParamsLoad/_EneStandardParamsLoad/EneStandardParamsLoad.h"
+#include "_Classes_Yu/_Enemys/_EneParamsLoad/_EneLvParamsLoad/EneLvParamsLoad.h"
+#include "_Classes_Yu/_Enemys/_EneParamsLoad/_EnesPositionLoad/EnesPositionLoad.h"
 
 std::vector<Enemy*> EnemyManager::enemyList_;
 
-EnemyManager::EnemyManager(const int enemyNum) {
-	enemyList_.reserve(enemyNum);
+EnemyManager::EnemyManager() {
+	EneStandardParamsLoad::GetInstance().LoadParams();
+	EneLvParamsLoad::GetInstance().LoadParams();
+	EnesPositionLoad::GetInstance().LoadParams();
 
-	for (int _i = 0; _i < enemyNum; ++_i)
-		enemyList_.push_back(new Enemy(Vector3(0.0f, 0.0f, 250.0f), 1.0f));
+	enemyList_.reserve(LV1 + LV2);
+
+	for (int _i = 0; _i < LEVELS_NUM::LV1; ++_i)
+		enemyList_.push_back(new Enemy((int)LEVELS::ONE, ENPos.GetPosition(_i), 1.0f));
 }
 
 EnemyManager::~EnemyManager() {
