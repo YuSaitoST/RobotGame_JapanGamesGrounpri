@@ -2,9 +2,11 @@
 #include "_Classes_Yu/_PlayerInformation/PlayerInformation.h"
 
 void PlayerManager::Initialize() {
-	camera->SetView(SimpleMath::Vector3(0, 0, 0), SimpleMath::Vector3(0, 0, 0));
+	camera->SetView(SimpleMath::Vector3(0, 0, 0), SimpleMath::Vector3(0.25f, 0, 0));
 	camera->SetPerspectiveFieldOfView(XMConvertToRadians(45.0f), 16.0f / 9.0f, 1.0f, 10000.0f);
 	DXTK->Direct3D9->SetCamera(camera);
+	
+
 
 	p_base_.Initialize(0);
 	
@@ -22,11 +24,10 @@ void PlayerManager::Update(const float deltaTime) {
 
 	camera->SetPosition(
 		p_base_.GetModel()->GetPosition().x + 2.0f,
-		p_base_.GetModel()->GetPosition().y + 5.5f,
+		p_base_.GetModel()->GetPosition().y + 3.5f,
 		p_base_.GetModel()->GetPosition().z - 6.0f
 	);
 
-	camera->SetRotation(XMConvertToRadians(20.0f), 0.0f, 0.0f);
 
 	if (Press.RotateRightCameraKey())
 		camera->Rotate(0.0f, XMConvertToRadians(-90.0f) * deltaTime, 0.0f);
