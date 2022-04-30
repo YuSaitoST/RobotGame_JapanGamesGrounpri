@@ -4,6 +4,7 @@
 #include "_Classes_Yu/_Enemys/_EneParamsLoad/_EneLvParamsLoad/EneLvParamsLoad.h"
 #include "_Classes_Yu/_FieldOutCheck/FieldOutCheck.h"
 #include "_Classes_Yu/_CellList/_Object/WeaponBase.h"
+#include "_Classes_Yu/_CellList/_Object/WeaponBase.h"
 #include "DontDestroyOnLoad.h"
 
 Enemy::Enemy(int level, Vector3 pos, float r) : level_(level), isInStep_(false), timeDelta_(0.0f), jumpTime_(0.0f) {
@@ -15,6 +16,7 @@ Enemy::Enemy(int level, Vector3 pos, float r) : level_(level), isInStep_(false),
 }
 
 Enemy::~Enemy() {
+	delete meleeWapon_;
 	delete m_state_;
 	delete se_shooting_;
 	delete se_adjacent_;
@@ -37,6 +39,8 @@ void Enemy::Initialize(const int id) {
 void Enemy::LoadAssets(std::wstring file_name) {
 	model_ = DX9::SkinnedModel::CreateFromFile(DXTK->Device9, file_name.c_str());
 	model_->SetScale(0.1f);
+
+	meleeWapon_->LoadAssets();
 }
 
 void Enemy::Update(const float deltaTime) {
@@ -50,10 +54,13 @@ void Enemy::Update(const float deltaTime) {
 
 	model_->SetPosition(pos_);
 	model_->SetRotation(0.0f, rotateY_, 0.0f);
+
+	meleeWapon_->UpdatePosition(pos_, forward_);
 }
 
 void Enemy::Render() {
 	model_->Draw();
+	meleeWapon_->Render();
 }
 
 void Enemy::SetMember() {
@@ -63,6 +70,7 @@ void Enemy::SetMember() {
 	se_adjacent_	= new SoundPlayer();
 	se_shooting_	= new SoundPlayer();
 	m_state_		= new SwitchStates();
+	meleeWapon_		= new MeleeWeapon();
 	attackState_	= AttackState::None_Attack;
 	isHitPlayer_	= false;
 	forward_		= Vector3(0.0f, 0.0f, -1.0f);

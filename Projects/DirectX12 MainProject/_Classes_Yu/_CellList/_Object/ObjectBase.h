@@ -8,6 +8,7 @@
 using namespace DirectX::SimpleMath;
 
 class Cell;
+class WeaponBase;
 enum OBJ_TYPE { PLAYER, ENEMY, WEAPON, BASE, NONE_OBJ_ID };
 
 class ObjectBase {
