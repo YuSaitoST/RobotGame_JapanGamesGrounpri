@@ -5,6 +5,7 @@
 #include "_Classes_Yu/_FieldOutCheck/FieldOutCheck.h"
 #include "_Classes_Yu/_CellList/_Object/WeaponBase.h"
 #include "_Classes_Yu/_CellList/_Object/WeaponBase.h"
+#include "_Classes_Yu/_EnemyInformation/EnemyInformation.h"
 #include "DontDestroyOnLoad.h"
 
 Enemy::Enemy(int level, Vector3 pos, float r) : level_(level), isInStep_(false), timeDelta_(0.0f), jumpTime_(0.0f) {
@@ -77,6 +78,7 @@ void Enemy::SetMember() {
 	moveDirection_	= Vector3::Zero;
 	moveStartCoordinate_ = Vector3::Zero;
 	lastAction_		= Action::FAILIRE;
+	posListID_ = -1;
 }
 
 void Enemy::SwitchState(ENE_STATE state) {
@@ -92,6 +94,8 @@ void Enemy::HitCheck() {
 			SwitchState(STAN);
 		else {
 			DontDestroy->score_.Addition(SCORE::BREAK_ENEMY);
+			EnemyInfo.Erase(posListID_);
+			posListID_ = -1;
 			SwitchState(DOWN);
 		}
 	}

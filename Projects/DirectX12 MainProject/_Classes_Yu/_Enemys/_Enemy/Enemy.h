@@ -28,6 +28,7 @@ public:
 
 	Vector3* GetPosP() { return &pos_; }
 	int myLevel() const { return level_; }
+	int& GetPosListID() { return posListID_; }
 	bool IsInAction() const { return isInStep_; }
 
 	Action Move(const Vector3 targetDirection);
@@ -59,6 +60,7 @@ private:
 
 	DX9::SKINNEDMODEL model_;
 
+	int posListID_;
 	int level_;
 	bool isInStep_;
 	bool isHitPlayer_;
