@@ -1,5 +1,6 @@
 #include "ESStandby.h"
 #include "_Classes_Yu/_Enemys/EnemyManager.h"
+#include "_Classes_Yu/_EnemyInformation/EnemyInformation.h"
 
 void ESStandby::Initialize(const int myID) {
 	enemy_ = EnemyManager::Access(myID);
@@ -12,8 +13,10 @@ void ESStandby::Update(const int myID) {
 	else
 		UpperUnit();
 
-	if (PlayerInfo.GetDistance(enemy_->myPosition()) <= ENParams.DISTANCE_APPROACHING_PLAYER)
+	if (PlayerInfo.GetDistance(enemy_->myPosition()) <= ENParams.DISTANCE_APPROACHING_PLAYER) {
+		EnemyInfo.Push(enemy_->myPosition(), enemy_->GetPosListID());
 		enemy_->SwitchState(FIGHTING);
+	}
 }
 
 void ESStandby::SertchUnit() {

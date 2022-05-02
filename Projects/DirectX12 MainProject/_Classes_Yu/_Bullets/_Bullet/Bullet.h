@@ -15,10 +15,5 @@ public:
 	virtual void Render(DX9::MODEL& model);
 	virtual void UIRender() {}
 
-	inline bool IsBeenShot() const { return isShot_; }
-
 	void Shoot(int ownerID, int damage, Vector3 pos, Vector3 forward, float rotY);
-
-private:
-	bool isShot_;
 };

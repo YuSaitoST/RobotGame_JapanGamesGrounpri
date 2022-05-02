@@ -16,20 +16,20 @@ void BulletManager::LoadAssets() {
 
 void BulletManager::Update(const float deltaTime) {
 	for (Bullet* bt : bulletList_)
-		if (bt->IsBeenShot())
+		if (bt->IsBeenAttack())
 			bt->Update(deltaTime);
 }
 
 void BulletManager::Render() {
 	for (Bullet* bt : bulletList_)
-		if (bt->IsBeenShot())
+		if (bt->IsBeenAttack())
 			bt->Render(model_);
 }  // ’eƒ‚ƒfƒ‹‚ÆAŽå‚É‘Î‰ž‚µ‚½texture‚ð“n‚·
 
 void BulletManager::Shooting(int ownerID, int damage, DirectX::SimpleMath::Vector3 pos, DirectX::SimpleMath::Vector3 forward, float rotY) {
 	bool completion = false;
 	for (Bullet* bt : bulletList_) {
-		if (!bt->IsBeenShot()) {
+		if (!bt->IsBeenAttack()) {
 			bt->Shoot(ownerID, damage, pos, forward, rotY);
 			completion = true;
 			break;

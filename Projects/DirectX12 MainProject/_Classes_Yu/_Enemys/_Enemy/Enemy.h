@@ -3,8 +3,10 @@
 #include "_Classes_Yu/_CellList/_Object/ObjectBase.h"
 #include "_Classes_Yu/_SoundPlayer/SoundPlayer.h"
 #include "_Classes_Yu/_HPGauge/HPGauge.h"
+#include "_Classes_Yu/_MSShoulderSide/MSShoulderSide.h"
 #include "_EneState/EneState.h"
 #include "_EneState/SwitchState.h"
+#include "_Classes_Yu/_MeleeWeapon/MeleeWeapon.h"
 
 enum Action;
 class Enemy final : public ObjectBase {
@@ -26,6 +28,7 @@ public:
 
 	Vector3* GetPosP() { return &pos_; }
 	int myLevel() const { return level_; }
+	int& GetPosListID() { return posListID_; }
 	bool IsInAction() const { return isInStep_; }
 
 	Action Move(const Vector3 targetDirection);
@@ -48,11 +51,16 @@ private:
 	SoundPlayer* se_adjacent_;
 	SoundPlayer* se_shooting_;
 
+	//MSShoulderSide* shoulderL_;
+
 	EneState* state_;
 	SwitchStates* m_state_;
 
+	MeleeWeapon* meleeWapon_;
+
 	DX9::SKINNEDMODEL model_;
 
+	int posListID_;
 	int level_;
 	bool isInStep_;
 	bool isHitPlayer_;

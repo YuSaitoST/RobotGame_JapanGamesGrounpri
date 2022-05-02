@@ -10,9 +10,7 @@ public:
 	virtual ~bsCollBox() = default;
 
 	void SetPosition(SimpleMath::Vector3 pos) { colli.Center = pos; };
-
 	void SetColli(BoundingBox bound) { colli = bound; };
-
 	BoundingBox GetBounding() const { return colli; };
 
 private:

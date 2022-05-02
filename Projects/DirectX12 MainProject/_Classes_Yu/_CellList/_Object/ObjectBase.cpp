@@ -1,5 +1,6 @@
 #include "ObjectBase.h"
 #include "_Classes_Yu/_CellList/_Cell/Cell.h"
+#include "_Classes_Yu/_CellList/_Object/WeaponBase.h"
 
 ObjectBase::ObjectBase() {
 	SetBaseMember(NONE_OBJ_ID, Vector3::Zero, 0.0f);
@@ -32,14 +33,27 @@ void ObjectBase::SetBaseMember(OBJ_TYPE kind, Vector3 pos, float r) {
 }
 
 ObjectBase* ObjectBase::IsCollision(ObjectBase* m) {
-	// “¯‚¶í—Ş‚Ì•¨‘Ì“¯mA‚Ü‚½‚Í“¯‚¶ID‚Ì•¨‘Ì“¯m‚Å‚ÍÕ“Ë‚µ‚È‚¢
+	// “¯‚¶í—Ş‚Ì•¨‘Ì“¯m‚È‚çÕ“Ë‚µ‚È‚¢
 	if ((OBJ_TYPE::WEAPON != m->myObjectType()))
 		return nullptr;
+
+	// “G“¯m‚Å‚ÌÕ“Ë‚È‚ç–³‹
+	if ((id_my_ != 0) && (m->myObjectID() != 0))
+		return nullptr;
+
+	// “¯‚¶ID‚Ì•¨‘Ì“¯m‚Å‚ÍÕ“Ë‚µ‚È‚¢
 	if (id_my_ == m->myObjectID())
 		return nullptr;
 
-	if (collision_->GetBounding().Intersects(m->collision_->GetBounding()))
-		return m;
+	WeaponBase* weapon = dynamic_cast<WeaponBase*>(m);
+
+	// ‚»‚Ì•Ší‚ªUŒ‚ó‘Ô‚Å‚Í‚È‚¢‚È‚ç
+	if (!weapon->IsBeenAttack())
+		return nullptr;
+
+	// Õ“Ë‚µ‚½‚ç
+	if (collision_->GetBounding().Intersects(weapon->collision_->GetBounding()))
+		return weapon;
 
 	return nullptr;
 }
@@ -51,6 +65,5 @@ void ObjectBase::UpdateToMorton() {
 }
 
 ObjectBase* ObjectBase::IsHitObject() {
-	return nullptr;
 	return cp_->IsCollision();  // ã•ûA“¯ƒŒƒxƒ‹A‰º•û‚Ì3•ûŒü‚ğ’²‚×‚é(l•ª–Ø’Tõ)
 }

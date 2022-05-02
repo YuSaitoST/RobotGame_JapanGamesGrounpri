@@ -18,6 +18,12 @@ BhEscapeThink::~BhEscapeThink() {
 }
 
 Action BhEscapeThink::Behavior(const int myID) {
+	const bool a_certain_distance_away = ENParams.DISTANCE_APPROACHING_PLAYER < PlayerInfo.GetDistance(EnemyManager::Access(myID)->myPosition());
+
+	// 一定以上離れていて、行動していないなら
+	if ((lastAction_ != Action::REPEAT) && a_certain_distance_away)
+		return Action::FAILIRE;
+
 	// 連続ステップが終了したら
 	if (2 <= stepCount_) {
 		stepCount_ = 0;
