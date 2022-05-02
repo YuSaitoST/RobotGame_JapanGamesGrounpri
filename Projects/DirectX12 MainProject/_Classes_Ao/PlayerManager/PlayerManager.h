@@ -28,4 +28,5 @@ private:
 
 	DX9::CAMERA camera;
 
+
 };

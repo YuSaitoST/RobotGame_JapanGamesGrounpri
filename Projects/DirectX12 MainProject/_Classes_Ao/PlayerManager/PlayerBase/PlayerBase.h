@@ -4,7 +4,6 @@
 #include "Base/dxtk.h"
 
 #include "_Classes_Yu/_CellList/_Object/ObjectBase.h"
-#include "_Classes_Ao/PlayerManager/PlayerBase/Dush/Dush.h"
 
 using namespace DirectX;
 
@@ -41,28 +40,8 @@ public:
 
 	DX9::SKINNEDMODEL& GetModel() { return player_model; }
 	SimpleMath::Vector3* GetPlayer_Pos() { return &pos_; }
-
-	//攻撃
-	enum AtackMode
-	{
-		MeleeAttack, //近接攻撃
-		ShotAttack   //射撃
-	};
-	AtackMode attack_mode_state;
-	AtackMode AtackState() { return attack_mode_state; }
-
-	//近接攻撃 コンボ
-    //三連撃
-	enum  BURST_STATE
-	{
-		NOT_BURST,
-		FIRST,
-		SECOND,
-		THIRD
-	};
-	BURST_STATE burst_state_mode;
-
-
+	SimpleMath::Vector3 GetPos() { return pos_; }
+	SimpleMath::Vector3 GetForward() { return forward_; }
 
 	bool GetJump() { return jump_flag; }
 
@@ -115,6 +94,17 @@ private:
 
 
 	//近接攻撃 コンボ
+	//三連撃
+	enum  BURST_STATE
+	{
+		NOT_BURST,
+		FIRST,
+		SECOND,
+		THIRD
+	};
+	BURST_STATE burst_state_mode;
+
+	 
 	//一撃目
 	float frist_reception_time; //受付時間初期値
 	float frist_reception_max;  //受付時間最大値

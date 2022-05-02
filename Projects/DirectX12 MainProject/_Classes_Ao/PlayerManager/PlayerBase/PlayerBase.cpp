@@ -290,9 +290,11 @@ void PlayerBase::Attack(const float deltaTime) {
 }
 
 void PlayerBase::Shot(const float deltaTime) {
-	attackState_ = AttackState::Shooting;
-	ObjectManager::SetShooting(id_my_, 0, pos_, forward_, rotateY_);
-	attackState_ = AttackState::None_Attack;
+	if (Press.ShotEventKey()) {
+		attackState_ = AttackState::Shooting;
+		ObjectManager::SetShooting(id_my_, 0, pos_, forward_, rotateY_);
+		attackState_ = AttackState::None_Attack;
+	}
 }
 
 void PlayerBase::Jump(const float deltaTime) {
