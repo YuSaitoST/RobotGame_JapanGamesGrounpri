@@ -3,7 +3,8 @@
 #include <random>
 #include "_Classes_Yu/_Enemys/_Enemy/_EneState/_ESFighting/_Behavior/_Nodes/Node.h"
 #include "BhMove.h"
-#include "_Classes_Yu/_Enemys/_Enemy/_EneState/_ESFighting/_Behavior/_Nodes/_Node/BhRandSelector.h"
+#include "_Classes_Yu/_Enemys/_Enemy/_EneState/_ESFighting/_Behavior/_Nodes/_Node/_Nd_War/_Nd_Escape/BhBackStep.h"
+#include "_Classes_Yu/_Enemys/_Enemy/_EneState/_ESFighting/_Behavior/_Nodes/_Node/_Nd_War/_Nd_Escape/BhSideStep.h"
 
 class BhMoveThink : public Node {
 public:
@@ -13,10 +14,14 @@ public:
 	virtual Action Behavior(const int myID) override;
 
 private:
-	const int PROBABILITY_OF_NOT_STEP[2] = { 20,5 };
+	Node* NewActToBeTaken(Node* node);
+
+	const int PROBABILITY_OF_NOT_STEP[2] = { 65,25 };
+	const float MELEEATTACK_TO_DIST_MIN = 1.0f;
 
 	BhMove* nd_move_;
-	BhRandSelector* nd_backStep_;
+	BhBackStep* nd_backStep_;
+	BhSideStep* nd_sideStep_;
 	Node* lastNode_;
 	Action lastAction_;
 

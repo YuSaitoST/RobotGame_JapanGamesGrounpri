@@ -32,18 +32,19 @@ public:
 	bool IsInAction() const { return isInStep_; }
 
 	Action Move(const Vector3 targetDirection);
-	Action Thruster();
+	Action Slide(const Vector3 moveDirection);
 	Action BackStep();
 	Action SideStep(const Vector3 targetDirection);
 	Action Adjacent();
 	Action Shooting();
+	
+	void Rotate(const Vector3 targetDirection);
+	//void ErasePosList();
 
 private:
 	void SetMember();
 
-	void Rotate(const Vector3 targetDirection);
 	Action Step(const Vector3 moveDirection);
-	Action Slide(const Vector3 moveDirection);
 
 	HPGauge* hp_;
 	OriTimer* actionInterval_;
@@ -58,7 +59,8 @@ private:
 
 	MeleeWeapon* meleeWapon_;
 
-	DX9::SKINNEDMODEL model_;
+	//DX9::SKINNEDMODEL model_;
+	DX9::MODEL model_;
 
 	int posListID_;
 	int level_;
@@ -74,7 +76,4 @@ private:
 	Action lastAction_;
 
 	const float GRAVITY = 9.8f;
-	const std::wstring seNameRun = L"_Sounds\\_SE\\SELab_RunningOnAsphalt1.wav";
-	const std::wstring seNameAtk = L"_Sounds\\_SE\\_Attack\\SELab_useOnesSword1.wav";
-	const std::wstring seNameBem = L"_Sounds\\_SE\\_Attack\\SELab_beamCannon1.wav";
 };

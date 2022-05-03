@@ -4,8 +4,7 @@
 #include "_Classes_Yu/_Enemys/_EneParamsLoad/_EneLvParamsLoad/EneLvParamsLoad.h"
 #include "_Classes_Yu/_FieldOutCheck/FieldOutCheck.h"
 #include "_Classes_Yu/_CellList/_Object/WeaponBase.h"
-#include "_Classes_Yu/_CellList/_Object/WeaponBase.h"
-#include "_Classes_Yu/_EnemyInformation/EnemyInformation.h"
+//#include "_Classes_Yu/_EnemyInformation/EnemyInformation.h"
 #include "DontDestroyOnLoad.h"
 
 Enemy::Enemy(int level, Vector3 pos, float r) : level_(level), isInStep_(false), timeDelta_(0.0f), jumpTime_(0.0f) {
@@ -28,18 +27,26 @@ Enemy::~Enemy() {
 
 void Enemy::Initialize(const int id) {
 	id_my_ = id;
-	se_running_->Initialize(seNameRun, SOUND_TYPE::SE, 10.0f);
-	se_adjacent_->Initialize(seNameAtk, SOUND_TYPE::SE, 0.5f);  // 仮の値、連続攻撃なら音変わるかもだからここの仕様が変わりそう
-	se_shooting_->Initialize(seNameBem, SOUND_TYPE::SE, ENParams.FREQUENCY_OF_SHOOTING);  // ここの間隔は射撃の頻度に合わせて
+	se_running_->Initialize(L"_Sounds\\_SE\\SELab_RunningOnAsphalt1.wav", SOUND_TYPE::SE, 10.0f);
+	se_adjacent_->Initialize(L"_Sounds\\_SE\\_Attack\\SELab_useOnesSword1.wav", SOUND_TYPE::SE, 0.5f);  // 仮の値、連続攻撃なら音変わるかもだからここの仕様が変わりそう
+	se_shooting_->Initialize(L"_Sounds\\_SE\\_Attack\\SELab_beamCannon1.wav", SOUND_TYPE::SE, ENParams.FREQUENCY_OF_SHOOTING);  // ここの間隔は射撃の頻度に合わせて
 
 	m_state_->Initialize(id_my_);
+	meleeWapon_->Initialize(id_my_);
 
 	forward_ = Vector3(0.0f, 0.0f, -1.0f);
 }
 
 void Enemy::LoadAssets(std::wstring file_name) {
-	model_ = DX9::SkinnedModel::CreateFromFile(DXTK->Device9, file_name.c_str());
-	model_->SetScale(0.1f);
+	//model_ = DX9::SkinnedModel::CreateFromFile(DXTK->Device9, file_name.c_str());
+	model_ = DX9::Model::CreateFromFile(DXTK->Device9, file_name.c_str());
+	const float size = 0.2032f * 50.0f;
+	model_->SetScale(size);
+
+	D3DMATERIAL9 _mate{};
+	_mate.Diffuse = DX9::Colors::Value(0.35f, 0.35f, 0.35f, 1.0f);
+	_mate.Ambient = DX9::Colors::Value(0.35f, 0.35f, 0.35f, 1.0f);
+	model_->SetMaterial(_mate);
 
 	meleeWapon_->LoadAssets();
 }
@@ -94,8 +101,7 @@ void Enemy::HitCheck() {
 			SwitchState(STAN);
 		else {
 			DontDestroy->score_.Addition(SCORE::BREAK_ENEMY);
-			EnemyInfo.Erase(posListID_);
-			posListID_ = -1;
+			//ErasePosList();
 			SwitchState(DOWN);
 		}
 	}
@@ -113,7 +119,7 @@ Action Enemy::Move(const Vector3 targetDirection) {
 
 	forward_ = targetDirection;
 	pos_ += forward_ * ENLParams.SPEED_OF_ACTION[level_];
-	//pos_.y = 0.0f;
+	pos_.y = 0.0f;  // 空中に移動するのを防ぐため
 	Rotate(targetDirection);
 	se_running_->PlayRoopSE(timeDelta_);
 
@@ -127,10 +133,6 @@ Action Enemy::Move(const Vector3 targetDirection) {
 		return REPEAT;
 }
 
-Action Enemy::Thruster() {
-	return SUCSESS;
-}
-
 Action Enemy::Step(const Vector3 moveDirection) {
 	if (jumpTime_ == 0.0f) {
 		moveDirection_ = moveDirection;
@@ -140,7 +142,7 @@ Action Enemy::Step(const Vector3 moveDirection) {
 	jumpTime_ += timeDelta_;
 
 	// 移動計算
-	pos_ += moveDirection_ * ENLParams.SPEED_OF_STEP[level_];
+	pos_ += moveDirection_ * ENLParams.SPEED_OF_ACTION[level_];
 	pos_.y = ENParams.STEP_INITIALVELOCITY * jumpTime_ - 0.5f * GRAVITY * jumpTime_ * jumpTime_;
 
 	pos_.y = std::min(std::max(0.0f, pos_.y), 5.0f);
@@ -166,6 +168,7 @@ Action Enemy::Slide(const Vector3 moveDirection) {
 
 	const float _moveDistance = std::fabsf((moveStartCoordinate_ - pos_).Length());
 
+	// 移動量が一定以上になったら終了
 	if (8.0f <= _moveDistance) {
 		moveStartCoordinate_ = Vector3::Zero;
 		return SUCSESS;
@@ -183,16 +186,22 @@ Action Enemy::SideStep(const Vector3 targetDirection) {
 }
 
 Action Enemy::Adjacent() {
-	attackState_ = AttackState::Adjacent;
+	if (actionInterval_->NowTime() == 0.0f) {
+		actionInterval_->ResetCountTime();
+		attackState_ = AttackState::Adjacent;
+	}
+
+	actionInterval_->Update(timeDelta_);
 	se_adjacent_->PlayRoopSE(timeDelta_);
-	return SUCSESS;
+
+	return (actionInterval_->TimeOut()) ? SUCSESS : REPEAT;
 }
 
 Action Enemy::Shooting() {
 	if (actionInterval_->NowTime() == 0.0f) {
+		actionInterval_->ResetCountTime();
 		attackState_ = AttackState::Shooting;
 		ObjectManager::SetShooting(id_my_, ENLParams.DAMAGE_SHO[level_], pos_, forward_, rotateY_);
-		actionInterval_->ResetCountTime();
 	}
 
 	actionInterval_->Update(timeDelta_);
@@ -200,3 +209,8 @@ Action Enemy::Shooting() {
 
 	return (actionInterval_->TimeOut()) ? SUCSESS : REPEAT;
 }
+
+//void Enemy::ErasePosList() {
+//	EnemyInfo.Erase(posListID_);
+//	posListID_ = -1;
+//}
