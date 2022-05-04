@@ -21,14 +21,14 @@ void EneStandardParamsLoad::LoadParams() {
 		&number_.MOB_RIGHT_END[1],
 		&number_.MOB_LEFT_END[0],
 		&number_.MOB_LEFT_END[1],
-		&number_.DISTANCE_APPROACHING_PLAYER,
-		&number_.SHORTEST_DISTANCE,
+		&number_.DISTANCE_TO_NOTICE_PLAYER,
+		&number_.RANGE_OF_SHOOTING,
+		&number_.ALWAYS_KEEP_DISTANCE_OPEN,
+		&number_.RANGE_OF_MELEEATTACK,
+		&number_.UNAPPROACHABLE_DISTANCE,
 		&number_.STEP_INITIALVELOCITY,
 		&number_.STEP_DISTANCE,
-		&number_.RANGE_OF_SHOT,
-		&number_.FREQUENCY_OF_SHOOTING,
-		&number_.SWITCH_TO_MELEEATTACK,
-		&number_.MELEEATTACK_TO_DISTANCE
+		&number_.FREQUENCY_OF_SHOOTING
 	);
 
 	// 構造体を配列で扱い、ループでチェックする

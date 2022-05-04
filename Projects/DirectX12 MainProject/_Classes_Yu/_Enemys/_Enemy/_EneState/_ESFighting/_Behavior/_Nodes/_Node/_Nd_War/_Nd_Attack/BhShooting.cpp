@@ -2,11 +2,14 @@
 #include "_Classes_Yu/_Enemys/EnemyManager.h"
 
 Action BhShooting::Behavior(const int myID) {
-	const float distance = PlayerInfo.GetDistance(EnemyManager::Access(myID)->myPosition());
-	const bool certainDistance = (ENParams.SWITCH_TO_MELEEATTACK < distance) && (distance <= ENParams.RANGE_OF_SHOT);
+	Enemy* enemy = EnemyManager::Access(myID);
+	const float distance = PlayerInfo.GetDistance(enemy->myPosition());
+	const bool certainDistance = (ENParams.RANGE_OF_MELEEATTACK < distance) && (distance <= ENParams.RANGE_OF_SHOOTING);
 
 	if (certainDistance)
-		return EnemyManager::Access(myID)->Shooting();
+		return enemy->Shooting();
+	else
+		enemy->ResetAttackState();
 
 	return Action::FAILIRE;
 }

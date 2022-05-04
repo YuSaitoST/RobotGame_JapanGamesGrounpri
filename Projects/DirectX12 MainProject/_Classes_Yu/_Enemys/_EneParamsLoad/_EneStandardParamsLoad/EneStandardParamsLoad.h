@@ -9,14 +9,14 @@ public:
 	struct Number {
 		float MOB_RIGHT_END[2];
 		float MOB_LEFT_END[2];
-		float DISTANCE_APPROACHING_PLAYER;
-		float SHORTEST_DISTANCE;
+		float DISTANCE_TO_NOTICE_PLAYER;	// [ e ]
+		float RANGE_OF_SHOOTING;			// [ d ] 
+		float ALWAYS_KEEP_DISTANCE_OPEN;	// [ c ]
+		float RANGE_OF_MELEEATTACK;			// [ b ]
+		float UNAPPROACHABLE_DISTANCE;		// [ a ]
 		float STEP_INITIALVELOCITY;
 		float STEP_DISTANCE;
-		float RANGE_OF_SHOT;
 		float FREQUENCY_OF_SHOOTING;
-		float SWITCH_TO_MELEEATTACK;
-		float MELEEATTACK_TO_DISTANCE;
 	};
 
 	static EneStandardParamsLoad& GetInstance() {

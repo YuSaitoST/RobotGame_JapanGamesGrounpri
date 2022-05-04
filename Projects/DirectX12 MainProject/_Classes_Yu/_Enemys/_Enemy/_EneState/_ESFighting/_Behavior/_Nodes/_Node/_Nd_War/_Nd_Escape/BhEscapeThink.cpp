@@ -18,7 +18,7 @@ BhEscapeThink::~BhEscapeThink() {
 }
 
 Action BhEscapeThink::Behavior(const int myID) {
-	const bool a_certain_distance_away = ENParams.DISTANCE_APPROACHING_PLAYER < PlayerInfo.GetDistance(EnemyManager::Access(myID)->myPosition());
+	const bool a_certain_distance_away = ENParams.DISTANCE_TO_NOTICE_PLAYER < PlayerInfo.GetDistance(EnemyManager::Access(myID)->myPosition());
 
 	// ˆê’èˆÈã—£‚ê‚Ä‚¢‚ÄAs“®‚µ‚Ä‚¢‚È‚¢‚È‚ç
 	if ((lastAction_ != Action::REPEAT) && a_certain_distance_away)
