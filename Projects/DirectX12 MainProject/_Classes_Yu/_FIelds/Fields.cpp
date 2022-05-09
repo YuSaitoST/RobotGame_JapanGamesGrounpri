@@ -14,10 +14,12 @@ void Fields::LoadAssets() {
 	skyDome_->LoadAsset();
 
 	model_ = DX9::Model::CreateFromFile(DXTK->Device9, L"_Models_Field\\field.X");
-	model_->SetPosition(DirectX::SimpleMath::Vector3(FLParams.GetFieldFalfScale(), -0.25f, FLParams.GetFieldFalfScale()));
+	//model_->SetPosition(DirectX::SimpleMath::Vector3(FLParams.GetFieldFalfScale(), -0.25f, FLParams.GetFieldFalfScale()));
+	 model_->SetPosition(DirectX::SimpleMath::Vector3(4, -0.25f, 4));
 	//model_->SetScale(FLParams.GetNumber().SCALE, 0.0f, FLParams.GetNumber().SCALE);
-	const float size = 0.2032f * 50.0f;
-	model_->SetScale(size, 0.0f, size);
+	//const float size = 0.2032f * 50.0f * 10;
+	//model_->SetScale(size, 1.0f, size);
+	model_->SetScale(1.0f, 1.0f, 1.0f);
 
 	D3DMATERIAL9 _mate{};
 	_mate.Diffuse = DX9::Colors::Value(0.35f, 0.35f, 0.35f, 1.0f);
