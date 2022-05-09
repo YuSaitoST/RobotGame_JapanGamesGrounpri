@@ -4,7 +4,6 @@
 #include "_Classes_Yu/_Enemys/_EneParamsLoad/_EneLvParamsLoad/EneLvParamsLoad.h"
 #include "_Classes_Yu/_FieldOutCheck/FieldOutCheck.h"
 #include "_Classes_Yu/_CellList/_Object/WeaponBase.h"
-//#include "_Classes_Yu/_EnemyInformation/EnemyInformation.h"
 #include "DontDestroyOnLoad.h"
 
 Enemy::Enemy(int level, Vector3 pos, float r) : level_(level), isInStep_(false), timeDelta_(0.0f), jumpTime_(0.0f) {
@@ -40,8 +39,9 @@ void Enemy::Initialize(const int id) {
 void Enemy::LoadAssets(std::wstring file_name) {
 	//model_ = DX9::SkinnedModel::CreateFromFile(DXTK->Device9, file_name.c_str());
 	model_ = DX9::Model::CreateFromFile(DXTK->Device9, file_name.c_str());
-	const float size = 0.2032f * 50.0f;
-	model_->SetScale(size);
+	//const float size = 0.2032f * 50.0f;
+	//model_->SetScale(size);
+	model_->SetScale(1.0f);
 
 	D3DMATERIAL9 _mate{};
 	_mate.Diffuse = DX9::Colors::Value(0.35f, 0.35f, 0.35f, 1.0f);
@@ -54,7 +54,7 @@ void Enemy::LoadAssets(std::wstring file_name) {
 void Enemy::Update(const float deltaTime) {
 	timeDelta_ = deltaTime;
 
-	state_->Update(id_my_);
+	//state_->Update(id_my_);
 	
 	Field::ClampPosition(pos_);
 

@@ -6,7 +6,7 @@
 
 class ConstiateParam {
 public:
-	const float LENGHT_OF_A_SIDE = 800.0f;
+	const float LENGHT_OF_A_SIDE = 8.0f;
 
 public:
 	static ConstiateParam& GetInstance() {

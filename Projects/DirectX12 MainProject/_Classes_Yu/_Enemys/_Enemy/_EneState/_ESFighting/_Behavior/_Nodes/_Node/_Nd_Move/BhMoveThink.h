@@ -6,6 +6,7 @@
 #include "_Classes_Yu/_Enemys/_Enemy/_EneState/_ESFighting/_Behavior/_Nodes/_Node/_Nd_War/_Nd_Escape/BhBackStep.h"
 #include "_Classes_Yu/_Enemys/_Enemy/_EneState/_ESFighting/_Behavior/_Nodes/_Node/_Nd_War/_Nd_Escape/BhSideStep.h"
 
+class Enemy;
 class BhMoveThink : public Node {
 public:
 	BhMoveThink();
@@ -14,9 +15,10 @@ public:
 	virtual Action Behavior(const int myID) override;
 
 private:
+	Node* ActThinks(Enemy* enemy);
 	Node* NewActToBeTaken(Node* node);
 
-	const int PROBABILITY_OF_NOT_STEP[2] = { 65,25 };
+	const int PROBABILITY_OF_STEP[2] = { 35, 75 };
 	const float MELEEATTACK_TO_DIST_MIN = 1.0f;
 
 	BhMove* nd_move_;
