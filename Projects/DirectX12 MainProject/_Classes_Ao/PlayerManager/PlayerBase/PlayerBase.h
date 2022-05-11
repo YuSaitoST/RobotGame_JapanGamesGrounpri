@@ -38,7 +38,7 @@ public:
 	void SetAnimation(DX9::SKINNEDMODEL& model, const int enableTrack);
 
 
-	DX9::SKINNEDMODEL& GetModel() { return player_model; }
+	DX9::MODEL& GetModel() { return player_model; }
 	SimpleMath::Vector3* GetPlayer_Pos() { return &pos_; }
 	SimpleMath::Vector3 GetPos() { return pos_; }
 	SimpleMath::Vector3 GetForward() { return forward_; }
@@ -46,7 +46,8 @@ public:
 	bool GetJump() { return jump_flag; }
 
 private:
-	DX9::SKINNEDMODEL player_model;
+	//DX9::SKINNEDMODEL player_model;
+	DX9::MODEL player_model;
 
 	enum
 	{
@@ -121,4 +122,10 @@ private:
 	float third_reception_max;  //受付時間最大値
 	bool  third_check_flag;     //最後終わるまで攻撃不可
 
+	//射撃
+	enum ShotState
+	{
+
+	};
+	int shotdamage;
 };

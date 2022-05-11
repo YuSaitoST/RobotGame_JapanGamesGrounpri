@@ -16,6 +16,8 @@ public:
 	bool MovePlayerStateRight();
 	bool MovePlayerStateLeft();
 
+	bool RotateStateRight();
+	bool RotateStateLeft();
 
 	bool DushStateKey();
 	bool JumpEventKey();

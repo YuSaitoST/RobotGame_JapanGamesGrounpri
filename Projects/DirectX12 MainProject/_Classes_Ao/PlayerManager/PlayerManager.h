@@ -27,6 +27,9 @@ private:
 	PlayerBase p_base_;
 
 	DX9::CAMERA camera;
+	bool rotate_flag;
+
+	DX9::SPRITEFONT font;
 
 
 };
