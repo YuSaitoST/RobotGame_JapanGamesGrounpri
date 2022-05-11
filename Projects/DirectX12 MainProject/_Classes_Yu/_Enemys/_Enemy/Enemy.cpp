@@ -41,11 +41,15 @@ void Enemy::LoadAssets(std::wstring file_name) {
 	model_ = DX9::Model::CreateFromFile(DXTK->Device9, file_name.c_str());
 	//const float size = 0.2032f * 50.0f;
 	//model_->SetScale(size);
-	model_->SetScale(1.0f);
+	model_->SetScale(20.0f);
 
 	D3DMATERIAL9 _mate{};
 	_mate.Diffuse = DX9::Colors::Value(0.35f, 0.35f, 0.35f, 1.0f);
 	_mate.Ambient = DX9::Colors::Value(0.35f, 0.35f, 0.35f, 1.0f);
+	_mate.Emissive = DX9::Colors::Value(0.5f, 0.5f, 0.5f, 1.0f);
+	//_mate.Diffuse	= DX9::Colors::Value(0.3f, 0.3f, 0.3f, 1.0f);
+	//_mate.Ambient	= DX9::Colors::Value(0.7f, 0.7f, 0.7f, 1.0f);
+	//_mate.Specular	= DX9::Colors::Value(1.0f, 1.0f, 1.0f, 1.0f);
 	model_->SetMaterial(_mate);
 
 	meleeWapon_->LoadAssets();
@@ -68,7 +72,7 @@ void Enemy::Update(const float deltaTime) {
 
 void Enemy::Render() {
 	model_->Draw();
-	meleeWapon_->Render();
+	//meleeWapon_->Render();
 }
 
 void Enemy::SetMember() {

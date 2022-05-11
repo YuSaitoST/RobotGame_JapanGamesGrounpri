@@ -18,11 +18,11 @@ MainScene::MainScene()
 void MainScene::Initialize()
 {
 	D3DLIGHT9 light_test_;
-	light_test_.Type = D3DLIGHT_DIRECTIONAL;
-	light_test_.Diffuse = DX9::Colors::Value(1.0f, 1.0f, 1.0f, 1.0f);
-	light_test_.Specular = DX9::Colors::Value(1.0f, 1.0f, 1.0f, 1.0f);
-	light_test_.Ambient = DX9::Colors::Value(1.0f, 1.0f, 1.0f, 1.0f);
-	light_test_.Direction = DX9::VectorSet(0.0f, -1.0f, 1.0f);
+	light_test_.Type		= D3DLIGHT_DIRECTIONAL;
+	light_test_.Diffuse		= DX9::Colors::Value(1.0f, 1.0f, 1.0f, 1.0f);
+	light_test_.Specular	= DX9::Colors::Value(1.0f, 1.0f, 1.0f, 1.0f);
+	light_test_.Ambient		= DX9::Colors::Value(1.0f, 1.0f, 1.0f, 1.0f);
+	light_test_.Direction	= DX9::VectorSet(0.0f, -1.0f, 1.0f);
 
 	Lighting.Setting("MainLight", light_test_);
 	Lighting.SetEnable("MainLight", true);

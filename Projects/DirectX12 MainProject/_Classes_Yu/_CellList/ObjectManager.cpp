@@ -4,9 +4,9 @@ CellList cellList = CellList{};
 EnemyManager* ObjectManager::m_enemy_;
 
 ObjectManager::ObjectManager() {
-	m_enemy_	= new EnemyManager();
-	m_bullet_	= new BulletManager();
-	ensBase_	= new EnesStronghold();
+	m_enemy_		= new EnemyManager();
+	m_bullet_		= new BulletManager();
+	ensBase_		= new EnesStronghold();
 }
 
 ObjectManager::~ObjectManager() {
