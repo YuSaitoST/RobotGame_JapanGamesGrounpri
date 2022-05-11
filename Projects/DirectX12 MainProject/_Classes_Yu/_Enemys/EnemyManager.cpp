@@ -4,6 +4,7 @@
 #include "_Classes_Yu/_Enemys/_EneParamsLoad/_EnesPositionLoad/EnesPositionLoad.h"
 
 std::vector<Enemy*> EnemyManager::enemyList_;
+EnePosList* EnemyManager::enePosList_;
 
 EnemyManager::EnemyManager() {
 	EneStandardParamsLoad::GetInstance().LoadParams();
@@ -14,9 +15,13 @@ EnemyManager::EnemyManager() {
 
 	for (int _i = 0; _i < LEVELS_NUM::LV1; ++_i)
 		enemyList_.push_back(new Enemy((int)LEVELS::ONE, ENPos.GetPosition(_i), 1.0f));
+
+	enePosList_ = new EnePosList();
 }
 
 EnemyManager::~EnemyManager() {
+	delete enePosList_;
+
 	for (int _i = enemyList_.size() - 1; 0 <= _i; --_i)
 		delete enemyList_[_i];
 }
@@ -26,8 +31,10 @@ Enemy* EnemyManager::Access(const int index) {
 }
 
 void EnemyManager::Initialize() {
-	for (int _i = 0; _i < enemyList_.size(); ++_i)
+	for (int _i = 0; _i < enemyList_.size(); ++_i) {
 		enemyList_[_i]->Initialize(_i + 1);
+		enePosList_->SetPosition(_i, &(enemyList_[_i]->myPosition()));
+	}
 }
 
 void EnemyManager::LoadAssets() {
