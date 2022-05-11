@@ -33,7 +33,7 @@ Enemy* EnemyManager::Access(const int index) {
 void EnemyManager::Initialize() {
 	for (int _i = 0; _i < enemyList_.size(); ++_i) {
 		enemyList_[_i]->Initialize(_i + 1);
-		enePosList_->SetPosition(_i, &(enemyList_[_i]->myPosition()));
+		enePosList_->SetPosition(_i, enemyList_[_i]->GetPosPointer());
 	}
 }
 

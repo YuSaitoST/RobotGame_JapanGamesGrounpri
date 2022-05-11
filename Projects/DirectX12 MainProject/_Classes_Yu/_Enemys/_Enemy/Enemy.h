@@ -26,7 +26,7 @@ public:
 	void HitCheck();
 	void ResetAttackState() { attackState_ = AttackState::None_Attack; }
 
-	Vector3* GetPosP() { return &pos_; }
+	Vector3* GetPosPointer() { return &pos_; }
 	int myLevel() const { return level_; }
 	int& GetPosListID() { return posListID_; }
 	bool IsInAction() const { return isInStep_; }
@@ -39,7 +39,6 @@ public:
 	Action Shooting();
 	
 	void Rotate(const Vector3 targetDirection);
-	//void ErasePosList();
 
 private:
 	void SetMember();
