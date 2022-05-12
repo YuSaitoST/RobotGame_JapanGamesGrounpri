@@ -8,6 +8,7 @@
 #include "_Classes_Yu/_InputClasses/UseKeyCheck.h"
 #include "_Classes_Yu/_CellList/ObjectManager.h"
 #include "_Classes_Yu/_FieldOutCheck/FieldOutCheck.h"
+#include "_Classes_Yu/_MeleeWeapon/MeleeWeapon.h"
 
 
 PlayerBase::PlayerBase() {
@@ -64,7 +65,7 @@ PlayerBase::PlayerBase() {
 
 void PlayerBase::Initialize(const int id) {
 	
-	pos_ = SimpleMath::Vector3(pos_.x, 0.0f, pos_.z);
+	pos_ = SimpleMath::Vector3(pos_.x, pos_.y, pos_.z);
 
 	//ダッシュ 関数
 	boost_zero = 0;     //オーバーヒートの初期値
@@ -106,13 +107,17 @@ void PlayerBase::Initialize(const int id) {
 	third_check_flag = false;    //最後終わるまで攻撃不可
 
 
+
 	PlayerInfo.SetMenber(&pos_, &attackState_);
 
 }
 
 void PlayerBase::LoadAssets(std::wstring file_name) {
-	player_model = DX9::SkinnedModel::CreateFromFile(DXTK->Device9, L"Player\\SwordManEX\\armor_red2_0210b.X");
-	player_model->SetScale(0.1f);
+	//player_model = DX9::SkinnedModel::CreateFromFile(DXTK->Device9, L"Player\\j_mein.x");
+	player_model = DX9::Model::CreateFromFile(DXTK->Device9,L"Player\\j_mein.x");
+
+	player_model->SetRotation(0.0f, XMConvertToRadians(180.0f), 0.0f);
+	
 	
 	font = DX9::SpriteFont::CreateDefaultFont(DXTK->Device9);
 	debag_font = DX9::SpriteFont::CreateDefaultFont(DXTK->Device9);
@@ -142,7 +147,7 @@ void PlayerBase::LoadCsv() {
    本命の値代入、%iはint型、%fはfloat型、%sはstring型
    その後に、.hで定義した変数の参照を渡す
 	*/
-	fscanf_s(file, "%f,%f,%f,%f", &player_spped, &boost_dush, &pos_.x, &pos_.z);
+	fscanf_s(file, "%f,%f,%f,%f,%f", &player_spped, &boost_dush, &pos_.x, &pos_.y, &pos_.z);
 
 	// ファイルを閉じる
 	fclose(file);
@@ -150,19 +155,17 @@ void PlayerBase::LoadCsv() {
 }
 
 void PlayerBase::Setting(const float deltaTime) {
-	player_model->SetRotation(0.0f, XMConvertToRadians(180.0f), 0.0f);
 	pos_ = player_model->GetPosition();
 
 	//移動制限	
 	Field::ClampPosition(pos_);
 	Field::IsOut(pos_);
 
-	player_model->AdvanceTime(deltaTime);
 	player_model->SetPosition(pos_);
 }
 
 void PlayerBase::Update(const float deltaTime) {
-	SetAnimation(player_model, STAND);
+	
 
 	
 	UpdateToMorton();
@@ -172,10 +175,8 @@ void PlayerBase::Move(const float deltaTime) {
 	forward_ = Vector3(-Press.DirectionKey().x, 0.0f, Press.DirectionKey().y);
 	Vector3 amountMove = forward_ * speed * deltaTime;
 	player_model->Move(amountMove);
-	
-	if (Press.MovePlayerStateUp() || Press.MovePlayerStateDown() || Press.MovePlayerStateLeft() || Press.MovePlayerStateRight()) {
-		SetAnimation(player_model, RUN);
-	}
+
+
 }
 
 
@@ -191,7 +192,6 @@ void PlayerBase::Dush(const float deltaTime) {
 			speed = player_spped;
 			boost_max += 2;
 		}
-
 		if (boost_max == boost_zero) {
 			speed = player_spped;
 			overheart_flag = true;
@@ -290,9 +290,12 @@ void PlayerBase::Attack(const float deltaTime) {
 }
 
 void PlayerBase::Shot(const float deltaTime) {
-	attackState_ = AttackState::Shooting;
-	ObjectManager::SetShooting(id_my_, 0, pos_, forward_, rotateY_);
-	attackState_ = AttackState::None_Attack;
+	if (Press.ShotEventKey()) {
+		attackState_ = AttackState::Shooting;
+		Vector3 flont = player_model->GetRotation();
+		ObjectManager::SetShooting(id_my_, 0, pos_, -flont, rotateY_);
+		attackState_ = AttackState::None_Attack;
+	}
 }
 
 void PlayerBase::Jump(const float deltaTime) {
@@ -333,7 +336,7 @@ void PlayerBase::UIRender() {
 	DX9::SpriteBatch->DrawString(
 		font.Get(),
 		SimpleMath::Vector2(0.0f, 0.0f),
-		DX9::Colors::Red,
+		DX9::Colors::Blue,
 		L"座標　%f %f %f", pos_.x, pos_.y, pos_.z
 	);
 
@@ -425,8 +428,15 @@ void PlayerBase::UIRender() {
 			L"オーバーヒート OFF"
 		);
 	}
-}
 
+	DX9::SpriteBatch->DrawString(
+		debag_font.Get(),
+		SimpleMath::Vector2(0.0f, 200.0f),
+		DX9::Colors::Blue,
+		L"Forward X %f Y %f Z %f", forward_.x,forward_.y,forward_.z
+	);
+
+}
 
 //指定されたモーションはTRUE,それ以外はFALSE
 void PlayerBase::SetAnimation(DX9::SKINNEDMODEL& model, const int enableTrack)

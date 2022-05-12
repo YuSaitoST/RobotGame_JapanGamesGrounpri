@@ -77,10 +77,10 @@ Node* BhMoveThink::ActThinks(Enemy* enemy) {
 				return nd_sideStep_;
 			}
 		}
-		else if (DistanceThatCantBeAnyCloser && DistanceToInitiateMeleeAttack) {
-			// ‹ßÚUŒ‚”ÍˆÍ“à‚È‚ç‰½‚à‚µ‚È‚¢
-			return nullptr;
-		}
+		//else if (DistanceThatCantBeAnyCloser && DistanceToInitiateMeleeAttack) {
+		//	// ‹ßÚUŒ‚”ÍˆÍ“à‚È‚ç‰½‚à‚µ‚È‚¢
+		//	return nullptr;
+		//}
 		else {
 			return nullptr;
 		}
