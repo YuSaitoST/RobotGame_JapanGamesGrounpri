@@ -27,7 +27,12 @@ private:
 	PlayerBase p_base_;
 
 	DX9::CAMERA camera;
-	bool rotate_flag;
+	Vector3 camera_pos_;
+
+	Vector3 pos_bef_;
+	Vector3 pos_aft_;
+
+	
 
 	DX9::SPRITEFONT font;
 

@@ -23,7 +23,7 @@ public:
 	void Setting(const float deltaTime);
 	void Update(const float deltaTime);
 
-	void Move(const float deltaTime);
+	void Move(const float deltaTime, DX9::CAMERA camera);
 
 
 	void Attack(const float deltaTime);
@@ -70,6 +70,7 @@ private:
 	float player_spped;
 	float speed;
 	
+
 
 	//ダッシュ 関数 系統
 	//ブースト時の変数

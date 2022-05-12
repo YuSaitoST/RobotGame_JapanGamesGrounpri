@@ -65,7 +65,9 @@ PlayerBase::PlayerBase() {
 
 void PlayerBase::Initialize(const int id) {
 	
-	pos_ = SimpleMath::Vector3(pos_.x, pos_.y, pos_.z);
+	pos_ = SimpleMath::Vector3(pos_.x, -0.24f, pos_.z);
+
+
 
 	//ダッシュ 関数
 	boost_zero = 0;     //オーバーヒートの初期値
@@ -117,6 +119,7 @@ void PlayerBase::LoadAssets(std::wstring file_name) {
 	player_model = DX9::Model::CreateFromFile(DXTK->Device9,L"Player\\j_mein.x");
 
 	player_model->SetRotation(0.0f, XMConvertToRadians(180.0f), 0.0f);
+	player_model->SetPosition(pos_);
 	
 	
 	font = DX9::SpriteFont::CreateDefaultFont(DXTK->Device9);
@@ -147,11 +150,18 @@ void PlayerBase::LoadCsv() {
    本命の値代入、%iはint型、%fはfloat型、%sはstring型
    その後に、.hで定義した変数の参照を渡す
 	*/
-	fscanf_s(file, "%f,%f,%f,%f,%f", &player_spped, &boost_dush, &pos_.x, &pos_.y, &pos_.z);
+	fscanf_s(file, "%f,%f,%f,%f", &player_spped, &boost_dush, &pos_.x, &pos_.z);
 
 	// ファイルを閉じる
 	fclose(file);
 
+}
+
+void PlayerBase::Update(const float deltaTime) {
+
+	
+
+	UpdateToMorton();
 }
 
 void PlayerBase::Setting(const float deltaTime) {
@@ -164,19 +174,10 @@ void PlayerBase::Setting(const float deltaTime) {
 	player_model->SetPosition(pos_);
 }
 
-void PlayerBase::Update(const float deltaTime) {
-	
-
-	
-	UpdateToMorton();
-}
-
-void PlayerBase::Move(const float deltaTime) {
+void PlayerBase::Move(const float deltaTime, DX9::CAMERA camera) {
 	forward_ = Vector3(-Press.DirectionKey().x, 0.0f, Press.DirectionKey().y);
 	Vector3 amountMove = forward_ * speed * deltaTime;
 	player_model->Move(amountMove);
-
-
 }
 
 
