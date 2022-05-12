@@ -24,8 +24,6 @@ void PlayerManager::LoadModel() {
 
 void PlayerManager::Update(const float deltaTime) {
 
-
-
 	if (Press.RotateRightCameraKey()) {
 		Vector3 at = p_base_.GetPos();
 		Matrix mat = Matrix::CreateTranslation(camera->GetPosition() - at);

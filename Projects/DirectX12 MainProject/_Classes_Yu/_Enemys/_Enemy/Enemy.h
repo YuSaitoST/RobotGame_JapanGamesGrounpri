@@ -61,6 +61,8 @@ private:
 	//DX9::SKINNEDMODEL model_;
 	DX9::MODEL model_;
 
+	DX9::SHADER shader_;
+
 	int posListID_;
 	int level_;
 	bool isInStep_;
