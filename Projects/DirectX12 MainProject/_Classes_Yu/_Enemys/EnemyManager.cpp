@@ -7,6 +7,7 @@ std::vector<Enemy*> EnemyManager::enemyList_;
 EnePosList* EnemyManager::enePosList_;
 
 EnemyManager::EnemyManager() {
+	// CSVƒtƒ@ƒCƒ‹‚Ì“Ç‚İ‚İ
 	EneStandardParamsLoad::GetInstance().LoadParams();
 	EneLvParamsLoad::GetInstance().LoadParams();
 	EnesPositionLoad::GetInstance().LoadParams();

@@ -27,18 +27,16 @@ void PlayerManager::LoadModel() {
 
 void PlayerManager::Update(const float deltaTime) {
 	
-	float camera_distance_x = p_base_.GetPos().x + camera_pos_.x;
-	float camera_distance_z = p_base_.GetPos().z + camera_pos_.z;
 
+	pos_bef_ = p_base_.GetPos();
 	pos_aft_ = p_base_.GetPos();
 
-	camera_pos_ = p_base_.GetPos();
 
+	camera->Move(0,0,0);
 
 	//ƒJƒƒ‰‚Ì‰ñ“]
 	Vector3 at = p_base_.GetPos();
 	Matrix mat = Matrix::CreateTranslation(camera->GetPosition() - at);
-
 
 	if (Press.RotateRightCameraKey()) {		
 		Matrix rot = Matrix::CreateRotationY(XMConvertToRadians(-180.0f * deltaTime));
