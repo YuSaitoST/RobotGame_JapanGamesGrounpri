@@ -85,9 +85,9 @@ void PlayerBase::Initialize(const int id) {
 	//1/2
 	half = 0.5f;
 	//重力加速度
-	gravity_ = 50.0f;
+	gravity_ = 20.0f;
 	//初速
-	V0 = 40.0f;
+	V0 = 10.0f;
 
 	//近接攻撃 コンボ
 	burst_state_mode = BURST_STATE::NOT_BURST;
@@ -158,26 +158,28 @@ void PlayerBase::LoadCsv() {
 }
 
 void PlayerBase::Update(const float deltaTime) {
+	pos_ = player_model->GetPosition();
 
-	
+	Field::ClampPosition(pos_);
+	player_model->SetPosition(pos_);
 
 	UpdateToMorton();
 }
 
 void PlayerBase::Setting(const float deltaTime) {
-	pos_ = player_model->GetPosition();
+
+
 
 	//移動制限	
-	Field::ClampPosition(pos_);
 	Field::IsOut(pos_);
 
-	player_model->SetPosition(pos_);
 }
 
-void PlayerBase::Move(const float deltaTime, DX9::CAMERA camera) {
+void PlayerBase::Move(const float deltaTime) {
 	forward_ = Vector3(-Press.DirectionKey().x, 0.0f, Press.DirectionKey().y);
 	Vector3 amountMove = forward_ * speed * deltaTime;
 	player_model->Move(amountMove);
+
 }
 
 
@@ -317,7 +319,8 @@ void PlayerBase::Jump(const float deltaTime) {
 		player_model->SetPosition(pos);
 
 
-		if (player_model->GetPosition().y <= 0.0f) {
+		if (player_model->GetPosition().y <= -0.24f) {
+			player_model->SetPosition(pos.x, -0.24f, pos.z);
 			jump_flag = false;
 		}
 	}
@@ -337,7 +340,7 @@ void PlayerBase::UIRender() {
 	DX9::SpriteBatch->DrawString(
 		font.Get(),
 		SimpleMath::Vector2(0.0f, 0.0f),
-		DX9::Colors::Blue,
+		DX9::Colors::Red,
 		L"座標　%f %f %f", pos_.x, pos_.y, pos_.z
 	);
 
@@ -345,7 +348,7 @@ void PlayerBase::UIRender() {
 		DX9::SpriteBatch->DrawString(
 			debag_font.Get(),
 			SimpleMath::Vector2(0.0f, 30.0f),
-			DX9::Colors::Blue,
+			DX9::Colors::Red,
 			L"連撃 0"
 		);
 	}
@@ -353,14 +356,14 @@ void PlayerBase::UIRender() {
 		DX9::SpriteBatch->DrawString(
 			debag_font.Get(),
 			SimpleMath::Vector2(0.0f, 30.0f),
-			DX9::Colors::Blue,
+			DX9::Colors::Red,
 			L"連撃 1連撃目"
 		);
 
 		DX9::SpriteBatch->DrawString(
 			time_font.Get(),
 			SimpleMath::Vector2(0.0f, 60.0f),
-			DX9::Colors::Blue,
+			DX9::Colors::Red,
 			L"受付時間 %f", frist_reception_time
 		);
 	}
@@ -368,14 +371,14 @@ void PlayerBase::UIRender() {
 		DX9::SpriteBatch->DrawString(
 			debag_font.Get(),
 			SimpleMath::Vector2(0.0f, 30.0f),
-			DX9::Colors::Blue,
+			DX9::Colors::Red,
 			L"連撃 2連撃目"
 		);
 
 		DX9::SpriteBatch->DrawString(
 			time_font.Get(),
 			SimpleMath::Vector2(0.0f, 60.0f),
-			DX9::Colors::Blue,
+			DX9::Colors::Red,
 			L"受付時間 %f", second_reception_time
 		);
 
@@ -384,7 +387,7 @@ void PlayerBase::UIRender() {
 		DX9::SpriteBatch->DrawString(
 			debag_font.Get(),
 			SimpleMath::Vector2(0.0f, 30.0f),
-			DX9::Colors::Blue,
+			DX9::Colors::Red,
 			L"連撃 3連撃目"
 		);
 
@@ -392,7 +395,7 @@ void PlayerBase::UIRender() {
 		DX9::SpriteBatch->DrawString(
 			time_font.Get(),
 			SimpleMath::Vector2(0.0f, 60.0f),
-			DX9::Colors::Blue,
+			DX9::Colors::Red,
 			L"受付時間 %f", third_reception_time
 		);
 
@@ -409,14 +412,14 @@ void PlayerBase::UIRender() {
 		DX9::SpriteBatch->DrawString(
 			debag_font.Get(),
 			SimpleMath::Vector2(0.0f, 130.0f),
-			DX9::Colors::Blue,
+			DX9::Colors::Red,
 			L"オーバーヒート ON"
 		);
 
 		DX9::SpriteBatch->DrawString(
 			debag_font.Get(),
 			SimpleMath::Vector2(0.0f, 160.0f),
-			DX9::Colors::Blue,
+			DX9::Colors::Red,
 			L"オーバーヒート解除まで残り %f 秒",overheart_time
 		);
 	}
@@ -425,7 +428,7 @@ void PlayerBase::UIRender() {
 		DX9::SpriteBatch->DrawString(
 			debag_font.Get(),
 			SimpleMath::Vector2(0.0f, 130.0f),
-			DX9::Colors::Blue,
+			DX9::Colors::Red,
 			L"オーバーヒート OFF"
 		);
 	}
@@ -433,7 +436,7 @@ void PlayerBase::UIRender() {
 	DX9::SpriteBatch->DrawString(
 		debag_font.Get(),
 		SimpleMath::Vector2(0.0f, 200.0f),
-		DX9::Colors::Blue,
+		DX9::Colors::Red,
 		L"Forward X %f Y %f Z %f", forward_.x,forward_.y,forward_.z
 	);
 

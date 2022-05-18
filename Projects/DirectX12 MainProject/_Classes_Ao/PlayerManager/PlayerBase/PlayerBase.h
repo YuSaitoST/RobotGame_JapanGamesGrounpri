@@ -23,7 +23,7 @@ public:
 	void Setting(const float deltaTime);
 	void Update(const float deltaTime);
 
-	void Move(const float deltaTime, DX9::CAMERA camera);
+	void Move(const float deltaTime);
 
 
 	void Attack(const float deltaTime);
@@ -38,10 +38,12 @@ public:
 	void SetAnimation(DX9::SKINNEDMODEL& model, const int enableTrack);
 
 
-	DX9::MODEL& GetModel() { return player_model; }
+	//DX9::MODEL& GetModel() { return player_model; }
 	SimpleMath::Vector3* GetPlayer_Pos() { return &pos_; }
-	SimpleMath::Vector3 GetPos() { return pos_; }
+	Vector3 GetPos() { return player_model->GetPosition(); }
 	SimpleMath::Vector3 GetForward() { return forward_; }
+
+	bool GetMove() { return move_flag; }
 
 	bool GetJump() { return jump_flag; }
 
@@ -70,7 +72,7 @@ private:
 	float player_spped;
 	float speed;
 	
-
+	bool move_flag = false;
 
 	//ダッシュ 関数 系統
 	//ブースト時の変数

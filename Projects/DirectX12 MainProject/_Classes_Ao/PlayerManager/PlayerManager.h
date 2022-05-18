@@ -28,10 +28,11 @@ private:
 
 	DX9::CAMERA camera;
 	Vector3 camera_pos_;
+	Vector3 camera_angle;
 
 	Vector3 pos_bef_;
 	Vector3 pos_aft_;
-
+	Vector3 pos_distance_;
 	
 
 	DX9::SPRITEFONT font;
