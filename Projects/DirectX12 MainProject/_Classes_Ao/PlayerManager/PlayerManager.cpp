@@ -11,18 +11,28 @@ void PlayerManager::LoadModel() {
 
 	font = DX9::SpriteFont::CreateDefaultFont(DXTK->Device9);
 
-	camera->SetView(SimpleMath::Vector3(0, 0, 0), SimpleMath::Vector3(0, 0, 0));
-	camera->SetPerspectiveFieldOfView(XMConvertToRadians(20.0f), 16.0f / 9.0f, 1.0f, 100000.0f);
+	//camera->SetView(SimpleMath::Vector3(0, 0, 0), SimpleMath::Vector3(0, 0, 0));
+
+	//camera_pos_ = Vector3(
+	//	p_base_.GetPos().x + 0.11f,
+	//	p_base_.GetPos().y + 0.15f,
+	//	p_base_.GetPos().z - 1.17f
+	//);
+
+
+	//camera->SetPosition(camera_pos_);
+	//camera->Rotate(0.0f, -0.3f, 0.0f);
 
 	camera_pos_ = Vector3(
-		p_base_.GetPos().x + 0.11f,
-		p_base_.GetPos().y + 0.15f,
-		p_base_.GetPos().z - 1.17f
+		p_base_.GetPos().x + 0.6f,
+		p_base_.GetPos().y + 0.19f,
+		p_base_.GetPos().z - 1.4f
 	);
 
+	Vector3 at = Vector3(p_base_.GetPos().x + 0.08f, p_base_.GetPos().y + 0.15f, p_base_.GetPos().z);
 
-	camera->SetPosition(camera_pos_);
-
+	camera->SetViewLookAt(camera_pos_, at, Vector3::Up);//p_base_.GetPos(), Vector3::Up);
+	camera->SetPerspectiveFieldOfView(XMConvertToRadians(20.0f), 16.0f / 9.0f, 1.0f, 100000.0f);
 }
 
 void PlayerManager::Update(const float deltaTime) {
@@ -30,7 +40,7 @@ void PlayerManager::Update(const float deltaTime) {
 	pos_bef_ = p_base_.GetPos();
 
 	//ƒJƒƒ‰‚Ì‰ñ“]
-	Vector3 at = Vector3(p_base_.GetPos().x + 0.11f, p_base_.GetPos().y + 0.15f, p_base_.GetPos().z);
+	Vector3 at = Vector3(p_base_.GetPos().x + 0.08f, p_base_.GetPos().y + 0.15f, p_base_.GetPos().z);
 	Matrix mat = Matrix::CreateTranslation(camera->GetPosition() - at);
 
 	if (Press.RotateRightCameraKey()) {		
