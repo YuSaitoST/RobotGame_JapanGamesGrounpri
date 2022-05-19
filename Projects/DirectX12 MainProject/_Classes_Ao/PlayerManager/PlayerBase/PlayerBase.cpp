@@ -10,6 +10,7 @@
 #include "_Classes_Yu/_FieldOutCheck/FieldOutCheck.h"
 #include "_Classes_Yu/_MeleeWeapon/MeleeWeapon.h"
 
+#include "_Classes_Ao/PlayerManager/PlayerManager.h"
 
 PlayerBase::PlayerBase() {
 	LoadCsv();
@@ -85,9 +86,9 @@ void PlayerBase::Initialize(const int id) {
 	//1/2
 	half = 0.5f;
 	//重力加速度
-	gravity_ = 20.0f;
+	gravity_ = 3.14f;
 	//初速
-	V0 = 10.0f;
+	V0 = 1.0f;
 
 	//近接攻撃 コンボ
 	burst_state_mode = BURST_STATE::NOT_BURST;

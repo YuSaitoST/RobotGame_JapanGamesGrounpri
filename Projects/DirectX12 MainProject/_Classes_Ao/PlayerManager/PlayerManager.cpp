@@ -26,7 +26,7 @@ void PlayerManager::LoadModel() {
 	camera_pos_ = Vector3(
 		p_base_.GetPos().x + 0.6f,
 		p_base_.GetPos().y + 0.19f,
-		p_base_.GetPos().z - 1.4f
+		p_base_.GetPos().z - 1.6f
 	);
 
 	Vector3 at = Vector3(p_base_.GetPos().x + 0.08f, p_base_.GetPos().y + 0.15f, p_base_.GetPos().z);
@@ -59,8 +59,6 @@ void PlayerManager::Update(const float deltaTime) {
 		camera->SetViewLookAt(pos, at, Vector3::Up);
 	}
 
-
-
 	p_base_.Update(deltaTime);
 
 	//移動
@@ -72,7 +70,6 @@ void PlayerManager::Update(const float deltaTime) {
 	pos_distance_ = pos_aft_ - pos_bef_;
 
 	camera->SetPosition(camera->GetPosition() + pos_distance_);
-
 
 
 	//ダッシュ
@@ -107,4 +104,26 @@ void PlayerManager::_2D() {
 		DX9::Colors::Red,
 		L"カメラ座標 X %f Y %f Z %f", camera.GetPosition().x, camera.GetPosition().y, camera.GetPosition().z
 	);
+
+	DX9::SpriteBatch->DrawString(
+		font.Get(),
+		SimpleMath::Vector2(0.0f, 260.0f),
+		DX9::Colors::Red,
+		L"pos_bef_ X %f Y %f Z %f", pos_bef_.x, pos_bef_.y, pos_bef_.z
+	);
+
+	DX9::SpriteBatch->DrawString(
+		font.Get(),
+		SimpleMath::Vector2(0.0f, 290.0f),
+		DX9::Colors::Red,
+		L"pos_aft_ X %f Y %f Z %f", pos_aft_.x, pos_aft_.y, pos_aft_.z
+	);
+
+	DX9::SpriteBatch->DrawString(
+		font.Get(),
+		SimpleMath::Vector2(0.0f, 320.0f),
+		DX9::Colors::Red,
+		L"pos_distance_ X %f Y %f Z %f", pos_distance_.x, pos_distance_.y, pos_distance_.z
+	);
+
 }

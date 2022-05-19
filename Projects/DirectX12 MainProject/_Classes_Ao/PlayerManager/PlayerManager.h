@@ -22,7 +22,9 @@ public:
 
 	void _2D();
 	
-
+	DX9::CAMERA MainCamera() { return camera; };
+	Vector3 Camera_pos_() { return camera->GetPosition(); }
+	
 private:
 	PlayerBase p_base_;
 

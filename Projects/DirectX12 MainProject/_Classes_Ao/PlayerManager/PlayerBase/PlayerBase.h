@@ -5,6 +5,7 @@
 
 #include "_Classes_Yu/_CellList/_Object/ObjectBase.h"
 
+
 using namespace DirectX;
 
 class PlayerBase :public ObjectBase
@@ -131,4 +132,7 @@ private:
 
 	};
 	int shotdamage;
+
+
+	
 };
