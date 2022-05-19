@@ -12,6 +12,7 @@
 
 #include "_Classes_Ao/PlayerManager/PlayerManager.h"
 
+
 PlayerBase::PlayerBase() {
 	LoadCsv();
 	cp_ = nullptr;
@@ -176,8 +177,13 @@ void PlayerBase::Setting(const float deltaTime) {
 
 }
 
-void PlayerBase::Move(const float deltaTime) {
+void PlayerBase::Move(const float deltaTime, DX9::CAMERA camera) {
+
+	camera_forward = camera.GetForwardVector();
+	
+	
 	forward_ = Vector3(-Press.DirectionKey().x, 0.0f, Press.DirectionKey().y);
+	//camera_forward = Vector3(-Press.DirectionKey().x, 0.0f, Press.DirectionKey().y);
 	Vector3 amountMove = forward_ * speed * deltaTime;
 	player_model->Move(amountMove);
 
@@ -434,11 +440,18 @@ void PlayerBase::UIRender() {
 		);
 	}
 
+	//DX9::SpriteBatch->DrawString(
+	//	debag_font.Get(),
+	//	SimpleMath::Vector2(0.0f, 200.0f),
+	//	DX9::Colors::Red,
+	//	L"Forward X %f Y %f Z %f", forward_.x,forward_.y,forward_.z
+	//);
+
 	DX9::SpriteBatch->DrawString(
 		debag_font.Get(),
 		SimpleMath::Vector2(0.0f, 200.0f),
 		DX9::Colors::Red,
-		L"Forward X %f Y %f Z %f", forward_.x,forward_.y,forward_.z
+		L"Camera_Forward X %f Y %f Z %f", camera_forward.x, camera_forward.y, camera_forward.z
 	);
 
 }

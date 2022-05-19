@@ -3,6 +3,10 @@
 void CameraManager::Initialize() {
 }
 
+void CameraManager::LoadAsset() {
+
+}
+
 void CameraManager::Update() {
 }
 

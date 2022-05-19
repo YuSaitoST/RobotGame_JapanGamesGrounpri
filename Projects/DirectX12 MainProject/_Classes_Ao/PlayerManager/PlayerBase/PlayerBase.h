@@ -24,7 +24,7 @@ public:
 	void Setting(const float deltaTime);
 	void Update(const float deltaTime);
 
-	void Move(const float deltaTime);
+	void Move(const float deltaTime, DX9::CAMERA camera);
 
 
 	void Attack(const float deltaTime);
@@ -129,6 +129,6 @@ private:
 	//ŽËŒ‚
 	int shotdamage;
 
-
+	Vector3 camera_forward;
 	
 };

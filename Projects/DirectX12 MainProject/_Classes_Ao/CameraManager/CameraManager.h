@@ -14,6 +14,7 @@ public:
 	~CameraManager(){};
 
 	void Initialize();
+	void LoadAsset();
 	void Update();
 	void Render();
 

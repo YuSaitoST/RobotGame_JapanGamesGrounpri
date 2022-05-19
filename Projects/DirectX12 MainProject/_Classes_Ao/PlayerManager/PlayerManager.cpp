@@ -43,6 +43,8 @@ void PlayerManager::Update(const float deltaTime) {
 	Vector3 at = Vector3(p_base_.GetPos().x + 0.08f, p_base_.GetPos().y + 0.15f, p_base_.GetPos().z);
 	Matrix mat = Matrix::CreateTranslation(camera->GetPosition() - at);
 
+	
+
 	if (Press.RotateRightCameraKey()) {		
 		Matrix rot = Matrix::CreateRotationY(XMConvertToRadians(-180.0f * deltaTime));
 		mat *= rot;
@@ -59,10 +61,11 @@ void PlayerManager::Update(const float deltaTime) {
 		camera->SetViewLookAt(pos, at, Vector3::Up);
 	}
 
+
 	p_base_.Update(deltaTime);
 
 	//ˆÚ“®
-	p_base_.Move(deltaTime);
+	p_base_.Move(deltaTime, camera);
 
 
 	pos_aft_ = p_base_.GetPos();
