@@ -11,8 +11,6 @@ void EneStandardParamsLoad::LoadParams() {
 	if (a != 0)
 		std::abort();
 
-	//char _dummyLine[256];
-	//fgets(_dummyLine, 255, _file);
 	char _dummyLine[512];
 	fgets(_dummyLine, 500, _file);
 

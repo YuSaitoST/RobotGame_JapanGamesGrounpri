@@ -18,6 +18,6 @@ public:
 	void UpdatePosition(Vector3 position, Vector3 forward);
 
 private:
-	const Vector3 ADJUSTMENT = Vector3(3.0f, 0.0f, 3.0f);
+	const Vector3 ADJUSTMENT = Vector3(0.8f, 0.0f, 0.8f);
 	DX9::MODEL mod_;  // テスト用
 };

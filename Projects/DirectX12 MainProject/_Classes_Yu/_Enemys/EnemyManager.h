@@ -18,6 +18,8 @@ public:
 
 	static Enemy* Access(const int index);
 	static Vector3 GetClosestCoordinate(const Vector3 position) { enePosList_->GetClosestCoordinate(position); }
+	static bool DoesThisIDexist(const int id) { return enePosList_->DoesThisIDexist(id); }
+	static void RemoveEnePosList(const int id) { enePosList_->ErasePosition(id); }
 
 private:
 	static std::vector<Enemy*> enemyList_;

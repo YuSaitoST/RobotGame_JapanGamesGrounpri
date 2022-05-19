@@ -6,17 +6,23 @@
 #include "Base/dxtk.h"
 #include "SceneFactory.h"
 #include "_Classes_Yu/_DeltaTime/DeltaTime.h"
+#include "_Classes_Yu/_UI/_GameUI/_UIParamsLoad/UIParamsLoad.h"
 
 // Initialize member variables.
 MainScene::MainScene()
 {
 	m_object_ = new ObjectManager();
 	field_ = new Fields();
+
+	ui_hpGauge_ = new MSHPGauge();
+	ui_miniMap_ = new MiniMap();
 }
 
 // Initialize a variable and audio resources.
 void MainScene::Initialize()
 {
+	UIParamsLoad::GetInstance().LoadParams();
+
 	D3DLIGHT9 light_test_;
 	light_test_.Type		= D3DLIGHT_DIRECTIONAL;
 	light_test_.Diffuse		= DX9::Colors::Value(1.0f, 1.0f, 1.0f, 1.0f);
@@ -29,15 +35,31 @@ void MainScene::Initialize()
 
 	m_object_->Initialize();
 	player_.Initialize();
+
+	ui_hpGauge_->Initialize();
+	ui_miniMap_->Initialize();
 }
 
 // Allocate all memory the Direct3D and Direct2D resources.
 void MainScene::LoadAssets()
 {
-	descriptorHeap_ = DX12::CreateDescriptorHeap(DXTK->Device, 1);
+	descriptorHeap_ = DX12::CreateDescriptorHeap(DXTK->Device, 2);
 
 	ResourceUploadBatch resourceUploadBatch(DXTK->Device);
 	resourceUploadBatch.Begin();
+
+	//ファイル読み込み
+	DX12::SPRITE ui_hpBar = DX12::CreateSpriteSRV(
+		DXTK->Device, L"_Images\\_Main\\_HP\\HP_bar.png",
+		resourceUploadBatch, descriptorHeap_.get(), 0
+	);
+	DX12::SPRITE ui_hpFrame = DX12::CreateSpriteSRV(
+		DXTK->Device, L"_Images\\_Main\\_HP\\HP_frame.png",
+		resourceUploadBatch, descriptorHeap_.get(), 1
+	);
+
+	/* クラスの引数に渡す */
+	ui_hpGauge_->LoadAssets(ui_hpBar, ui_hpFrame);
 
 	RenderTargetState rtState(DXGI_FORMAT_B8G8R8A8_UNORM, DXGI_FORMAT_D32_FLOAT);
 	SpriteBatchPipelineStateDescription pd(rtState, &CommonStates::NonPremultiplied);
@@ -65,6 +87,9 @@ void MainScene::Terminate()
 	DXTK->WaitForGpu();
 
 	// TODO: Add your Termination logic here.
+
+	delete ui_miniMap_;
+	delete ui_hpGauge_;
 
 	delete field_;
 	delete m_object_;
@@ -114,6 +139,7 @@ void MainScene::Render()
 
 	player_._2D();
 
+
 	DX9::SpriteBatch->End();  // スプライトの描画を終了
 	DXTK->Direct3D9->EndScene();  // シーンの終了を宣言
 
@@ -132,6 +158,8 @@ void MainScene::Render()
 		XMUINT2(1280, 720),   // HD
 		SimpleMath::Vector2(0.0f, 0.0f)
 	);
+
+	//ui_hpGauge_->Render(spriteBatch_);
 
 	spriteBatch_->End();
 

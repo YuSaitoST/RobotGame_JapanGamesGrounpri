@@ -15,7 +15,7 @@ void Fields::LoadAssets() {
 
 	model_ = DX9::Model::CreateFromFile(DXTK->Device9, L"_Models_Field\\field.X");
 	//model_->SetPosition(DirectX::SimpleMath::Vector3(FLParams.GetFieldFalfScale(), -0.25f, FLParams.GetFieldFalfScale()));
-	 model_->SetPosition(DirectX::SimpleMath::Vector3(4, -0.25f, 4));
+	 model_->SetPosition(DirectX::SimpleMath::Vector3(4, -0.01f, 4));
 	//model_->SetScale(FLParams.GetNumber().SCALE, 0.0f, FLParams.GetNumber().SCALE);
 	//const float size = 0.2032f * 50.0f * 10;
 	//model_->SetScale(size, 1.0f, size);

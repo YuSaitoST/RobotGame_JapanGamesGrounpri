@@ -2,7 +2,7 @@
 
 #include "_Classes_Yu/_CellList/_Object/ObjectBase.h"
 #include "_Classes_Yu/_SoundPlayer/SoundPlayer.h"
-#include "_Classes_Yu/_HPGauge/HPGauge.h"
+#include "_Classes_Yu/_MSHP/MSHP.h"
 #include "_Classes_Yu/_MSShoulderSide/MSShoulderSide.h"
 #include "_EneState/EneState.h"
 #include "_EneState/SwitchState.h"
@@ -42,6 +42,8 @@ public:
 
 private:
 	void SetMember();
+
+	const ENE_STATE STATE_OF_DAMAGE[2] = { ENE_STATE::STAN, ENE_STATE::DOWN };
 
 	Action Step(const Vector3 moveDirection);
 
