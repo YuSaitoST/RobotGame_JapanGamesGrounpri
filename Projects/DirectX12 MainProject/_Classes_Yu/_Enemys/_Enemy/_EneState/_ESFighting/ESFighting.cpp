@@ -13,13 +13,12 @@ void ESFighting::Update(const int myID) {
 	root_->Update(myID);
 
 	Enemy* enemy = EnemyManager::Access(myID);
-	//EnemyInfo.UpdatePosition(enemy->myPosition(), enemy->GetPosListID());
 
 	enemy->HitCheck();
 
-	// 戦闘範囲外なら、待機状態に切り替える
-	if (ENParams.DISTANCE_TO_NOTICE_PLAYER <= PlayerInfo.GetDistance(enemy->myPosition())) {
-		//enemy->ErasePosList();
-		enemy->SwitchState(ENE_STATE::STANDBY);
-	}
+	//// 戦闘範囲外なら、待機状態に切り替える
+	//if (ENParams.DISTANCE_TO_NOTICE_PLAYER <= PlayerInfo.GetDistance(enemy->myPosition())) {
+	//	EnemyManager::RemoveEnePosList(enemy->myObjectID());
+	//	enemy->SwitchState(ENE_STATE::STANDBY);
+	//}
 }

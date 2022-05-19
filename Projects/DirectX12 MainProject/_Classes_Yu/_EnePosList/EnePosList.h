@@ -10,6 +10,7 @@ public:
 	virtual ~EnePosList();
 	void SetPosition(const int id, Vector3* position);
 	void ErasePosition(const int id);
+	bool DoesThisIDexist(const int id);
 	Vector3 GetClosestCoordinate(const Vector3 position);
 
 private:

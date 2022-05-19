@@ -11,7 +11,7 @@ void MeleeWeapon::Initialize(const int id) {
 }
 
 void MeleeWeapon::LoadAssets() {
-	mod_ = DX9::Model::CreateBox(DXTK->Device9, 1.0f, 2.5f, 1.0f);
+	mod_ = DX9::Model::CreateBox(DXTK->Device9, 0.5f, 1.8f, 0.5f);
 }
 
 void MeleeWeapon::Render() {

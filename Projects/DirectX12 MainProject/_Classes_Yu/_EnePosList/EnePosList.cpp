@@ -1,15 +1,22 @@
 #include "EnePosList.h"
+#include <cassert>
 
 EnePosList::~EnePosList() {
 	posList_.clear();
 }
 
 void EnePosList::SetPosition(const int id, DirectX::SimpleMath::Vector3* position) {
+	assert(posList_.contains(id) + "EnePosList : éwíËÇµÇΩIDÇÕë∂ç›ÇµÇ‹ÇπÇÒ");
 	posList_.emplace(id, position);
 }
 
 void EnePosList::ErasePosition(const int id) {
+	assert(posList_.contains(id) + "EnePosList : éwíËÇµÇΩIDÇÕë∂ç›ÇµÇ‹ÇπÇÒ");
 	posList_.erase(id);
+}
+
+bool EnePosList::DoesThisIDexist(const int id) {
+	return posList_.contains(id);
 }
 
 Vector3 EnePosList::GetClosestCoordinate(const Vector3 position) {

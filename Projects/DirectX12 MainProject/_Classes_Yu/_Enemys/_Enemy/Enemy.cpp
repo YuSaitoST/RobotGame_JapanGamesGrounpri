@@ -43,15 +43,6 @@ void Enemy::LoadAssets(std::wstring file_name) {
 	//model_->SetScale(size);
 	model_->SetScale(1.0f);
 
-	D3DMATERIAL9 _mate{};
-	_mate.Diffuse = DX9::Colors::Value(0.35f, 0.35f, 0.35f, 1.0f);
-	_mate.Ambient = DX9::Colors::Value(0.35f, 0.35f, 0.35f, 1.0f);
-	_mate.Emissive = DX9::Colors::Value(0.5f, 0.5f, 0.5f, 1.0f);
-	//_mate.Diffuse	= DX9::Colors::Value(0.3f, 0.3f, 0.3f, 1.0f);
-	//_mate.Ambient	= DX9::Colors::Value(0.7f, 0.7f, 0.7f, 1.0f);
-	//_mate.Specular	= DX9::Colors::Value(1.0f, 1.0f, 1.0f, 1.0f);
-	model_->SetMaterial(_mate);
-
 	meleeWapon_->LoadAssets();
 
 	shader_ = DX9::Shader::CreateFromFile(DXTK->Device9, L"Player\\shader.hlsl");
@@ -60,7 +51,7 @@ void Enemy::LoadAssets(std::wstring file_name) {
 void Enemy::Update(const float deltaTime) {
 	timeDelta_ = deltaTime;
 
-	//state_->Update(id_my_);
+	state_->Update(id_my_);
 	
 	Field::ClampPosition(pos_);
 
@@ -69,20 +60,20 @@ void Enemy::Update(const float deltaTime) {
 	model_->SetPosition(pos_);
 	model_->SetRotation(0.0f, rotateY_, 0.0f);
 
-	meleeWapon_->UpdatePosition(pos_, forward_);
+	//meleeWapon_->UpdatePosition(pos_, forward_);
 }
 
 void Enemy::Render() {
-	DirectX::SimpleMath::Matrix mat = model_->GetWorldTransform();
-	shader_->SetParameter("mWVP_", mat);
-	shader_->Begin();
-	shader_->BeginPass(0);
+	//DirectX::SimpleMath::Matrix mat = model_->GetWorldTransform();
+	//shader_->SetParameter("mWVP_", mat);
+	//shader_->Begin();
+	//shader_->BeginPass(0);
 
 	model_->Draw();
 	//meleeWapon_->Render();
 
-	shader_->EndPass();
-	shader_->End();
+	//shader_->EndPass();
+	//shader_->End();
 }
 
 void Enemy::SetMember() {
@@ -108,17 +99,13 @@ void Enemy::SwitchState(ENE_STATE state) {
 
 void Enemy::HitCheck() {
 	ObjectBase* _obj = IsHitObject();
-	if (_obj != nullptr) {
-		WeaponBase* _weapon = dynamic_cast<WeaponBase*>(_obj);
-		hp_->TakeDamage(_weapon->GetDamage());
-		if (0 < hp_->GetHP())
-			SwitchState(STAN);
-		else {
-			DontDestroy->score_.Addition(SCORE::BREAK_ENEMY);
-			//ErasePosList();
-			SwitchState(DOWN);
-		}
-	}
+
+	if (_obj == nullptr)
+		return;
+
+	WeaponBase* _weapon = dynamic_cast<WeaponBase*>(_obj);
+	hp_->TakeDamage(_weapon->GetDamage());
+	SwitchState(STATE_OF_DAMAGE[(int)(0 < hp_->GetHP())]);
 }
 
 void Enemy::Rotate(const Vector3 targetDirection) {
@@ -127,28 +114,35 @@ void Enemy::Rotate(const Vector3 targetDirection) {
 }
 
 Action Enemy::Move(const Vector3 targetDirection) {
+	// ‰ŠúÝ’è
 	if (moveStartCoordinate_ == Vector3::Zero) {
+		attackState_ = AttackState::None_Attack;
 		moveStartCoordinate_ = pos_;
 	}
 
 	forward_ = targetDirection;
-	pos_ += forward_ * ENLParams.SPEED_OF_ACTION[level_];
+	//pos_ += forward_ * ENLParams.SPEED_OF_ACTION[level_];
+	pos_ += forward_ * 0.015f;
 	pos_.y = 0.0f;  // ‹ó’†‚ÉˆÚ“®‚·‚é‚Ì‚ð–h‚®‚½‚ß
 	Rotate(targetDirection);
 	se_running_->PlayRoopSE(timeDelta_);
 
-	const float _moveDistance = std::fabsf((moveStartCoordinate_ - pos_).Length());
+	//const float _moveDistance = std::fabsf((moveStartCoordinate_ - pos_).Length());
 
-	if (25.0f <= _moveDistance) {
-		moveStartCoordinate_ = Vector3::Zero;
-		return SUCSESS;
-	}
-	else
-		return REPEAT;
+	//if (25.0f <= _moveDistance) {
+	//	moveStartCoordinate_ = Vector3::Zero;
+	//	return SUCSESS;
+	//}
+	//else
+	//	return REPEAT;
+	return SUCSESS;
 }
 
 Action Enemy::Step(const Vector3 moveDirection) {
+	// ‰ŠúÝ’è
 	if (jumpTime_ == 0.0f) {
+		Rotate(PlayerInfo.GetDirection(myPosition()));
+		attackState_ = AttackState::None_Attack;
 		moveDirection_ = moveDirection;
 		isInStep_ = true;
 	}
@@ -156,10 +150,13 @@ Action Enemy::Step(const Vector3 moveDirection) {
 	jumpTime_ += timeDelta_;
 
 	// ˆÚ“®ŒvŽZ
-	pos_ += moveDirection_ * ENLParams.SPEED_OF_ACTION[level_];
-	pos_.y = ENParams.STEP_INITIALVELOCITY * jumpTime_ - 0.5f * GRAVITY * jumpTime_ * jumpTime_;
-
-	pos_.y = std::min(std::max(0.0f, pos_.y), 5.0f);
+	//pos_ += moveDirection_ * ENLParams.SPEED_OF_ACTION[level_];
+	//pos_.y = ENParams.STEP_INITIALVELOCITY * jumpTime_ - 0.5f * GRAVITY * jumpTime_ * jumpTime_;
+	//pos_.y = std::min(std::max(0.0f, pos_.y), 5.0f);
+	pos_ += moveDirection_ * 2.5f * timeDelta_;
+	pos_.y = 2.0f * jumpTime_ - 0.5f * GRAVITY * jumpTime_ * jumpTime_;
+	//pos_.y = std::min(std::max(0.0f, pos_.y), 5.0f);
+	pos_.y = std::max(0.0f, pos_.y);
 
 	const bool isFine = (pos_.y == 0.0f);
 
@@ -172,6 +169,7 @@ Action Enemy::Step(const Vector3 moveDirection) {
 }
 
 Action Enemy::Slide(const Vector3 moveDirection) {
+	// ‰ŠúÝ’è
 	if (moveStartCoordinate_ == Vector3::Zero) {
 		moveStartCoordinate_ = pos_;
 		moveDirection_ = moveDirection;
@@ -182,13 +180,15 @@ Action Enemy::Slide(const Vector3 moveDirection) {
 
 	const float _moveDistance = std::fabsf((moveStartCoordinate_ - pos_).Length());
 
-	// ˆÚ“®—Ê‚ªˆê’èˆÈã‚É‚È‚Á‚½‚çI—¹
-	if (8.0f <= _moveDistance) {
-		moveStartCoordinate_ = Vector3::Zero;
-		return SUCSESS;
-	}
+	//// ˆÚ“®—Ê‚ªˆê’èˆÈã‚É‚È‚Á‚½‚çI—¹
+	//if (8.0f <= _moveDistance) {
+	//	moveStartCoordinate_ = Vector3::Zero;
+	//	return SUCSESS;
+	//}
 
-	return REPEAT;
+	//return REPEAT;
+
+	return SUCSESS;
 }
 
 Action Enemy::BackStep() {
@@ -200,6 +200,7 @@ Action Enemy::SideStep(const Vector3 targetDirection) {
 }
 
 Action Enemy::Adjacent() {
+	// ‰ŠúÝ’è
 	if (actionInterval_->NowTime() == 0.0f) {
 		actionInterval_->ResetCountTime();
 		attackState_ = AttackState::Adjacent;
@@ -212,6 +213,7 @@ Action Enemy::Adjacent() {
 }
 
 Action Enemy::Shooting() {
+	// ‰ŠúÝ’è
 	if (actionInterval_->NowTime() == 0.0f) {
 		actionInterval_->ResetCountTime();
 		attackState_ = AttackState::Shooting;
@@ -223,8 +225,3 @@ Action Enemy::Shooting() {
 
 	return (actionInterval_->TimeOut()) ? SUCSESS : REPEAT;
 }
-
-//void Enemy::ErasePosList() {
-//	EnemyInfo.Erase(posListID_);
-//	posListID_ = -1;
-//}

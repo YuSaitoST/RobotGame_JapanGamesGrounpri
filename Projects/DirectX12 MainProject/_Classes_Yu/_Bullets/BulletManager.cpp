@@ -11,7 +11,7 @@ BulletManager::BulletManager() {
 }
 
 void BulletManager::LoadAssets() {
-	model_ = DX9::Model::CreateSphere(DXTK->Device9, 1.0f, 10, 10);
+	model_ = DX9::Model::CreateSphere(DXTK->Device9, 0.05f, 10, 10);
 }
 
 void BulletManager::Update(const float deltaTime) {
@@ -24,7 +24,7 @@ void BulletManager::Render() {
 	for (Bullet* bt : bulletList_)
 		if (bt->IsBeenAttack())
 			bt->Render(model_);
-}  // ’eƒ‚ƒfƒ‹‚ÆAå‚É‘Î‰‚µ‚½texture‚ğ“n‚·
+}
 
 void BulletManager::Shooting(int ownerID, int damage, DirectX::SimpleMath::Vector3 pos, DirectX::SimpleMath::Vector3 forward, float rotY) {
 	bool completion = false;

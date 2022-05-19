@@ -24,7 +24,6 @@ Action BhMoveThink::Behavior(const int myID) {
 	// s“®‚ðI—¹‚·‚é‚Ü‚ÅA“¯‚¶s“®‚ðŒJ‚è•Ô‚·
 	if (lastAction_ == Action::REPEAT) {
 		lastAction_ = lastNode_->Behavior(myID);
-		enemy->Rotate(PlayerInfo.GetDirection(enemy->myPosition()));
 
 		// s“®‚ªI—¹‚µ‚½‚È‚çƒŠƒZƒbƒg‚·‚é
 		if (lastAction_ != Action::REPEAT) {
@@ -43,28 +42,31 @@ Node* BhMoveThink::ActThinks(Enemy* enemy) {
 	const float distance					= PlayerInfo.GetDistance(enemy->myPosition());
 	const bool TooClose						= distance <= ENParams.UNAPPROACHABLE_DISTANCE;
 	const bool FartherThanTheShootingRange	= ENParams.RANGE_OF_SHOOTING < distance;
-
-	if (FartherThanTheShootingRange) {
-		// ŽË’ö‹——£‚æ‚è‚à‰“‚¢‚È‚çˆÚ“®‚·‚é
-		return nd_move_;
-	}
-	else if (TooClose) {
-		// Player‚Æ‚Ì‹——£‚ª‹ß‚·‚¬‚é‚È‚çABackStep‚Å—£‚ê‚é
-		enemy->Rotate(PlayerInfo.GetDirection(enemy->myPosition()));
-		return nd_backStep_;
-	}
 	
 	// Ž©g‚ªUŒ‚‚µ‚Ä‚¢‚È‚¢ê‡
 	if (enemy->nowAttackAttate() == AttackState::None_Attack) {
 		const bool WithinShootingDistance = ENParams.ALWAYS_KEEP_DISTANCE_OPEN < distance&& distance < ENParams.RANGE_OF_SHOOTING;
-		if (WithinShootingDistance) {
-			// ŽË’ö‹——£“à‚È‚çASideStep‚Å–|˜M‚³‚¹‚é
-			enemy->Rotate(PlayerInfo.GetDirection(enemy->myPosition()));
-			return nd_sideStep_;
+
+		if (TooClose) {
+			// Player‚Æ‚Ì‹——£‚ª‹ß‚·‚¬‚é‚È‚çABackStep‚Å—£‚ê‚é
+			// Šm—§‚Å•ªŠò‚³‚¹‚½‚¢(BackStep or “Ëi‹ßÚ)
+			return nd_backStep_;
 		}
-		else {
+		else if (WithinShootingDistance) {
+			if (PROBABILITY_OF_STEP[enemy->myLevel()] < randomDist_(randomEngine_) % 100) {
+				// ’†‹——£‚È‚çŠm—§‚ÅSideStep‚Å–|˜M‚³‚¹‚é
+				return nd_sideStep_;
+			}
+			else {
+				return nullptr;
+			}
+		}
+		else if (FartherThanTheShootingRange) {
+			// ŽË’ö‹——£‚æ‚è‚à‰“‚¢‚È‚çˆÚ“®‚·‚é
 			return nd_move_;
 		}
+		else
+			return nullptr;
 	}
 	else {
 		const bool MiddleDistance					= ENParams.RANGE_OF_MELEEATTACK < distance&& distance < ENParams.ALWAYS_KEEP_DISTANCE_OPEN;
@@ -76,11 +78,13 @@ Node* BhMoveThink::ActThinks(Enemy* enemy) {
 				// ’†‹——£‚È‚çŠm—§‚ÅSideStep‚Å–|˜M‚³‚¹‚é
 				return nd_sideStep_;
 			}
+			else
+				return nullptr;
 		}
-		//else if (DistanceThatCantBeAnyCloser && DistanceToInitiateMeleeAttack) {
-		//	// ‹ßÚUŒ‚”ÍˆÍ“à‚È‚ç‰½‚à‚µ‚È‚¢
-		//	return nullptr;
-		//}
+		else if (DistanceThatCantBeAnyCloser && DistanceToInitiateMeleeAttack) {
+			// ‹ßÚUŒ‚”ÍˆÍ“à‚È‚ç‰½‚à‚µ‚È‚¢
+			return nullptr;
+		}
 		else {
 			return nullptr;
 		}

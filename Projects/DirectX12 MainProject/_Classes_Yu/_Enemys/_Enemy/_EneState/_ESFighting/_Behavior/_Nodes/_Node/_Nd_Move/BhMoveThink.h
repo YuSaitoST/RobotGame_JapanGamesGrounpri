@@ -18,7 +18,7 @@ private:
 	Node* ActThinks(Enemy* enemy);
 	Node* NewActToBeTaken(Node* node);
 
-	const int PROBABILITY_OF_STEP[2] = { 35, 75 };
+	const int PROBABILITY_OF_STEP[2] = { 5, 75 };
 	const float MELEEATTACK_TO_DIST_MIN = 1.0f;
 
 	BhMove* nd_move_;
