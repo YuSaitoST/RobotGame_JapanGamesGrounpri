@@ -66,7 +66,7 @@ PlayerBase::PlayerBase() {
 
 void PlayerBase::Initialize(const int id) {
 	
-	pos_ = SimpleMath::Vector3(pos_.x, -0.24f, pos_.z);
+	pos_ = SimpleMath::Vector3(pos_.x, 0.0f, pos_.z);
 
 
 
@@ -151,7 +151,7 @@ void PlayerBase::LoadCsv() {
    本命の値代入、%iはint型、%fはfloat型、%sはstring型
    その後に、.hで定義した変数の参照を渡す
 	*/
-	fscanf_s(file, "%f,%f,%f,%f", &player_spped, &boost_dush, &pos_.x, &pos_.z);
+	fscanf_s(file, "%f,%f,%f,%f,%i", &player_spped, &boost_dush, &pos_.x, &pos_.z, &shotdamage);
 
 	// ファイルを閉じる
 	fclose(file);
@@ -297,7 +297,7 @@ void PlayerBase::Shot(const float deltaTime) {
 	if (Press.ShotEventKey()) {
 		attackState_ = AttackState::Shooting;
 		Vector3 flont = player_model->GetRotation();
-		ObjectManager::SetShooting(id_my_, 0, pos_, -flont, rotateY_);
+		ObjectManager::SetShooting(id_my_, shotdamage, pos_, -flont, rotateY_);
 		attackState_ = AttackState::None_Attack;
 	}
 }
@@ -320,8 +320,8 @@ void PlayerBase::Jump(const float deltaTime) {
 		player_model->SetPosition(pos);
 
 
-		if (player_model->GetPosition().y <= -0.24f) {
-			player_model->SetPosition(pos.x, -0.24f, pos.z);
+		if (player_model->GetPosition().y <= 0.0f) {
+			player_model->SetPosition(pos.x, 0.0f, pos.z);
 			jump_flag = false;
 		}
 	}

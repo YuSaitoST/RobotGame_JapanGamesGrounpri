@@ -127,10 +127,6 @@ private:
 	bool  third_check_flag;     //ÅŒãI‚í‚é‚Ü‚ÅUŒ‚•s‰Â
 
 	//ËŒ‚
-	enum ShotState
-	{
-
-	};
 	int shotdamage;
 
 
