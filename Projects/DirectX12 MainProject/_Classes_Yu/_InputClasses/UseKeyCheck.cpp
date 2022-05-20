@@ -7,15 +7,6 @@ void UseKeyCheck::Accepts() {
 	pad_.Accepts(0);
 }
 
-
-bool UseKeyCheck::RotateStateRight() {
-	return key_.StateCharaKey('P');
-}
-bool UseKeyCheck::RotateStateLeft() {
-	return key_.StateCharaKey('O');
-}
-
-
 bool UseKeyCheck::DushStateKey() {
 	return key_.StateCharaKey('S');
 }
@@ -44,9 +35,24 @@ Vector2 UseKeyCheck::DirectionKey() {
 	return key_.StateDirection();
 }
 
+//à⁄ìÆÇÃÉLÅ[
+bool UseKeyCheck::MoveForwardStateKey() {
+	return key_.StateCharaKey('W');
+}
+bool UseKeyCheck::MoveBackwardStateKey() {
+	return key_.StateCharaKey('S');
+}
+bool UseKeyCheck::MoveRightStateKey() {
+	return key_.StateCharaKey('D');
+}
+bool UseKeyCheck::MoveLeftStateKey() {
+	return key_.StateCharaKey('A');
+}
+
+
 bool UseKeyCheck::RotateLeftCameraKey() {
-	return key_.StateCharaKey('Q');
+	return key_.StateArrowKey(ARROW_KEY::K_LEFT);
 }
 bool UseKeyCheck::RotateRightCameraKey() {
-	return key_.StateCharaKey('W');
+	return key_.StateArrowKey(ARROW_KEY::K_RIGHT);
 }

@@ -11,13 +11,6 @@ public:
 
 	void Accepts();
 
-	bool MovePlayerStateUp();
-	bool MovePlayerStateDown();
-	bool MovePlayerStateRight();
-	bool MovePlayerStateLeft();
-
-	bool RotateStateRight();
-	bool RotateStateLeft();
 
 	bool DushStateKey();
 	bool JumpEventKey();
@@ -33,6 +26,11 @@ public:
 	bool RotateLeftCameraKey();
 	bool RotateRightCameraKey();
 
+	//à⁄ìÆÇÃÉLÅ[
+	bool MoveForwardStateKey();
+	bool MoveBackwardStateKey();
+	bool MoveRightStateKey();
+	bool MoveLeftStateKey();
 
 private:
 	UseKeyCheck() {}

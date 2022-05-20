@@ -181,9 +181,9 @@ void PlayerBase::Move(const float deltaTime, DX9::CAMERA camera) {
 
 	camera_forward = camera.GetForwardVector();
 	
+
 	
 	forward_ = Vector3(-Press.DirectionKey().x, 0.0f, Press.DirectionKey().y);
-	//camera_forward = Vector3(-Press.DirectionKey().x, 0.0f, Press.DirectionKey().y);
 	Vector3 amountMove = forward_ * speed * deltaTime;
 	player_model->Move(amountMove);
 
@@ -193,7 +193,7 @@ void PlayerBase::Move(const float deltaTime, DX9::CAMERA camera) {
 void PlayerBase::Dush(const float deltaTime) {
 	if (!overheart_flag) {
 		//ダッシュを押している間だけスピードUP
-		if (Press.DushStateKey()) {
+		if (DXTK->KeyState->LeftShift){//Press.DushStateKey()) {
 			speed = boost_dush;
 			boost_max -= 1 * deltaTime;
 		}
