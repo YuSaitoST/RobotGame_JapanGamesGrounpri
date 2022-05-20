@@ -11,11 +11,6 @@ public:
 
 	void Accepts();
 
-	bool MovePlayerStateUp();
-	bool MovePlayerStateDown();
-	bool MovePlayerStateRight();
-	bool MovePlayerStateLeft();
-
 	bool RotateStateRight();
 	bool RotateStateLeft();
 
@@ -28,6 +23,7 @@ public:
 	bool MoveStateLeft();
 	bool MoveStateRight();
 
+	Vector2 MoveDirection();
 	Vector2 DirectionKey();
 	//ÉJÉÅÉâÇÃÉLÅ[
 	bool RotateLeftCameraKey();

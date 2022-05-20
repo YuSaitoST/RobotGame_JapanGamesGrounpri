@@ -9,35 +9,43 @@ void UseKeyCheck::Accepts() {
 
 
 bool UseKeyCheck::RotateStateRight() {
-	return key_.StateCharaKey('P');
+	return key_.StateOnOffKey(CKEY::P);
 }
 bool UseKeyCheck::RotateStateLeft() {
-	return key_.StateCharaKey('O');
+	return key_.StateOnOffKey(CKEY::O);
 }
 
 
 bool UseKeyCheck::DushStateKey() {
-	return key_.StateCharaKey('S');
+	return key_.StateOnOffKey(CKEY::S);
 }
 
 bool UseKeyCheck::JumpEventKey() {
-	return key_.EventCharaKey('D');
+	return key_.EventOnOffKey(SKEY::SPACE);
 }
 
 bool UseKeyCheck::AtackEventKey() {
-	return key_.EventCharaKey('A');
+	return key_.EventOnOffKey(CKEY::A);
 }
 
 bool UseKeyCheck::ShotEventKey() {
-	return key_.EventCharaKey('Z');
+	return key_.EventOnOffKey(CKEY::Z);
 }
 
 bool UseKeyCheck::MoveStateLeft() {
-	return key_.StateArrowKey(ARROW_KEY::K_LEFT) || pad_.StateOnOffKey(0, PAD::P_LEFT);
+	return key_.StateOnOffKey(SKEY::LEFT) || pad_.StateOnOffKey(0, PAD::P_LEFT);
 }
 
 bool UseKeyCheck::MoveStateRight() {
-	return key_.StateArrowKey(ARROW_KEY::K_RIGHT) || pad_.StateOnOffKey(0, PAD::P_RIGHT);
+	return key_.StateOnOffKey(SKEY::RIGHT) || pad_.StateOnOffKey(0, PAD::P_RIGHT);
+}
+
+Vector2 UseKeyCheck::MoveDirection() {
+	Vector2 direction = Vector2::Zero;
+	direction.x = key_.StateOnOffKey(SKEY::LEFT) ? -1 : key_.StateOnOffKey(SKEY::RIGHT) ? 1 : 0;
+	direction.x = key_.StateOnOffKey(SKEY::DOWN) ? -1 : key_.StateOnOffKey(SKEY::UP) ? 1 : 0;
+	direction.Normalize();
+	return direction;
 }
 
 Vector2 UseKeyCheck::DirectionKey() {
@@ -45,8 +53,8 @@ Vector2 UseKeyCheck::DirectionKey() {
 }
 
 bool UseKeyCheck::RotateLeftCameraKey() {
-	return key_.StateCharaKey('Q');
+	return key_.StateOnOffKey(CKEY::Q);
 }
 bool UseKeyCheck::RotateRightCameraKey() {
-	return key_.StateCharaKey('W');
+	return key_.StateOnOffKey(CKEY::W);
 }
