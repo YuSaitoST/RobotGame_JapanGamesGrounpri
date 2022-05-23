@@ -1,42 +1,55 @@
 #include "KeyBoadState.h"
 
+/**
+* @brief “ü—Íó‘Ô‚ð’²‚×‚é
+*/
 void KeyBoadState::Accepts() {
-	// Œ…ã‚ª‚è–hŽ~
-	flag_ = 0;
+	//Œ…ã‚ª‚è–hŽ~
+	cflag_	= 0;
+	sflag_  = 0;
 	direct_ = Vector2::Zero;
 
-	/*
-		Šebit‚É“ü—Íó‘Ô‚ð“ü‚ê‚é
-		‘«‚·——R‚ÍA“¯Žž‰Ÿ‚µ‚ð”»’è‚Å‚«‚é‚æ‚¤‚É‚·‚é‚½‚ß
-	*/
-	flag_ |= (bool)DXTK->KeyState->A		<< A;
-	flag_ |= (bool)DXTK->KeyState->B		<< B;
-	flag_ |= (bool)DXTK->KeyState->C		<< C;
-	flag_ |= (bool)DXTK->KeyState->D		<< D;
-	flag_ |= (bool)DXTK->KeyState->E		<< E;
-	flag_ |= (bool)DXTK->KeyState->F		<< F;
-	flag_ |= (bool)DXTK->KeyState->G		<< G;
-	flag_ |= (bool)DXTK->KeyState->H		<< H;
-	flag_ |= (bool)DXTK->KeyState->I		<< I;
-	flag_ |= (bool)DXTK->KeyState->J		<< J;
-	flag_ |= (bool)DXTK->KeyState->K		<< K;
-	flag_ |= (bool)DXTK->KeyState->L		<< L;
-	flag_ |= (bool)DXTK->KeyState->M		<< M;
-	flag_ |= (bool)DXTK->KeyState->N		<< N;
-	flag_ |= (bool)DXTK->KeyState->O		<< O;
-	flag_ |= (bool)DXTK->KeyState->P		<< P;
-	flag_ |= (bool)DXTK->KeyState->Q		<< Q;
-	flag_ |= (bool)DXTK->KeyState->R		<< R;
-	flag_ |= (bool)DXTK->KeyState->S		<< S;
-	flag_ |= (bool)DXTK->KeyState->T		<< T;
-	flag_ |= (bool)DXTK->KeyState->U		<< U;
-	flag_ |= (bool)DXTK->KeyState->V		<< V;
-	flag_ |= (bool)DXTK->KeyState->W		<< W;
-	flag_ |= (bool)DXTK->KeyState->X		<< X;
-	flag_ |= (bool)DXTK->KeyState->Y		<< Y;
-	flag_ |= (bool)DXTK->KeyState->Z		<< Z;
-	flag_ |= (bool)DXTK->KeyState->Up		<< UP;
-	flag_ |= (bool)DXTK->KeyState->Down		<< DOWN;
-	flag_ |= (bool)DXTK->KeyState->Left		<< LEFT;
-	flag_ |= (bool)DXTK->KeyState->Right	<< RIGHT;
+	//Šeƒrƒbƒg‚É“ü—Íó‘Ô‚ð“ü‚ê‚é
+	cflag_ |= (bool)DXTK->KeyState->A					<< A    ;
+	cflag_ |= (bool)DXTK->KeyState->B					<< B    ;
+	cflag_ |= (bool)DXTK->KeyState->C					<< C    ;
+	cflag_ |= (bool)DXTK->KeyState->D					<< D    ;
+	cflag_ |= (bool)DXTK->KeyState->E					<< E    ;
+	cflag_ |= (bool)DXTK->KeyState->F					<< F    ;
+	cflag_ |= (bool)DXTK->KeyState->G					<< G    ;
+	cflag_ |= (bool)DXTK->KeyState->H					<< H    ;
+	cflag_ |= (bool)DXTK->KeyState->I					<< I    ;
+	cflag_ |= (bool)DXTK->KeyState->J					<< J    ;
+	cflag_ |= (bool)DXTK->KeyState->K					<< K    ;
+	cflag_ |= (bool)DXTK->KeyState->L					<< L    ;
+	cflag_ |= (bool)DXTK->KeyState->M					<< M    ;
+	cflag_ |= (bool)DXTK->KeyState->N					<< N    ;
+	cflag_ |= (bool)DXTK->KeyState->O					<< O    ;
+	cflag_ |= (bool)DXTK->KeyState->P					<< P    ;
+	cflag_ |= (bool)DXTK->KeyState->Q					<< Q    ;
+	cflag_ |= (bool)DXTK->KeyState->R					<< R    ;
+	cflag_ |= (bool)DXTK->KeyState->S					<< S    ;
+	cflag_ |= (bool)DXTK->KeyState->T					<< T    ;
+	cflag_ |= (bool)DXTK->KeyState->U					<< U    ;
+	cflag_ |= (bool)DXTK->KeyState->V					<< V    ;
+	cflag_ |= (bool)DXTK->KeyState->W					<< W    ;
+	cflag_ |= (bool)DXTK->KeyState->X					<< X    ;
+	cflag_ |= (bool)DXTK->KeyState->Y					<< Y    ;
+	cflag_ |= (bool)DXTK->KeyState->Z					<< Z    ;
+	sflag_ |= (bool)DXTK->KeyState->Up					<< UP   ;
+	sflag_ |= (bool)DXTK->KeyState->Down				<< DOWN ;
+	sflag_ |= (bool)DXTK->KeyState->Left				<< LEFT ;
+	sflag_ |= (bool)DXTK->KeyState->Right				<< RIGHT;
+	sflag_ |= (bool)DXTK->KeyState->Tab					<< TAB	;
+	sflag_ |= (bool)DXTK->KeyState->Space				<< SPACE;
+	sflag_ |= (bool)DXTK->KeyEvent->pressed.Up			<< UP	;
+	sflag_ |= (bool)DXTK->KeyEvent->pressed.Down		<< DOWN ;
+	sflag_ |= (bool)DXTK->KeyEvent->pressed.Left		<< LEFT ;
+	sflag_ |= (bool)DXTK->KeyEvent->pressed.Right		<< RIGHT;
+	sflag_ |= (bool)DXTK->KeyEvent->pressed.Tab			<< TAB  ;
+	sflag_ |= (bool)DXTK->KeyEvent->pressed.Space		<< SPACE;
+	sflag_ |= (bool)DXTK->KeyEvent->pressed.LeftAlt		<< LALT ;
+	sflag_ |= (bool)DXTK->KeyEvent->pressed.RightAlt	<< RALT ;
+	sflag_ |= (bool)DXTK->KeyEvent->pressed.LeftControl << LCTRL;
+	sflag_ |= (bool)DXTK->KeyEvent->pressed.RightControl<< RCTRL;
 }

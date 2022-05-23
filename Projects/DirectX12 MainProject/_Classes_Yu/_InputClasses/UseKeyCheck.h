@@ -21,6 +21,7 @@ public:
 	bool MoveStateLeft();
 	bool MoveStateRight();
 
+	Vector2 MoveDirection();
 	Vector2 DirectionKey();
 	//ƒJƒƒ‰‚ÌƒL[
 	bool RotateLeftCameraKey();

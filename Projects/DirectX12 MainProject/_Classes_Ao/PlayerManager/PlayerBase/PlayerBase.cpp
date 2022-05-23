@@ -180,20 +180,37 @@ void PlayerBase::Setting(const float deltaTime) {
 void PlayerBase::Move(const float deltaTime, DX9::CAMERA camera) {
 
 	camera_forward = camera.GetForwardVector();
-	
 
+	camera->SetViewLookAt(player_model->Position, camera_forward, Vector3::Up);
 	
+	//キーボード操作
+	if (Press.MoveForwardStateKey()) {
+		player_model->Move(0, 0, (-1.0f + forward_.z) * speed * deltaTime);
+	}
+
+	if (Press.MoveBackwardStateKey()) {
+		player_model->Move(0, 0, ( 1.0f + forward_.z) * speed * deltaTime);
+	}
+
+	if (Press.MoveLeftStateKey()) {
+		player_model->Move((-1.0f + forward_.x) * speed * deltaTime, 0, 0);
+	}
+
+	if (Press.MoveLeftStateKey()) {
+		player_model->Move(( 1.0f + forward_.x) * speed * deltaTime, 0, 0);
+	}	
+
+	//ゲームパッド操作
 	forward_ = Vector3(-Press.DirectionKey().x, 0.0f, Press.DirectionKey().y);
 	Vector3 amountMove = forward_ * speed * deltaTime;
 	player_model->Move(amountMove);
-
 }
 
 
 void PlayerBase::Dush(const float deltaTime) {
 	if (!overheart_flag) {
 		//ダッシュを押している間だけスピードUP
-		if (DXTK->KeyState->LeftShift){//Press.DushStateKey()) {
+		if (Press.DushStateKey()) {
 			speed = boost_dush;
 			boost_max -= 1 * deltaTime;
 		}

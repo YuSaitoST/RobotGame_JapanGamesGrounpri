@@ -8,51 +8,58 @@ void UseKeyCheck::Accepts() {
 }
 
 bool UseKeyCheck::DushStateKey() {
-	return key_.StateCharaKey('S');
+	return key_.StateOnOffKey(CKEY::Z);
 }
 
 bool UseKeyCheck::JumpEventKey() {
-	return key_.EventCharaKey('D');
+	return key_.EventOnOffKey(SKEY::SPACE);
 }
 
 bool UseKeyCheck::AtackEventKey() {
-	return key_.EventCharaKey('A');
+	return key_.EventOnOffKey(SKEY::LALT);
 }
 
 bool UseKeyCheck::ShotEventKey() {
-	return key_.EventCharaKey('Z');
+	return key_.EventOnOffKey(SKEY::LCTRL);
 }
 
 bool UseKeyCheck::MoveStateLeft() {
-	return key_.StateArrowKey(ARROW_KEY::K_LEFT) || pad_.StateOnOffKey(0, PAD::P_LEFT);
+	return key_.StateOnOffKey(SKEY::LEFT) || pad_.StateOnOffKey(0, PAD::P_LEFT);
 }
 
 bool UseKeyCheck::MoveStateRight() {
-	return key_.StateArrowKey(ARROW_KEY::K_RIGHT) || pad_.StateOnOffKey(0, PAD::P_RIGHT);
+	return key_.StateOnOffKey(SKEY::RIGHT) || pad_.StateOnOffKey(0, PAD::P_RIGHT);
+}
+
+Vector2 UseKeyCheck::MoveDirection() {
+	Vector2 direction = Vector2::Zero;
+	direction.x = key_.StateOnOffKey(SKEY::LEFT) ? -1 : key_.StateOnOffKey(SKEY::RIGHT) ? 1 : 0;
+	direction.x = key_.StateOnOffKey(SKEY::DOWN) ? -1 : key_.StateOnOffKey(SKEY::UP) ? 1 : 0;
+	direction.Normalize();
+	return direction;
 }
 
 Vector2 UseKeyCheck::DirectionKey() {
 	return key_.StateDirection();
 }
 
-//à⁄ìÆÇÃÉLÅ[
-bool UseKeyCheck::MoveForwardStateKey() {
-	return key_.StateCharaKey('W');
-}
-bool UseKeyCheck::MoveBackwardStateKey() {
-	return key_.StateCharaKey('S');
-}
-bool UseKeyCheck::MoveRightStateKey() {
-	return key_.StateCharaKey('D');
-}
-bool UseKeyCheck::MoveLeftStateKey() {
-	return key_.StateCharaKey('A');
-}
-
 
 bool UseKeyCheck::RotateLeftCameraKey() {
-	return key_.StateArrowKey(ARROW_KEY::K_LEFT);
+	return key_.StateOnOffKey(SKEY::LEFT);
 }
 bool UseKeyCheck::RotateRightCameraKey() {
-	return key_.StateArrowKey(ARROW_KEY::K_RIGHT);
+	return key_.StateOnOffKey(SKEY::RIGHT);
+}
+
+bool UseKeyCheck::MoveForwardStateKey() {
+	return key_.StateOnOffKey(CKEY::W);
+}
+bool UseKeyCheck::MoveBackwardStateKey() {
+	return key_.StateOnOffKey(CKEY::S);
+}
+bool UseKeyCheck::MoveRightStateKey() {
+	return key_.StateOnOffKey(CKEY::D);
+}
+bool UseKeyCheck::MoveLeftStateKey() {
+	return key_.StateOnOffKey(CKEY::A);
 }
