@@ -47,28 +47,13 @@ private:
 	//DX9::SKINNEDMODEL player_model;
 	DX9::MODEL player_model;
 
-	enum
-	{
-		STAND,
-		RUN,
-		ACT1,
-		ACT2,
-		FINISH,
-		REBOUND,
-		JUMP,
-		ROLL,
-		DAMAGE1,
-		MOTION_MAX
-	};
-
 	DX9::SPRITEFONT font;
 	DX9::SPRITEFONT debag_font;
 	DX9::SPRITEFONT time_font;
 
+	void Camera_Focus(DX9::CAMERA camera);
 	float player_spped;
-	float speed;
 	
-	bool move_flag = false;
 
 	//ダッシュ 関数 系統
 	//ブースト時の変数
@@ -80,6 +65,7 @@ private:
 	bool overheart_flag; //オーバーヒートのフラグ
 	float overheart_time;//オーバーヒートしている時間 初期値
 	float overheart_max; //オーバーヒートしている時間 最大値
+	float overheart_speed = 10.0f;//オーバーヒート時のスピード
 
 	//ジャンプ 関数
 	bool jump_flag = false;
@@ -116,6 +102,7 @@ private:
 	bool  second_check_flag;      //次に攻撃に移る
 
 
+
 	//三撃目
 	float third_reception_time; //受付時間初期値
 	float third_reception_max;  //受付時間最大値
@@ -123,7 +110,5 @@ private:
 
 	//射撃
 	int shotdamage;
-
-	Vector3 camera_forward;
 	
 };

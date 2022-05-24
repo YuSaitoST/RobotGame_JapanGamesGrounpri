@@ -21,7 +21,6 @@ PlayerBase::PlayerBase() {
 	player_model = nullptr;
 	pos_ = SimpleMath::Vector3(0.0f, 0.0f, 0.0f);
 
-	speed = 0.0f;
 
 	//ダッシュ 関数
 	boost_zero = 0;//オーバーヒートの初期値
@@ -180,29 +179,22 @@ void PlayerBase::Setting(const float deltaTime) {
 
 void PlayerBase::Move(const float deltaTime, DX9::CAMERA camera) {
 
-	Vector3 cam_dir = camera->GetForwardVector();
-	cam_dir.y = 0.0f;
-	cam_dir.Normalize();
-
-	auto player_pos = player_model->GetPosition();
-	auto player_rot = Matrix::CreateLookAt(player_pos, player_pos + cam_dir, Vector3::Up);
-	player_rot.Invert();
-	player_model->SetRotationMatrix(player_rot);
-
-	//camera->SetViewLookAt(player_model->GetPosition(), camera->GetForwardVector(), Vector3::Up);
-	
 	//キーボード操作
 	if (Press.MoveForwardStateKey()) {
-		player_model->Move(0, 0, -speed * deltaTime);
+		Camera_Focus(camera);
+		player_model->Move(0, 0, -player_spped * deltaTime);
 	}
 	if (Press.MoveBackwardStateKey()) {
-		player_model->Move(0, 0,  speed * deltaTime);
+		Camera_Focus(camera);
+		player_model->Move(0, 0, player_spped * deltaTime);
 	}
 	if (Press.MoveLeftStateKey()) {
-		player_model->Move( speed * deltaTime, 0, 0);
+		Camera_Focus(camera);
+		player_model->Move(player_spped * deltaTime, 0, 0);
 	}
 	if (Press.MoveRightStateKey()) {
-		player_model->Move(-speed * deltaTime, 0, 0);
+		Camera_Focus(camera);
+		player_model->Move(-player_spped * deltaTime, 0, 0);
 	}	
 
 	////ゲームパッド操作
@@ -211,21 +203,30 @@ void PlayerBase::Move(const float deltaTime, DX9::CAMERA camera) {
 	//player_model->Move(amountMove);
 }
 
+void PlayerBase::Camera_Focus(DX9::CAMERA camera) {
+	Vector3 cam_dir = camera->GetForwardVector();
+	cam_dir.y = 0.0f;
+	cam_dir.Normalize();
+
+	const float rotation_y = atan2(-cam_dir.z, cam_dir.x) + XMConvertToRadians(-90.0f);
+	const auto  rot_mat = Matrix::CreateRotationY(rotation_y);
+	player_model->SetRotationMatrix(rot_mat);
+}
 
 void PlayerBase::Dush(const float deltaTime) {
 	if (!overheart_flag) {
 		//ダッシュを押している間だけスピードUP
 		if (DXTK->KeyState->LeftShift){//Press.DushStateKey()) {
-			speed = boost_dush;
+			player_spped = boost_dush;
 			boost_max -= 1 * deltaTime;
 		}
 		else {
 			//離したらブーストゲージ回復
-			speed = player_spped;
+			player_spped = overheart_speed;
 			boost_max += 2;
 		}
 		if (boost_max == boost_zero) {
-			speed = player_spped;
+			player_spped = overheart_speed;
 			overheart_flag = true;
 		}
 	}
@@ -472,11 +473,11 @@ void PlayerBase::UIRender() {
 
 }
 
-//指定されたモーションはTRUE,それ以外はFALSE
-void PlayerBase::SetAnimation(DX9::SKINNEDMODEL& model, const int enableTrack)
-{
-	for (int i = 0; i < MOTION_MAX; ++i) {
-		model->SetTrackEnable(i, FALSE);
-	}
-	model->SetTrackEnable(enableTrack, TRUE);
-}
+////指定されたモーションはTRUE,それ以外はFALSE
+//void PlayerBase::SetAnimation(DX9::SKINNEDMODEL& model, const int enableTrack)
+//{
+//	for (int i = 0; i < MOTION_MAX; ++i) {
+//		model->SetTrackEnable(i, FALSE);
+//	}
+//	model->SetTrackEnable(enableTrack, TRUE);
+//}
