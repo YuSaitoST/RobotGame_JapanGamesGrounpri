@@ -2,7 +2,7 @@
 
 #define ENParams EneStandardParamsLoad::GetInstance().GetNumber()
 
-enum ENE_STATE { STANDBY, FIGHTING, STAN, DOWN };
+enum class ENE_STATE { STANDBY, FIGHTING, STAN, DOWN };
 
 class EneStandardParamsLoad {
 public:

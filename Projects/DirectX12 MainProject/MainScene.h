@@ -10,9 +10,6 @@
 #include "_Classes_Yu/_CellList/ObjectManager.h"
 #include "_Classes_Yu/_FIelds/Fields.h"
 
-#include "_Classes_Yu/_UI/_GameUI/_MSHPGauge/MSHPGauge.h"
-#include "_Classes_Yu/_UI/_GameUI/_MiniMap/MiniMap.h"
-
 #include "_Classes_Ao/PlayerManager/PlayerManager.h"
 #include"_Classes_Ao/CameraManager/CameraManager.h"
 
@@ -55,7 +52,4 @@ private:
 	PlayerManager player_;
 
 	Fields* field_;
-
-	MSHPGauge* ui_hpGauge_;
-	MiniMap* ui_miniMap_;
 };

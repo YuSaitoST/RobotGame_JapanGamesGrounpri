@@ -13,9 +13,6 @@ MainScene::MainScene()
 {
 	m_object_ = new ObjectManager();
 	field_ = new Fields();
-
-	ui_hpGauge_ = new MSHPGauge();
-	ui_miniMap_ = new MiniMap();
 }
 
 // Initialize a variable and audio resources.
@@ -35,9 +32,6 @@ void MainScene::Initialize()
 
 	m_object_->Initialize();
 	player_.Initialize();
-
-	ui_hpGauge_->Initialize();
-	ui_miniMap_->Initialize();
 }
 
 // Allocate all memory the Direct3D and Direct2D resources.
@@ -47,19 +41,6 @@ void MainScene::LoadAssets()
 
 	ResourceUploadBatch resourceUploadBatch(DXTK->Device);
 	resourceUploadBatch.Begin();
-
-	//ファイル読み込み
-	DX12::SPRITE ui_hpBar = DX12::CreateSpriteSRV(
-		DXTK->Device, L"_Images\\_Main\\_HP\\HP_bar.png",
-		resourceUploadBatch, descriptorHeap_.get(), 0
-	);
-	DX12::SPRITE ui_hpFrame = DX12::CreateSpriteSRV(
-		DXTK->Device, L"_Images\\_Main\\_HP\\HP_frame.png",
-		resourceUploadBatch, descriptorHeap_.get(), 1
-	);
-
-	/* クラスの引数に渡す */
-	ui_hpGauge_->LoadAssets(ui_hpBar, ui_hpFrame);
 
 	RenderTargetState rtState(DXGI_FORMAT_B8G8R8A8_UNORM, DXGI_FORMAT_D32_FLOAT);
 	SpriteBatchPipelineStateDescription pd(rtState, &CommonStates::NonPremultiplied);
@@ -87,9 +68,6 @@ void MainScene::Terminate()
 	DXTK->WaitForGpu();
 
 	// TODO: Add your Termination logic here.
-
-	delete ui_miniMap_;
-	delete ui_hpGauge_;
 
 	delete field_;
 	delete m_object_;
