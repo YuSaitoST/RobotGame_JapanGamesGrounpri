@@ -16,7 +16,7 @@ void ESStandby::Update(const int myID) {
 	}
 
 	if (PlayerInfo.GetDistance(enemy_->myPosition()) <= ENParams.DISTANCE_TO_NOTICE_PLAYER) {
-		enemy_->SwitchState(FIGHTING);
+		enemy_->SwitchState(ENE_STATE::FIGHTING);
 	}
 }
 

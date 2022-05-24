@@ -128,6 +128,7 @@ void PlayerBase::LoadAssets(std::wstring file_name) {
 	debag_font = DX9::SpriteFont::CreateDefaultFont(DXTK->Device9);
 	time_font = DX9::SpriteFont::CreateDefaultFont(DXTK->Device9);
 }
+
 void PlayerBase::LoadEffect() {
 
 }
@@ -179,38 +180,42 @@ void PlayerBase::Setting(const float deltaTime) {
 
 void PlayerBase::Move(const float deltaTime, DX9::CAMERA camera) {
 
-	camera_forward = camera.GetForwardVector();
+	Vector3 cam_dir = camera->GetForwardVector();
+	cam_dir.y = 0.0f;
+	cam_dir.Normalize();
 
-	camera->SetViewLookAt(player_model->Position, camera_forward, Vector3::Up);
+	auto player_pos = player_model->GetPosition();
+	auto player_rot = Matrix::CreateLookAt(player_pos, player_pos + cam_dir, Vector3::Up);
+	player_rot.Invert();
+	player_model->SetRotationMatrix(player_rot);
+
+	//camera->SetViewLookAt(player_model->GetPosition(), camera->GetForwardVector(), Vector3::Up);
 	
 	//キーボード操作
 	if (Press.MoveForwardStateKey()) {
-		player_model->Move(0, 0, (-1.0f + forward_.z) * speed * deltaTime);
+		player_model->Move(0, 0, -speed * deltaTime);
 	}
-
 	if (Press.MoveBackwardStateKey()) {
-		player_model->Move(0, 0, ( 1.0f + forward_.z) * speed * deltaTime);
+		player_model->Move(0, 0,  speed * deltaTime);
 	}
-
 	if (Press.MoveLeftStateKey()) {
-		player_model->Move((-1.0f + forward_.x) * speed * deltaTime, 0, 0);
+		player_model->Move( speed * deltaTime, 0, 0);
 	}
-
-	if (Press.MoveLeftStateKey()) {
-		player_model->Move(( 1.0f + forward_.x) * speed * deltaTime, 0, 0);
+	if (Press.MoveRightStateKey()) {
+		player_model->Move(-speed * deltaTime, 0, 0);
 	}	
 
-	//ゲームパッド操作
-	forward_ = Vector3(-Press.DirectionKey().x, 0.0f, Press.DirectionKey().y);
-	Vector3 amountMove = forward_ * speed * deltaTime;
-	player_model->Move(amountMove);
+	////ゲームパッド操作
+	//forward_ = Vector3(-Press.DirectionKey().x, 0.0f, Press.DirectionKey().y);
+	//Vector3 amountMove = forward_ * speed * deltaTime;
+	//player_model->Move(amountMove);
 }
 
 
 void PlayerBase::Dush(const float deltaTime) {
 	if (!overheart_flag) {
 		//ダッシュを押している間だけスピードUP
-		if (Press.DushStateKey()) {
+		if (DXTK->KeyState->LeftShift){//Press.DushStateKey()) {
 			speed = boost_dush;
 			boost_max -= 1 * deltaTime;
 		}
@@ -464,12 +469,6 @@ void PlayerBase::UIRender() {
 	//	L"Forward X %f Y %f Z %f", forward_.x,forward_.y,forward_.z
 	//);
 
-	DX9::SpriteBatch->DrawString(
-		debag_font.Get(),
-		SimpleMath::Vector2(0.0f, 200.0f),
-		DX9::Colors::Red,
-		L"Camera_Forward X %f Y %f Z %f", camera_forward.x, camera_forward.y, camera_forward.z
-	);
 
 }
 

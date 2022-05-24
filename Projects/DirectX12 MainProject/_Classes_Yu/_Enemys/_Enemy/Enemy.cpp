@@ -11,7 +11,7 @@ Enemy::Enemy(int level, Vector3 pos, float r) : level_(level), isInStep_(false),
 	SetBaseMember(OBJ_TYPE::ENEMY, pos, r);
 	SetMember();
 
-	SwitchState(STANDBY);
+	SwitchState(ENE_STATE::STANDBY);
 }
 
 Enemy::~Enemy() {

@@ -129,4 +129,13 @@ void PlayerManager::_2D() {
 		L"pos_distance_ X %f Y %f Z %f", pos_distance_.x, pos_distance_.y, pos_distance_.z
 	);
 
+
+	DX9::SpriteBatch->DrawString(
+		font.Get(),
+		SimpleMath::Vector2(0.0f, 350.0f),
+		DX9::Colors::Red,
+		L"CAMERA   GetForwardVector X %f Y %f Z %f", camera->GetForwardVector().x, camera->GetForwardVector().y, camera->GetForwardVector().z
+	);
+
+
 }

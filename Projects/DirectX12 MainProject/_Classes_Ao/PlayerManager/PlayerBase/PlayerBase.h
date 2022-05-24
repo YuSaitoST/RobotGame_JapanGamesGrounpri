@@ -42,11 +42,6 @@ public:
 	//DX9::MODEL& GetModel() { return player_model; }
 	SimpleMath::Vector3* GetPlayer_Pos() { return &pos_; }
 	Vector3 GetPos() { return player_model->GetPosition(); }
-	SimpleMath::Vector3 GetForward() { return forward_; }
-
-	bool GetMove() { return move_flag; }
-
-	bool GetJump() { return jump_flag; }
 
 private:
 	//DX9::SKINNEDMODEL player_model;
