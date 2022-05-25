@@ -12,6 +12,8 @@ Enemy::Enemy(int level, Vector3 pos, float r) : level_(level), isInStep_(false),
 	SetMember();
 
 	SwitchState(ENE_STATE::STANDBY);
+
+	actionCount_ = 0;
 }
 
 Enemy::~Enemy() {
@@ -118,24 +120,27 @@ Action Enemy::Move(const Vector3 targetDirection) {
 	if (moveStartCoordinate_ == Vector3::Zero) {
 		attackState_ = AttackState::None_Attack;
 		moveStartCoordinate_ = pos_;
+		forward_ = targetDirection;
+		Rotate(targetDirection);
 	}
 
-	forward_ = targetDirection;
 	//pos_ += forward_ * ENLParams.SPEED_OF_ACTION[level_];
 	pos_ += forward_ * 0.015f;
 	pos_.y = 0.0f;  // ‹ó’†‚ÉˆÚ“®‚·‚é‚Ì‚ð–h‚®‚½‚ß
-	Rotate(targetDirection);
 	se_running_->PlayRoopSE(timeDelta_);
 
-	//const float _moveDistance = std::fabsf((moveStartCoordinate_ - pos_).Length());
+	const float _moveDistance = std::fabsf((moveStartCoordinate_ - pos_).Length());
 
-	//if (25.0f <= _moveDistance) {
-	//	moveStartCoordinate_ = Vector3::Zero;
-	//	return SUCSESS;
-	//}
-	//else
-	//	return REPEAT;
+	if (1.0f <= _moveDistance) {
+		moveStartCoordinate_ = Vector3::Zero;
+		actionCount_ += 1;
+		//return SUCSESS;
+	}
+	else
+		return REPEAT;
+
 	return SUCSESS;
+	//return SUCSESS;
 }
 
 Action Enemy::Step(const Vector3 moveDirection) {
@@ -153,8 +158,8 @@ Action Enemy::Step(const Vector3 moveDirection) {
 	//pos_ += moveDirection_ * ENLParams.SPEED_OF_ACTION[level_];
 	//pos_.y = ENParams.STEP_INITIALVELOCITY * jumpTime_ - 0.5f * GRAVITY * jumpTime_ * jumpTime_;
 	//pos_.y = std::min(std::max(0.0f, pos_.y), 5.0f);
-	pos_ += moveDirection_ * 2.5f * timeDelta_;
-	pos_.y = 2.0f * jumpTime_ - 0.5f * GRAVITY * jumpTime_ * jumpTime_;
+	pos_ += moveDirection_ * 1.55f * timeDelta_;
+	pos_.y = 1.25f * jumpTime_ - 0.5f * GRAVITY * jumpTime_ * jumpTime_;
 	//pos_.y = std::min(std::max(0.0f, pos_.y), 5.0f);
 	pos_.y = std::max(0.0f, pos_.y);
 
@@ -163,9 +168,11 @@ Action Enemy::Step(const Vector3 moveDirection) {
 	if (isFine) {
 		jumpTime_ = 0.0f;
 		isInStep_ = false;
+		actionCount_ += 1;
 	}
 
-	return isFine ? SUCSESS : REPEAT;
+	return REPEAT;
+	//return isFine ? SUCSESS : REPEAT;
 }
 
 Action Enemy::Slide(const Vector3 moveDirection) {
@@ -180,23 +187,58 @@ Action Enemy::Slide(const Vector3 moveDirection) {
 
 	const float _moveDistance = std::fabsf((moveStartCoordinate_ - pos_).Length());
 
-	//// ˆÚ“®—Ê‚ªˆê’èˆÈã‚É‚È‚Á‚½‚çI—¹
-	//if (8.0f <= _moveDistance) {
-	//	moveStartCoordinate_ = Vector3::Zero;
-	//	return SUCSESS;
-	//}
+	// ˆÚ“®—Ê‚ªˆê’èˆÈã‚É‚È‚Á‚½‚çI—¹
+	if (1.5f <= _moveDistance) {
+		moveStartCoordinate_ = Vector3::Zero;
+		actionCount_ += 1;
+		//return SUCSESS;
+	}
 
-	//return REPEAT;
+	return REPEAT;
 
-	return SUCSESS;
+	//return SUCSESS;
 }
 
 Action Enemy::BackStep() {
-	return Step(-forward_);
+	if (actionCount_ = 0)
+		return Step(-forward_);
+	else if (actionCount_ = 1)
+		return Slide(-forward_);
+	else if (actionCount_ == 2)
+		return Stay();
+	else {
+		actionCount_ = 0;
+		return SUCSESS;
+	}
+		//return Step(-forward_);
 }
 
 Action Enemy::SideStep(const Vector3 targetDirection) {
-	return Step(XMFLOAT3(targetDirection.z, 0.0f, targetDirection.x));
+	if (actionCount_ == 0)
+		Step(XMFLOAT3(targetDirection.z, 0.0f, targetDirection.x));
+	else if (actionCount_ == 1)
+		Slide(XMFLOAT3(targetDirection.z, 0.0f, targetDirection.x));
+	else if (actionCount_ == 2)
+		Stay();
+	else {
+		actionCount_ = 0;
+		return SUCSESS;
+	}
+
+	//return Step(XMFLOAT3(targetDirection.z, 0.0f, targetDirection.x));
+}
+
+Action Enemy::Stay() {
+	if (actionInterval_->NowTime() == 0.0f) {
+		actionInterval_->ResetCountTime();
+	}
+
+	actionInterval_->Update(timeDelta_);
+
+	if (actionInterval_->TimeOut())
+		return SUCSESS;
+	else
+		return REPEAT;
 }
 
 Action Enemy::Adjacent() {

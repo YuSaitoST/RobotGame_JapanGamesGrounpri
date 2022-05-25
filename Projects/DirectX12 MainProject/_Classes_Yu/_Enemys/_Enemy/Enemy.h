@@ -37,6 +37,7 @@ public:
 	Action SideStep(const Vector3 targetDirection);
 	Action Adjacent();
 	Action Shooting();
+	Action Stay();
 	
 	void Rotate(const Vector3 targetDirection);
 
@@ -67,6 +68,9 @@ private:
 
 	int posListID_;
 	int level_;
+
+	int actionCount_;
+
 	bool isInStep_;
 	bool isHitPlayer_;
 

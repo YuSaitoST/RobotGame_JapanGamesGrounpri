@@ -45,7 +45,7 @@ Node* BhMoveThink::ActThinks(Enemy* enemy) {
 	
 	// Ž©g‚ªUŒ‚‚µ‚Ä‚¢‚È‚¢ê‡
 	if (enemy->nowAttackAttate() == AttackState::None_Attack) {
-		const bool WithinShootingDistance = ENParams.ALWAYS_KEEP_DISTANCE_OPEN < distance&& distance < ENParams.RANGE_OF_SHOOTING;
+		const bool WithinShootingDistance = ENParams.ALWAYS_KEEP_DISTANCE_OPEN < distance && distance < ENParams.RANGE_OF_SHOOTING;
 
 		if (TooClose) {
 			// Player‚Æ‚Ì‹——£‚ª‹ß‚·‚¬‚é‚È‚çABackStep‚Å—£‚ê‚é
