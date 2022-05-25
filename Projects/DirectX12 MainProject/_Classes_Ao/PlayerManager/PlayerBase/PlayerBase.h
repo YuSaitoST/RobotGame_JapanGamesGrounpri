@@ -17,7 +17,6 @@ public:
 	void Initialize(const int id);
 	void LoadAssets() {}
 	void LoadAssets(std::wstring file_name);
-	void LoadEffect();
 
 	void LoadCsv();
 
@@ -53,6 +52,7 @@ private:
 
 	void Camera_Focus(DX9::CAMERA camera);
 	float player_spped;
+	float normal_speed;
 	
 
 	//ダッシュ 関数 系統
@@ -60,12 +60,17 @@ private:
 	int   boost_zero;//ブーストの初期値
 	int   boost_max; //ブーストの最大値
 	float boost_dush;//ブースト時の速度
+	bool  boost_flag;//ブーストしているかのフラグ
 
 	//オーバーヒート時の変数
 	bool overheart_flag; //オーバーヒートのフラグ
 	float overheart_time;//オーバーヒートしている時間 初期値
 	float overheart_max; //オーバーヒートしている時間 最大値
-	float overheart_speed = 10.0f;//オーバーヒート時のスピード
+	float overheart_speed = 5.0f;//オーバーヒート時のスピード
+
+	float PlayerSpeedMode();
+
+	
 
 	//ジャンプ 関数
 	bool jump_flag = false;
