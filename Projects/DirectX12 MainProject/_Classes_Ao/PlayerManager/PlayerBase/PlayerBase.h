@@ -6,6 +6,7 @@
 #include "_Classes_Yu/_CellList/_Object/ObjectBase.h"
 
 
+
 using namespace DirectX;
 
 class PlayerBase :public ObjectBase
@@ -41,6 +42,7 @@ public:
 	//DX9::MODEL& GetModel() { return player_model; }
 	SimpleMath::Vector3* GetPlayer_Pos() { return &pos_; }
 	Vector3 GetPos() { return player_model->GetPosition(); }
+	float GetCameraRotate() { return camera_rotate_speed; }
 
 private:
 	//DX9::SKINNEDMODEL player_model;
@@ -51,8 +53,9 @@ private:
 	DX9::SPRITEFONT time_font;
 
 	void Camera_Focus(DX9::CAMERA camera);
-	float player_spped;
-	float normal_speed;
+	float camera_rotate_speed;//カメラの回転速度
+	float player_spped;//プレイヤーのスピード()
+	float normal_speed;//プレイヤーの通常のスピード
 	
 
 	//ダッシュ 関数 系統
@@ -83,9 +86,7 @@ private:
 	//初速
 	float V0 = 40.0f;
 
-
 	//近接攻撃 コンボ
-	//三連撃
 	enum  BURST_STATE
 	{
 		NOT_BURST,
@@ -94,7 +95,6 @@ private:
 		THIRD
 	};
 	BURST_STATE burst_state_mode;
-
 	 
 	//一撃目
 	float frist_reception_time; //受付時間初期値
@@ -105,8 +105,6 @@ private:
 	float second_reception_time; //受付時間初期値
 	float second_reception_max;   //受付時間最大値
 	bool  second_check_flag;      //次に攻撃に移る
-
-
 
 	//三撃目
 	float third_reception_time; //受付時間初期値

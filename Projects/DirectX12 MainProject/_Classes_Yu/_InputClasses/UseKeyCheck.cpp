@@ -16,7 +16,7 @@ bool UseKeyCheck::JumpEventKey() {
 }
 
 bool UseKeyCheck::AtackEventKey() {
-	return key_.EventOnOffKey(SKEY::LALT);
+	return key_.EventOnOffKey(CKEY::V);
 }
 
 bool UseKeyCheck::ShotEventKey() {

@@ -9,6 +9,7 @@
 #include "_Classes_Yu/_CellList/ObjectManager.h"
 #include "_Classes_Yu/_FieldOutCheck/FieldOutCheck.h"
 #include "_Classes_Yu/_MeleeWeapon/MeleeWeapon.h"
+#include "_Classes_Yu/_LoadCSV/LoadCSV.h"
 
 #include "_Classes_Ao/PlayerManager/PlayerManager.h"
 
@@ -19,43 +20,32 @@ PlayerBase::PlayerBase() {
 	SetBaseMember(OBJ_TYPE::PLAYER, SimpleMath::Vector3::Zero, 1.0f);
 
 	player_model = nullptr;
+	player_spped = 0.0f;
 	pos_ = SimpleMath::Vector3(0.0f, 0.0f, 0.0f);
 
-	//ダッシュ 関数
 	boost_zero = 0;//オーバーヒートの初期値
 	boost_max  = 0; //オーバーヒートの最大値
-	//オーバーヒート時の変数
 	overheart_flag = false; //オーバーヒートのフラグ
 	overheart_time = 0.0f;//オーバーヒートしている時間 初期値
 	overheart_max = 0.0f; //オーバーヒートしている時間 最大値
 
-	//ジャンプ 関数
 	jump_flag = false;
 	jump_time = 0.0f;
 	jump_start_v_ = 0.0f;
-	//1/2
 	half = 0.0f;
-	//重力加速度
 	gravity_ = 0.0f;
-	//初速
 	V0 = 0.0f;
 
-	//近接攻撃 コンボ
 	burst_state_mode = BURST_STATE::NOT_BURST;
-	//一撃目
 	frist_reception_time = 0.0f; //受付時間初期値
 	frist_reception_max = 0.0f;  //受付時間最大値
 	frist_check_flag = false;     //次に攻撃に移る
-   //二撃目
 	second_reception_time = 0.0f; //受付時間初期値
 	second_reception_max = 0.0f;   //受付時間最大値
 	second_check_flag = false;      //次に攻撃に移る
-   //三撃目
 	third_reception_time = 0.0f; //受付時間初期値
 	third_reception_max = 0.0f;  //受付時間最大値
 	third_check_flag = false;     //最後終わるまで攻撃不可
-
-	
 }
 
 void PlayerBase::Initialize(const int id) {
@@ -113,16 +103,29 @@ void PlayerBase::LoadAssets(std::wstring file_name) {
 }
 
 void PlayerBase::LoadCsv() {
-	FILE* file;
+	//FILE* file;
 
-	auto a = _wfopen_s(&file, L"_Parameters\\PlayerParams.csv", L"r");
-	if (a != 0)
-		abort();
- 	char dummy[512];
-	fgets(dummy, 500, file);
-	fscanf_s(file, "%f,%f,%f,%f,%i", &normal_speed, &boost_dush, &pos_.x, &pos_.z, &shotdamage);
+	//auto a = _wfopen_s(&file, L"_Parameters\\PlayerParams.csv", L"r");
+	//if (a != 0)
+	//	abort();
+	//char dummy[512];
+	//fgets(dummy, 500, file);
+	//fscanf_s(file, "%f,%f,%f,%f,%i", &normal_speed, &boost_dush, &pos_.x, &pos_.z, &shotdamage);
 
-	fclose(file);
+	//fclose(file);
+
+	CSV::Schan
+	(
+		L"_Parameters\\PlayerParams.csv",
+		"%f,%f,%f,%f,%f,%i",
+		&normal_speed, 
+		&boost_dush,
+		&camera_rotate_speed,
+		&pos_.x, 
+		&pos_.z,
+		&shotdamage
+	);
+
 
 }
 
@@ -148,11 +151,12 @@ void PlayerBase::Move(const float deltaTime, DX9::CAMERA camera) {
 	}
 	if (Press.MoveBackwardStateKey()) {
 		Camera_Focus(camera);
-		player_model->Move(0, 0, PlayerSpeedMode() * deltaTime);
+		
+		player_model->Move(0, 0,  PlayerSpeedMode() * deltaTime);
 	}
 	if (Press.MoveLeftStateKey()) {
 		Camera_Focus(camera);
-		player_model->Move(PlayerSpeedMode() * deltaTime, 0, 0);
+		player_model->Move( PlayerSpeedMode() * deltaTime, 0, 0);
 	}
 	if (Press.MoveRightStateKey()) {
 		Camera_Focus(camera);
@@ -200,15 +204,10 @@ void PlayerBase::Dush(const float deltaTime) {
 }
 
 float PlayerBase::PlayerSpeedMode() {
-	switch (boost_flag)
-	{
-	case true:
+	if (boost_flag)
 		player_spped = boost_dush;
-		break;
-	case false:
+	else
 		player_spped = normal_speed;
-		break;
-	}
 	return player_spped;
 }
 
@@ -321,12 +320,6 @@ void PlayerBase::Render(DX9::MODEL& model) {
 }
 
 void PlayerBase::UIRender() {
-	DX9::SpriteBatch->DrawString(
-		font.Get(),
-		SimpleMath::Vector2(0.0f, 0.0f),
-		DX9::Colors::Red,
-		L"座標　%f %f %f", pos_.x, pos_.y, pos_.z
-	);
 	if (burst_state_mode == BURST_STATE::NOT_BURST) {
 		DX9::SpriteBatch->DrawString(
 			debag_font.Get(),
@@ -386,16 +379,17 @@ void PlayerBase::UIRender() {
 	DX9::SpriteBatch->DrawString(
 		debag_font.Get(),
 		SimpleMath::Vector2(0.0f, 120.0f),
-		DX9::Colors::Red,
-		L"PLAYER_Forword X %f Y %f Z %f", player_model->GetForwardVector().x, player_model->GetForwardVector().y, player_model->GetForwardVector().z
+		DX9::Colors::Green,
+		L"プレイヤーのスピード %f", player_spped
 	);
+
 }
 
-//指定されたモーションはTRUE,それ以外はFALSE
-void PlayerBase::SetAnimation(DX9::SKINNEDMODEL& model, const int enableTrack)
-{
-//	for (int i = 0; i < MOTION_MAX; ++i) {
-//		model->SetTrackEnable(i, FALSE);
-//	}
-//	model->SetTrackEnable(enableTrack, TRUE);
-}
+////指定されたモーションはTRUE,それ以外はFALSE
+//void PlayerBase::SetAnimation(DX9::SKINNEDMODEL& model, const int enableTrack)
+//{
+////	for (int i = 0; i < MOTION_MAX; ++i) {
+////		model->SetTrackEnable(i, FALSE);
+////	}
+////	model->SetTrackEnable(enableTrack, TRUE);
+//}
