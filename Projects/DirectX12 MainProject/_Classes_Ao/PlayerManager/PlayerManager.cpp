@@ -11,17 +11,6 @@ void PlayerManager::LoadModel() {
 
 	font = DX9::SpriteFont::CreateDefaultFont(DXTK->Device9);
 
-	//camera->SetView(SimpleMath::Vector3(0, 0, 0), SimpleMath::Vector3(0, 0, 0));
-
-	//camera_pos_ = Vector3(
-	//	p_base_.GetPos().x + 0.11f,
-	//	p_base_.GetPos().y + 0.15f,
-	//	p_base_.GetPos().z - 1.17f
-	//);
-
-
-	//camera->SetPosition(camera_pos_);
-	//camera->Rotate(0.0f, -0.3f, 0.0f);
 
 	camera_pos_ = Vector3(
 		p_base_.GetPos().x + 0.3f,

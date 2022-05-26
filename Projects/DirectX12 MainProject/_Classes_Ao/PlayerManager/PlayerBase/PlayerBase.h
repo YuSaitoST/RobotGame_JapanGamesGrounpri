@@ -52,7 +52,6 @@ private:
 	DX9::SPRITEFONT debag_font;
 	DX9::SPRITEFONT time_font;
 
-	void Camera_Focus(DX9::CAMERA camera);
 	float camera_rotate_speed;//カメラの回転速度
 	float player_spped;//プレイヤーのスピード()
 	float normal_speed;//プレイヤーの通常のスピード

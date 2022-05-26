@@ -103,30 +103,15 @@ void PlayerBase::LoadAssets(std::wstring file_name) {
 }
 
 void PlayerBase::LoadCsv() {
-	//FILE* file;
-
-	//auto a = _wfopen_s(&file, L"_Parameters\\PlayerParams.csv", L"r");
-	//if (a != 0)
-	//	abort();
-	//char dummy[512];
-	//fgets(dummy, 500, file);
-	//fscanf_s(file, "%f,%f,%f,%f,%i", &normal_speed, &boost_dush, &pos_.x, &pos_.z, &shotdamage);
-
-	//fclose(file);
-
-	CSV::Schan
-	(
+	CSV::Schan(
 		L"_Parameters\\PlayerParams.csv",
 		"%f,%f,%f,%f,%f,%i",
-		&normal_speed, 
+		&normal_speed,
 		&boost_dush,
-		&camera_rotate_speed,
-		&pos_.x, 
-		&pos_.z,
+		&camera_rotate_speed, 
+		&pos_.x, &pos_.z, 
 		&shotdamage
 	);
-
-
 }
 
 void PlayerBase::Update(const float deltaTime) {
@@ -146,15 +131,18 @@ void PlayerBase::Setting(const float deltaTime) {
 void PlayerBase::Move(const float deltaTime, DX9::CAMERA camera) {
 	//キーボード操作
 	if (Press.MoveForwardStateKey()) {
+
 		Vector3 cam_dir = camera->GetForwardVector();
 		cam_dir.y = 0.0f;
 		cam_dir.Normalize();
 		const float rotation_y = atan2(-cam_dir.z, cam_dir.x) + XMConvertToRadians(-90.0f);
 		const auto  rot_mat = Matrix::CreateRotationY(rotation_y);
 		player_model->SetRotationMatrix(rot_mat);
+
 		player_model->Move(0, 0, -PlayerSpeedMode() * deltaTime);
 	}
 	if (Press.MoveBackwardStateKey()) {
+
 		Vector3 cam_dir = camera->GetForwardVector();
 		cam_dir.y = 0.0f;
 		cam_dir.Normalize();
@@ -165,6 +153,7 @@ void PlayerBase::Move(const float deltaTime, DX9::CAMERA camera) {
 		player_model->Move(0, 0,  -PlayerSpeedMode() * deltaTime);
 	}
 	if (Press.MoveLeftStateKey()) {
+
 		Vector3 cam_dir = camera->GetForwardVector();
 		cam_dir.y = 0.0f;
 		cam_dir.Normalize();
@@ -175,24 +164,18 @@ void PlayerBase::Move(const float deltaTime, DX9::CAMERA camera) {
 		player_model->Move( 0, 0, -PlayerSpeedMode() * deltaTime);
 	}
 	if (Press.MoveRightStateKey()) {
+
 		Vector3 cam_dir = camera->GetForwardVector();
 		cam_dir.y = 0.0f;
 		cam_dir.Normalize();
 		const float rotation_y = atan2(-cam_dir.z, cam_dir.x) + XMConvertToRadians(0.0f);
 		const auto  rot_mat = Matrix::CreateRotationY(rotation_y);
 		player_model->SetRotationMatrix(rot_mat);
+
 		player_model->Move(0, 0, -PlayerSpeedMode() * deltaTime);
 	}
 }
 
-void PlayerBase::Camera_Focus(DX9::CAMERA camera) {
-	Vector3 cam_dir = camera->GetForwardVector();
-	cam_dir.y = 0.0f;
-	cam_dir.Normalize();
-	const float rotation_y = atan2(-cam_dir.z, cam_dir.x) + XMConvertToRadians(-90.0f);
-	const auto  rot_mat = Matrix::CreateRotationY(rotation_y);
-	player_model->SetRotationMatrix(rot_mat);
-}
 
 void PlayerBase::Dush(const float deltaTime) {
 	if (!overheart_flag) {
@@ -344,7 +327,7 @@ void PlayerBase::UIRender() {
 	if (burst_state_mode == BURST_STATE::NOT_BURST) {
 		DX9::SpriteBatch->DrawString(
 			debag_font.Get(),
-			SimpleMath::Vector2(0.0f, 30.0f),
+			SimpleMath::Vector2(0.0f, 0.0f),
 			DX9::Colors::Red,
 			L"連撃 0"
 		);
@@ -352,13 +335,13 @@ void PlayerBase::UIRender() {
 	else if (burst_state_mode == BURST_STATE::FIRST) {
 		DX9::SpriteBatch->DrawString(
 			debag_font.Get(),
-			SimpleMath::Vector2(0.0f, 30.0f),
+			SimpleMath::Vector2(0.0f, 0.0f),
 			DX9::Colors::Red,
 			L"連撃 1連撃目"
 		);
 		DX9::SpriteBatch->DrawString(
 			time_font.Get(),
-			SimpleMath::Vector2(0.0f, 60.0f),
+			SimpleMath::Vector2(0.0f, 30.0f),
 			DX9::Colors::Red,
 			L"受付時間 %f", frist_reception_time
 		);
@@ -366,13 +349,13 @@ void PlayerBase::UIRender() {
 	else if (burst_state_mode == BURST_STATE::SECOND) {
 		DX9::SpriteBatch->DrawString(
 			debag_font.Get(),
-			SimpleMath::Vector2(0.0f, 30.0f),
+			SimpleMath::Vector2(0.0f, 0.0f),
 			DX9::Colors::Red,
 			L"連撃 2連撃目"
 		);
 		DX9::SpriteBatch->DrawString(
 			time_font.Get(),
-			SimpleMath::Vector2(0.0f, 60.0f),
+			SimpleMath::Vector2(0.0f, 30.0f),
 			DX9::Colors::Red,
 			L"受付時間 %f", second_reception_time
 		);
@@ -380,26 +363,26 @@ void PlayerBase::UIRender() {
 	else if (burst_state_mode == BURST_STATE::THIRD) {
 		DX9::SpriteBatch->DrawString(
 			debag_font.Get(),
-			SimpleMath::Vector2(0.0f, 30.0f),
+			SimpleMath::Vector2(0.0f, 0.0f),
 			DX9::Colors::Red,
 			L"連撃 3連撃目"
 		);
 		DX9::SpriteBatch->DrawString(
 			time_font.Get(),
-			SimpleMath::Vector2(0.0f, 60.0f),
+			SimpleMath::Vector2(0.0f, 30.0f),
 			DX9::Colors::Red,
 			L"受付時間 %f", third_reception_time
 		);
 	}
 	DX9::SpriteBatch->DrawString(
 		debag_font.Get(),
-		SimpleMath::Vector2(0.0f, 90.0f),
+		SimpleMath::Vector2(0.0f, 60.0f),
 		DX9::Colors::Green,
 		L"ブーストゲージ %d", boost_max
 	);
 	DX9::SpriteBatch->DrawString(
 		debag_font.Get(),
-		SimpleMath::Vector2(0.0f, 120.0f),
+		SimpleMath::Vector2(0.0f, 90.0f),
 		DX9::Colors::Green,
 		L"プレイヤーのスピード %f", player_spped
 	);
