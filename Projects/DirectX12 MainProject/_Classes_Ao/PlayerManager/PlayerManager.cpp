@@ -46,7 +46,7 @@ void PlayerManager::Update(const float deltaTime) {
 	float camera_rotate = p_base_.GetCameraRotate();
 
 	if (Press.RotateLeftCameraKey()) {
-		Matrix rot = Matrix::CreateRotationY(XMConvertToRadians(-camera_rotate * deltaTime));
+		Matrix rot = Matrix::CreateRotationY(XMConvertToRadians(camera_rotate * deltaTime));
 		mat *= rot;
 		Vector3 pos(mat._41, mat._42, mat._43);
 		pos += at;
@@ -54,7 +54,7 @@ void PlayerManager::Update(const float deltaTime) {
 	}
 
 	if (Press.RotateRightCameraKey()) {
-		Matrix rot = Matrix::CreateRotationY(XMConvertToRadians(camera_rotate * deltaTime));
+		Matrix rot = Matrix::CreateRotationY(XMConvertToRadians(-camera_rotate * deltaTime));
 		mat *= rot;
 		Vector3 pos(mat._41, mat._42, mat._43);
 		pos += at;

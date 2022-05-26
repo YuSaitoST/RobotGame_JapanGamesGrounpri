@@ -146,21 +146,42 @@ void PlayerBase::Setting(const float deltaTime) {
 void PlayerBase::Move(const float deltaTime, DX9::CAMERA camera) {
 	//キーボード操作
 	if (Press.MoveForwardStateKey()) {
-		Camera_Focus(camera);
+		Vector3 cam_dir = camera->GetForwardVector();
+		cam_dir.y = 0.0f;
+		cam_dir.Normalize();
+		const float rotation_y = atan2(-cam_dir.z, cam_dir.x) + XMConvertToRadians(-90.0f);
+		const auto  rot_mat = Matrix::CreateRotationY(rotation_y);
+		player_model->SetRotationMatrix(rot_mat);
 		player_model->Move(0, 0, -PlayerSpeedMode() * deltaTime);
 	}
 	if (Press.MoveBackwardStateKey()) {
-		Camera_Focus(camera);
-		
-		player_model->Move(0, 0,  PlayerSpeedMode() * deltaTime);
+		Vector3 cam_dir = camera->GetForwardVector();
+		cam_dir.y = 0.0f;
+		cam_dir.Normalize();
+		const float rotation_y = atan2(-cam_dir.z, cam_dir.x) + XMConvertToRadians(90.0f);
+		const auto  rot_mat = Matrix::CreateRotationY(rotation_y);
+		player_model->SetRotationMatrix(rot_mat);
+
+		player_model->Move(0, 0,  -PlayerSpeedMode() * deltaTime);
 	}
 	if (Press.MoveLeftStateKey()) {
-		Camera_Focus(camera);
-		player_model->Move( PlayerSpeedMode() * deltaTime, 0, 0);
+		Vector3 cam_dir = camera->GetForwardVector();
+		cam_dir.y = 0.0f;
+		cam_dir.Normalize();
+		const float rotation_y = atan2(-cam_dir.z, cam_dir.x) + XMConvertToRadians(180.0f);
+		const auto  rot_mat = Matrix::CreateRotationY(rotation_y);
+		player_model->SetRotationMatrix(rot_mat);
+
+		player_model->Move( 0, 0, -PlayerSpeedMode() * deltaTime);
 	}
 	if (Press.MoveRightStateKey()) {
-		Camera_Focus(camera);
-		player_model->Move(-PlayerSpeedMode() * deltaTime, 0, 0);
+		Vector3 cam_dir = camera->GetForwardVector();
+		cam_dir.y = 0.0f;
+		cam_dir.Normalize();
+		const float rotation_y = atan2(-cam_dir.z, cam_dir.x) + XMConvertToRadians(0.0f);
+		const auto  rot_mat = Matrix::CreateRotationY(rotation_y);
+		player_model->SetRotationMatrix(rot_mat);
+		player_model->Move(0, 0, -PlayerSpeedMode() * deltaTime);
 	}
 }
 
