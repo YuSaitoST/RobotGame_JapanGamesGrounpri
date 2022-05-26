@@ -1,6 +1,6 @@
 #include "Cell.h"
 #include "_Classes_Yu/_CellList/ObjectManager.h"
-#include "_Classes_Yu/_FIelds/ConstiateParam.h"
+#include "_Classes_Yu/_FIelds/_Parameter/ConstiateParam.h"
 
 Cell::Cell() {
 	level_		= -1;

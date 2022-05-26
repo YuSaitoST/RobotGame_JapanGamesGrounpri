@@ -125,7 +125,7 @@ Action Enemy::Move(const Vector3 targetDirection) {
 	}
 
 	//pos_ += forward_ * ENLParams.SPEED_OF_ACTION[level_];
-	pos_ += forward_ * 0.015f;
+	pos_ += forward_ * ENLParams.SPEED_OF_ACTION[level_];
 	pos_.y = 0.0f;  // ‹ó’†‚ÉˆÚ“®‚·‚é‚Ì‚ð–h‚®‚½‚ß
 	se_running_->PlayRoopSE(timeDelta_);
 
@@ -134,13 +134,12 @@ Action Enemy::Move(const Vector3 targetDirection) {
 	if (1.0f <= _moveDistance) {
 		moveStartCoordinate_ = Vector3::Zero;
 		actionCount_ += 1;
-		//return SUCSESS;
+		return SUCSESS;
 	}
 	else
 		return REPEAT;
 
 	return SUCSESS;
-	//return SUCSESS;
 }
 
 Action Enemy::Step(const Vector3 moveDirection) {
@@ -158,8 +157,8 @@ Action Enemy::Step(const Vector3 moveDirection) {
 	//pos_ += moveDirection_ * ENLParams.SPEED_OF_ACTION[level_];
 	//pos_.y = ENParams.STEP_INITIALVELOCITY * jumpTime_ - 0.5f * GRAVITY * jumpTime_ * jumpTime_;
 	//pos_.y = std::min(std::max(0.0f, pos_.y), 5.0f);
-	pos_ += moveDirection_ * 1.55f * timeDelta_;
-	pos_.y = 1.25f * jumpTime_ - 0.5f * GRAVITY * jumpTime_ * jumpTime_;
+	pos_ += moveDirection_ * ENLParams.SPEED_OF_ACTION[level_] * timeDelta_;
+	pos_.y = ENParams.STEP_INITIALVELOCITY * jumpTime_ - 0.5f * GRAVITY * jumpTime_ * jumpTime_;
 	//pos_.y = std::min(std::max(0.0f, pos_.y), 5.0f);
 	pos_.y = std::max(0.0f, pos_.y);
 
@@ -169,10 +168,10 @@ Action Enemy::Step(const Vector3 moveDirection) {
 		jumpTime_ = 0.0f;
 		isInStep_ = false;
 		actionCount_ += 1;
+		return SUCSESS;
 	}
 
 	return REPEAT;
-	//return isFine ? SUCSESS : REPEAT;
 }
 
 Action Enemy::Slide(const Vector3 moveDirection) {
@@ -188,15 +187,13 @@ Action Enemy::Slide(const Vector3 moveDirection) {
 	const float _moveDistance = std::fabsf((moveStartCoordinate_ - pos_).Length());
 
 	// ˆÚ“®—Ê‚ªˆê’èˆÈã‚É‚È‚Á‚½‚çI—¹
-	if (1.5f <= _moveDistance) {
+	if (1.0f <= _moveDistance) {
 		moveStartCoordinate_ = Vector3::Zero;
 		actionCount_ += 1;
-		//return SUCSESS;
+		return SUCSESS;
 	}
 
 	return REPEAT;
-
-	//return SUCSESS;
 }
 
 Action Enemy::BackStep() {
@@ -210,7 +207,6 @@ Action Enemy::BackStep() {
 		actionCount_ = 0;
 		return SUCSESS;
 	}
-		//return Step(-forward_);
 }
 
 Action Enemy::SideStep(const Vector3 targetDirection) {
@@ -224,19 +220,20 @@ Action Enemy::SideStep(const Vector3 targetDirection) {
 		actionCount_ = 0;
 		return SUCSESS;
 	}
-
-	//return Step(XMFLOAT3(targetDirection.z, 0.0f, targetDirection.x));
 }
 
 Action Enemy::Stay() {
+	// ‰ŠúÝ’è
 	if (actionInterval_->NowTime() == 0.0f) {
 		actionInterval_->ResetCountTime();
 	}
 
 	actionInterval_->Update(timeDelta_);
 
-	if (actionInterval_->TimeOut())
+	if (actionInterval_->TimeOut()) {
+		actionCount_ = 0;
 		return SUCSESS;
+	}
 	else
 		return REPEAT;
 }
