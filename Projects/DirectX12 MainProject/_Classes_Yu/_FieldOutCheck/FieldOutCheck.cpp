@@ -1,5 +1,5 @@
 #include "FieldOutCheck.h"
-#include "_Classes_Yu/_FIelds/ConstiateParam.h"
+#include "_Classes_Yu/_FIelds/_Parameter/ConstiateParam.h"
 
 void Field::ClampPosition(DirectX::SimpleMath::Vector3& position) {
 	position.x = std::min(std::max(0.0f, position.x), FLParams.LENGHT_OF_A_SIDE);

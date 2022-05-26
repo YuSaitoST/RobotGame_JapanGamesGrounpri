@@ -3,10 +3,10 @@
 #include "Base/pch.h"
 #include "Base/dxtk.h"
 
-class DomeRender {
+class KyotenRender {
 public:
-	DomeRender() : model_(DX9::MODEL()) {}
-	virtual ~DomeRender() {}
+	KyotenRender() : model_(DX9::MODEL()) {}
+	virtual ~KyotenRender() {}
 
 	void LoadAsset();
 	void Render();

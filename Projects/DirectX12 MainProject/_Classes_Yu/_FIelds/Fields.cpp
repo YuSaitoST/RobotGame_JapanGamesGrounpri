@@ -4,17 +4,17 @@
 
 Fields::Fields() {
 	skyDome_ = new SkyDome();
-	domes_ = new DomeRender();
+	kyotens_ = new KyotenRender();
 }
 
 Fields::~Fields() {
-	delete domes_;
+	delete kyotens_;
 	delete skyDome_;
 }
 
 void Fields::LoadAssets() {
 	skyDome_->LoadAsset();
-	domes_->LoadAsset();
+	kyotens_->LoadAsset();
 
 	model_ = DX9::Model::CreateFromFile(DXTK->Device9, L"_Models_Field\\field.X");
 	//model_->SetPosition(DirectX::SimpleMath::Vector3(FLParams.GetFieldFalfScale(), -0.25f, FLParams.GetFieldFalfScale()));
@@ -35,7 +35,7 @@ void Fields::LoadAssets() {
 
 void Fields::Render() {
 	skyDome_->Render(*PlayerInfo.GetPosition());  // Player‚ÌˆÚ“®§ŒÀ‚É‚æ‚Á‚Ä‚ÍÀ•W“n‚·•K—v‚Í‚È‚¢‚©‚à
-	domes_->Render();
+	kyotens_->Render();
 
 	//DXTK->Device9->SetTexture(1, bump_.Get());
 	//DirectX::SimpleMath::Matrix mat = model_->GetWorldTransform();
