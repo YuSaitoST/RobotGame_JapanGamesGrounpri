@@ -1,17 +1,20 @@
 #include "Fields.h"
 #include "_Classes_Yu/_PlayerInformation/PlayerInformation.h"
-#include "ConstiateParam.h"
+#include "_Parameter/ConstiateParam.h"
 
 Fields::Fields() {
 	skyDome_ = new SkyDome();
+	kyotens_ = new KyotenRender();
 }
 
 Fields::~Fields() {
+	delete kyotens_;
 	delete skyDome_;
 }
 
 void Fields::LoadAssets() {
 	skyDome_->LoadAsset();
+	kyotens_->LoadAsset();
 
 	model_ = DX9::Model::CreateFromFile(DXTK->Device9, L"_Models_Field\\field.X");
 	//model_->SetPosition(DirectX::SimpleMath::Vector3(FLParams.GetFieldFalfScale(), -0.25f, FLParams.GetFieldFalfScale()));
@@ -32,6 +35,7 @@ void Fields::LoadAssets() {
 
 void Fields::Render() {
 	skyDome_->Render(*PlayerInfo.GetPosition());  // Player‚ÌˆÚ“®§ŒÀ‚É‚æ‚Á‚Ä‚ÍÀ•W“n‚·•K—v‚Í‚È‚¢‚©‚à
+	kyotens_->Render();
 
 	//DXTK->Device9->SetTexture(1, bump_.Get());
 	//DirectX::SimpleMath::Matrix mat = model_->GetWorldTransform();
