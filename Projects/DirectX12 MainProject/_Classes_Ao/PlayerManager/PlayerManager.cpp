@@ -24,8 +24,8 @@ void PlayerManager::LoadModel() {
 	//camera->Rotate(0.0f, -0.3f, 0.0f);
 
 	camera_pos_ = Vector3(
-		p_base_.GetPos().x + 0.6f,
-		p_base_.GetPos().y + 0.19f,
+		p_base_.GetPos().x + 0.3f,
+		p_base_.GetPos().y + 0.20f,
 		p_base_.GetPos().z - 1.6f
 	);
 
@@ -100,42 +100,4 @@ void PlayerManager::Render() {
 
 void PlayerManager::_2D() {
 	p_base_.UIRender();
-
-	DX9::SpriteBatch->DrawString(
-		font.Get(),
-		SimpleMath::Vector2(0.0f, 230.0f),
-		DX9::Colors::Red,
-		L"ƒJƒƒ‰À•W X %f Y %f Z %f", camera.GetPosition().x, camera.GetPosition().y, camera.GetPosition().z
-	);
-
-	DX9::SpriteBatch->DrawString(
-		font.Get(),
-		SimpleMath::Vector2(0.0f, 260.0f),
-		DX9::Colors::Red,
-		L"pos_bef_ X %f Y %f Z %f", pos_bef_.x, pos_bef_.y, pos_bef_.z
-	);
-
-	DX9::SpriteBatch->DrawString(
-		font.Get(),
-		SimpleMath::Vector2(0.0f, 290.0f),
-		DX9::Colors::Red,
-		L"pos_aft_ X %f Y %f Z %f", pos_aft_.x, pos_aft_.y, pos_aft_.z
-	);
-
-	DX9::SpriteBatch->DrawString(
-		font.Get(),
-		SimpleMath::Vector2(0.0f, 320.0f),
-		DX9::Colors::Red,
-		L"pos_distance_ X %f Y %f Z %f", pos_distance_.x, pos_distance_.y, pos_distance_.z
-	);
-
-
-	DX9::SpriteBatch->DrawString(
-		font.Get(),
-		SimpleMath::Vector2(0.0f, 350.0f),
-		DX9::Colors::Red,
-		L"CAMERA   GetForwardVector X %f Y %f Z %f", camera->GetForwardVector().x, camera->GetForwardVector().y, camera->GetForwardVector().z
-	);
-
-
 }
