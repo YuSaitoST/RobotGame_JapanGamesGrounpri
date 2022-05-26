@@ -5,9 +5,13 @@
 Fields::Fields() {
 	skyDome_ = new SkyDome();
 	kyotens_ = new KyotenRender();
+	watchowers_ = new WatchtowerRender();
+	domes_ = new DomeRender();
 }
 
 Fields::~Fields() {
+	delete domes_;
+	delete watchowers_;
 	delete kyotens_;
 	delete skyDome_;
 }
@@ -15,10 +19,12 @@ Fields::~Fields() {
 void Fields::LoadAssets() {
 	skyDome_->LoadAsset();
 	kyotens_->LoadAsset();
+	watchowers_->LoadAsset();
+	domes_->LoadAsset();
 
 	model_ = DX9::Model::CreateFromFile(DXTK->Device9, L"_Models_Field\\field.X");
 	//model_->SetPosition(DirectX::SimpleMath::Vector3(FLParams.GetFieldFalfScale(), -0.25f, FLParams.GetFieldFalfScale()));
-	 model_->SetPosition(DirectX::SimpleMath::Vector3(4, -0.01f, 4));
+	 model_->SetPosition(DirectX::SimpleMath::Vector3(HALFSIZE, POS_Y, HALFSIZE));
 	//model_->SetScale(FLParams.GetNumber().SCALE, 0.0f, FLParams.GetNumber().SCALE);
 	//const float size = 0.2032f * 50.0f * 10;
 	//model_->SetScale(size, 1.0f, size);
@@ -36,6 +42,8 @@ void Fields::LoadAssets() {
 void Fields::Render() {
 	skyDome_->Render(*PlayerInfo.GetPosition());  // Player‚ÌˆÚ“®§ŒÀ‚É‚æ‚Á‚Ä‚ÍÀ•W“n‚·•K—v‚Í‚È‚¢‚©‚à
 	kyotens_->Render();
+	watchowers_->Render();
+	domes_->Render();
 
 	//DXTK->Device9->SetTexture(1, bump_.Get());
 	//DirectX::SimpleMath::Matrix mat = model_->GetWorldTransform();
@@ -43,7 +51,17 @@ void Fields::Render() {
 
 	//shader_->Begin();
 	//shader_->BeginPass(0);
-	model_->Draw();
+	//model_->SetPosition(DirectX::XMFLOAT3(HALFSIZE, POS_Y, HALFSIZE));
+	//model_->Draw();
+
+	//model_->SetPosition(DirectX::XMFLOAT3(HALFSIZE * 2, POS_Y, HALFSIZE));
+	//model_->Draw();
+
+	//model_->SetPosition(DirectX::XMFLOAT3(HALFSIZE * 2, POS_Y, HALFSIZE * 2));
+	//model_->Draw();
+
+	//model_->SetPosition(DirectX::XMFLOAT3(HALFSIZE, POS_Y, HALFSIZE * 2));
+	//model_->Draw();
 	//shader_->EndPass();
 	//shader_->End();
 

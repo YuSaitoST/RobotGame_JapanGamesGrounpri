@@ -2,7 +2,7 @@
 #include "_Classes_Yu/_LoadCSV/LoadCSV.h"
 
 void KyotenRender::LoadAsset() {
-	CSV::Schan(L"_Parameters\\KyotensPosition.csv", numberOfDome_, posList_);
+	CSV::Schan(L"_Parameters\\_FieldObject\\KyotensPosition.csv", numberOfDome_, posList_);
 	model_ = DX9::Model::CreateFromFile(DXTK->Device9, L"_Models_Field\\_Kyoten\\kyoten.x");
 }
 
