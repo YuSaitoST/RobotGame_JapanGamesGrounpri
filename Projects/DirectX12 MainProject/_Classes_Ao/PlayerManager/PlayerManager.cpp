@@ -13,12 +13,12 @@ void PlayerManager::LoadModel() {
 
 
 	camera_pos_ = Vector3(
-		p_base_.GetPos().x + 0.3f,
-		p_base_.GetPos().y + 0.20f,
-		p_base_.GetPos().z - 1.6f
+		p_base_.GetPos().x + 0.0f,
+		p_base_.GetPos().y + 0.45f,
+		p_base_.GetPos().z - 1.5f
 	);
 
-	Vector3 at = Vector3(p_base_.GetPos().x + 0.08f, p_base_.GetPos().y + 0.15f, p_base_.GetPos().z);
+	Vector3 at = Vector3(p_base_.GetPos().x, p_base_.GetPos().y + 0.15f, p_base_.GetPos().z);
 
 	camera->SetViewLookAt(camera_pos_, at, Vector3::Up);//p_base_.GetPos(), Vector3::Up);
 	camera->SetPerspectiveFieldOfView(XMConvertToRadians(20.0f), 16.0f / 9.0f, 1.0f, 100000.0f);
@@ -29,13 +29,14 @@ void PlayerManager::Update(const float deltaTime) {
 	pos_bef_ = p_base_.GetPos();
 
 	//ƒJƒƒ‰‚Ì‰ñ“]
-	Vector3 at = Vector3(p_base_.GetPos().x + 0.08f, p_base_.GetPos().y + 0.15f, p_base_.GetPos().z);
+	Vector3 at = Vector3(p_base_.GetPos().x, p_base_.GetPos().y + 0.15f, p_base_.GetPos().z);
 	Matrix mat = Matrix::CreateTranslation(camera->GetPosition() - at);
 
 	float camera_rotate = p_base_.GetCameraRotate();
 
+
 	if (Press.RotateLeftCameraKey()) {
-		Matrix rot = Matrix::CreateRotationY(XMConvertToRadians(camera_rotate * deltaTime));
+		Matrix rot = Matrix::CreateRotationY(XMConvertToRadians(-camera_rotate * deltaTime));
 		mat *= rot;
 		Vector3 pos(mat._41, mat._42, mat._43);
 		pos += at;
@@ -43,7 +44,7 @@ void PlayerManager::Update(const float deltaTime) {
 	}
 
 	if (Press.RotateRightCameraKey()) {
-		Matrix rot = Matrix::CreateRotationY(XMConvertToRadians(-camera_rotate * deltaTime));
+		Matrix rot = Matrix::CreateRotationY(XMConvertToRadians(camera_rotate * deltaTime));
 		mat *= rot;
 		Vector3 pos(mat._41, mat._42, mat._43);
 		pos += at;

@@ -94,7 +94,10 @@ private:
 		THIRD
 	};
 	BURST_STATE burst_state_mode;
-	 
+
+	//攻撃しているかどうかのフラグ
+	bool attack_flag;
+
 	//一撃目
 	float frist_reception_time; //受付時間初期値
 	float frist_reception_max;  //受付時間最大値
@@ -109,6 +112,11 @@ private:
 	float third_reception_time; //受付時間初期値
 	float third_reception_max;  //受付時間最大値
 	bool  third_check_flag;     //最後終わるまで攻撃不可
+
+	//近接　クールタイム 
+	bool attack_cool_flag;//三撃目以降に発生するフラグ
+	float cool_time_default; //クールタイムの初期値
+	float cool_time_max;  //クールタイムの終わり
 
 	//射撃
 	int shotdamage;
