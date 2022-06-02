@@ -18,6 +18,9 @@ PlayerBase::PlayerBase() {
 	SetBaseMember(OBJ_TYPE::PLAYER, SimpleMath::Vector3::Zero, 1.0f);
 
 	player_model = nullptr;
+	shoulderL_ = new MSShoulderSide();
+	shoulderR_ = new MSShoulderSide();
+
 	player_spped = 0.0f;
 	pos_ = SimpleMath::Vector3(0.0f, 0.0f, 0.0f);
 
@@ -104,7 +107,13 @@ void PlayerBase::LoadAssets(std::wstring file_name) {
 	//player_model = DX9::SkinnedModel::CreateFromFile(DXTK->Device9, L"Player\\j_mein.x");
 	player_model = DX9::Model::CreateFromFile(DXTK->Device9,L"Player\\j_mein.x");
 
+	
+	
 	player_model->SetRotation(0.0f, XMConvertToRadians(180.0f), 0.0f);
+	
+	shoulderL_->LoadAsset(L"Player\\L_sholder.x");
+	shoulderR_->LoadAsset(L"Player\\R_sholder.x");
+
 	player_model->SetPosition(pos_);
 		
 	font = DX9::SpriteFont::CreateDefaultFont(DXTK->Device9);
@@ -131,6 +140,9 @@ void PlayerBase::Update(const float deltaTime) {
 	Field::ClampPosition(pos_);
 	player_model->SetPosition(pos_);
 
+	shoulderL_->ConvertPosition(pos_, XMFLOAT3(-forward_.z, 0.0f, forward_.x));
+	shoulderR_->ConvertPosition(pos_, XMFLOAT3(-forward_.z, 0.0f, forward_.x));
+
 	UpdateToMorton();
 }
 
@@ -152,6 +164,7 @@ void PlayerBase::Move(const float deltaTime, DX9::CAMERA camera) {
 			player_model->SetRotationMatrix(rot_mat);
 
 			player_model->Move(0, 0, -PlayerSpeedMode() * deltaTime);
+
 		}
 		if (Press.MoveBackwardStateKey()) {
 
@@ -345,10 +358,14 @@ void PlayerBase::Jump(const float deltaTime) {
 
 void PlayerBase::Render() {
 	player_model->Draw();
+	shoulderL_->Render();
+	shoulderR_->Render();
 }
 
 void PlayerBase::Render(DX9::MODEL& model) {
 	player_model->Draw();
+	shoulderL_->Render();
+	shoulderR_->Render();
 }
 
 void PlayerBase::UIRender() {

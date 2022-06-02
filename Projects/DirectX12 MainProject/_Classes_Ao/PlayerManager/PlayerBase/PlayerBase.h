@@ -4,7 +4,7 @@
 #include "Base/dxtk.h"
 
 #include "_Classes_Yu/_CellList/_Object/ObjectBase.h"
-
+#include "_Classes_Yu/_MSShoulderSide/MSShoulderSide.h"
 
 
 using namespace DirectX;
@@ -47,6 +47,9 @@ public:
 private:
 	//DX9::SKINNEDMODEL player_model;
 	DX9::MODEL player_model;
+
+	MSShoulderSide* shoulderL_;
+	MSShoulderSide* shoulderR_;
 
 	DX9::SPRITEFONT font;
 	DX9::SPRITEFONT debag_font;
