@@ -52,7 +52,7 @@ void Fields::Render() {
 	//shader_->Begin();
 	//shader_->BeginPass(0);
 	//model_->SetPosition(DirectX::XMFLOAT3(HALFSIZE, POS_Y, HALFSIZE));
-	//model_->Draw();
+	model_->Draw();
 
 	//model_->SetPosition(DirectX::XMFLOAT3(HALFSIZE * 2, POS_Y, HALFSIZE));
 	//model_->Draw();

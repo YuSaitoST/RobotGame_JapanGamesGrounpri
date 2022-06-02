@@ -6,7 +6,7 @@ void MSShoulderSide::LoadAsset(std::wstring fileName) {
 
 void MSShoulderSide::Render() {
 	shoulder_->SetPosition(position_);
-	shoulder_->SetRotation(rotateX_, rotateY_, 0.0f);
+	//shoulder_->SetRotation(rotateX_, rotateY_, 0.0f);
 	shoulder_->Draw();
 }
 
