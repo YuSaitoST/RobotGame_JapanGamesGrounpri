@@ -54,7 +54,7 @@ private:
 	SoundPlayer* se_adjacent_;
 	SoundPlayer* se_shooting_;
 
-	//MSShoulderSide* shoulderL_;
+	MSShoulderSide* shoulderL_;
 
 	EneState* state_;
 	SwitchStates* m_state_;
@@ -63,8 +63,6 @@ private:
 
 	//DX9::SKINNEDMODEL model_;
 	DX9::MODEL model_;
-
-	DX9::SHADER shader_;
 
 	int posListID_;
 	int level_;

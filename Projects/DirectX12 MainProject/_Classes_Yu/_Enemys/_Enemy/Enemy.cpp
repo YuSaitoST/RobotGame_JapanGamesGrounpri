@@ -14,9 +14,12 @@ Enemy::Enemy(int level, Vector3 pos, float r) : level_(level), isInStep_(false),
 	SwitchState(ENE_STATE::STANDBY);
 
 	actionCount_ = 0;
+
+	shoulderL_ = new MSShoulderSide();
 }
 
 Enemy::~Enemy() {
+	delete shoulderL_;
 	delete meleeWapon_;
 	delete m_state_;
 	delete se_shooting_;
@@ -47,7 +50,7 @@ void Enemy::LoadAssets(std::wstring file_name) {
 
 	meleeWapon_->LoadAssets();
 
-	shader_ = DX9::Shader::CreateFromFile(DXTK->Device9, L"Player\\shader.hlsl");
+	shoulderL_->LoadAsset(L"Player\\L_sholder.x");
 }
 
 void Enemy::Update(const float deltaTime) {
@@ -56,6 +59,8 @@ void Enemy::Update(const float deltaTime) {
 	state_->Update(id_my_);
 	
 	Field::ClampPosition(pos_);
+
+	shoulderL_->ConvertPosition(pos_, XMFLOAT3(-forward_.z, 0.0f, forward_.x));
 
 	UpdateToMorton();
 
@@ -72,6 +77,7 @@ void Enemy::Render() {
 	//shader_->BeginPass(0);
 
 	model_->Draw();
+	shoulderL_->Render();
 	//meleeWapon_->Render();
 
 	//shader_->EndPass();
