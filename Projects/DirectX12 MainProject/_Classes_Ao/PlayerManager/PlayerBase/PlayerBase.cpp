@@ -18,8 +18,8 @@ PlayerBase::PlayerBase() {
 	SetBaseMember(OBJ_TYPE::PLAYER, SimpleMath::Vector3::Zero, 1.0f);
 
 	player_model = nullptr;
-	shoulderL_ = new MSShoulderSide();
-	shoulderR_ = new MSShoulderSide();
+	//shoulderL_ = new MSShoulderSide();
+	//shoulderR_ = new MSShoulderSide();
 
 	player_spped = 0.0f;
 	pos_ = SimpleMath::Vector3(0.0f, 0.0f, 0.0f);
@@ -107,16 +107,20 @@ void PlayerBase::LoadAssets(std::wstring file_name) {
 	//player_model = DX9::SkinnedModel::CreateFromFile(DXTK->Device9, L"Player\\j_mein.x");
 	player_model = DX9::Model::CreateFromFile(DXTK->Device9,L"Player\\j_mein.x");
 
-	
+	shoulderL_ = DX9::Model::CreateFromFile(DXTK->Device9, L"Player\\L_sholder.x");
+	shoulderR_ = DX9::Model::CreateFromFile(DXTK->Device9, L"Player\\R_sholder.x");
 	
 	player_model->SetRotation(0.0f, XMConvertToRadians(180.0f), 0.0f);
-	
-	shoulderL_->LoadAsset(L"Player\\L_sholder.x");
-	shoulderR_->LoadAsset(L"Player\\R_sholder.x");
+	shoulderL_->SetRotation(0.0f, XMConvertToRadians(180.0f), 0.0f);
+	shoulderR_->SetRotation(0.0f, XMConvertToRadians(180.0f), 0.0f);
+
+	//shoulderL_->LoadAsset(L"Player\\L_sholder.x");
+	//shoulderR_->LoadAsset(L"Player\\R_sholder.x");
 
 	player_model->SetPosition(pos_);
+	shoulderL_->SetPosition(pos_);
+	shoulderR_->SetPosition(pos_);
 		
-	font = DX9::SpriteFont::CreateDefaultFont(DXTK->Device9);
 	debag_font = DX9::SpriteFont::CreateDefaultFont(DXTK->Device9);
 	time_font = DX9::SpriteFont::CreateDefaultFont(DXTK->Device9);
 }
@@ -138,10 +142,14 @@ void PlayerBase::Update(const float deltaTime) {
 	pos_ = player_model->GetPosition();
 
 	Field::ClampPosition(pos_);
-	player_model->SetPosition(pos_);
 
-	shoulderL_->ConvertPosition(pos_, XMFLOAT3(-forward_.z, 0.0f, forward_.x));
-	shoulderR_->ConvertPosition(pos_, XMFLOAT3(-forward_.z, 0.0f, forward_.x));
+	player_model->SetPosition(pos_);
+	shoulderL_->SetPosition(pos_);
+	shoulderR_->SetPosition(pos_);
+
+
+	//shoulderL_->ConvertPosition(pos_, XMFLOAT3(-forward_.z, 0.0f, forward_.x));
+	//shoulderR_->ConvertPosition(pos_, XMFLOAT3( forward_.z, 0.0f, forward_.x));
 
 	UpdateToMorton();
 }
@@ -162,9 +170,12 @@ void PlayerBase::Move(const float deltaTime, DX9::CAMERA camera) {
 			const float rotation_y = atan2(-cam_dir.z, cam_dir.x) + XMConvertToRadians(-90.0f);
 			const auto  rot_mat = Matrix::CreateRotationY(rotation_y);
 			player_model->SetRotationMatrix(rot_mat);
+			shoulderL_->SetRotationMatrix(rot_mat);
+			shoulderR_->SetRotationMatrix(rot_mat);
 
 			player_model->Move(0, 0, -PlayerSpeedMode() * deltaTime);
-
+			shoulderL_->Move(0, 0, -PlayerSpeedMode() * deltaTime);
+			shoulderR_->Move(0, 0, -PlayerSpeedMode() * deltaTime);
 		}
 		if (Press.MoveBackwardStateKey()) {
 
@@ -174,8 +185,12 @@ void PlayerBase::Move(const float deltaTime, DX9::CAMERA camera) {
 			const float rotation_y = atan2(-cam_dir.z, cam_dir.x) + XMConvertToRadians(90.0f);
 			const auto  rot_mat = Matrix::CreateRotationY(rotation_y);
 			player_model->SetRotationMatrix(rot_mat);
+			shoulderL_->SetRotationMatrix(rot_mat);
+			shoulderR_->SetRotationMatrix(rot_mat);
 
 			player_model->Move(0, 0, -PlayerSpeedMode() * deltaTime);
+			shoulderL_->Move(0, 0, -PlayerSpeedMode() * deltaTime);
+			shoulderR_->Move(0, 0, -PlayerSpeedMode() * deltaTime);
 		}
 		if (Press.MoveLeftStateKey()) {
 
@@ -185,8 +200,12 @@ void PlayerBase::Move(const float deltaTime, DX9::CAMERA camera) {
 			const float rotation_y = atan2(-cam_dir.z, cam_dir.x) + XMConvertToRadians(180.0f);
 			const auto  rot_mat = Matrix::CreateRotationY(rotation_y);
 			player_model->SetRotationMatrix(rot_mat);
+			shoulderL_->SetRotationMatrix(rot_mat);
+			shoulderR_->SetRotationMatrix(rot_mat);
 
 			player_model->Move(0, 0, -PlayerSpeedMode() * deltaTime);
+			shoulderL_->Move(0, 0, -PlayerSpeedMode() * deltaTime);
+			shoulderR_->Move(0, 0, -PlayerSpeedMode() * deltaTime);
 		}
 		if (Press.MoveRightStateKey()) {
 
@@ -196,8 +215,12 @@ void PlayerBase::Move(const float deltaTime, DX9::CAMERA camera) {
 			const float rotation_y = atan2(-cam_dir.z, cam_dir.x) + XMConvertToRadians(0.0f);
 			const auto  rot_mat = Matrix::CreateRotationY(rotation_y);
 			player_model->SetRotationMatrix(rot_mat);
+			shoulderL_->SetRotationMatrix(rot_mat);
+			shoulderR_->SetRotationMatrix(rot_mat);
 
 			player_model->Move(0, 0, -PlayerSpeedMode() * deltaTime);
+			shoulderL_->Move(0, 0, -PlayerSpeedMode() * deltaTime);
+			shoulderR_->Move(0, 0, -PlayerSpeedMode() * deltaTime);
 		}
 	}
 }
@@ -358,14 +381,20 @@ void PlayerBase::Jump(const float deltaTime) {
 
 void PlayerBase::Render() {
 	player_model->Draw();
-	shoulderL_->Render();
-	shoulderR_->Render();
+
+	shoulderL_->Draw();
+	shoulderR_->Draw();
+	//shoulderL_->Render();
+	//shoulderR_->Render();
 }
 
 void PlayerBase::Render(DX9::MODEL& model) {
 	player_model->Draw();
-	shoulderL_->Render();
-	shoulderR_->Render();
+
+	shoulderL_->Draw();
+	shoulderR_->Draw();
+	//shoulderL_->Render();
+	//shoulderR_->Render();
 }
 
 void PlayerBase::UIRender() {
@@ -422,13 +451,13 @@ void PlayerBase::UIRender() {
 	DX9::SpriteBatch->DrawString(
 		debag_font.Get(),
 		SimpleMath::Vector2(0.0f, 60.0f),
-		DX9::Colors::Green,
+		DX9::Colors::Red,
 		L"ブーストゲージ %d", boost_max
 	);
 	DX9::SpriteBatch->DrawString(
 		debag_font.Get(),
 		SimpleMath::Vector2(0.0f, 90.0f),
-		DX9::Colors::Green,
+		DX9::Colors::Red,
 		L"プレイヤーのスピード %f", player_spped
 	);
 

@@ -48,10 +48,13 @@ private:
 	//DX9::SKINNEDMODEL player_model;
 	DX9::MODEL player_model;
 
-	MSShoulderSide* shoulderL_;
-	MSShoulderSide* shoulderR_;
+	DX9::MODEL shoulderL_;
+	DX9::MODEL shoulderR_;
 
-	DX9::SPRITEFONT font;
+
+	//MSShoulderSide* shoulderL_;
+	//MSShoulderSide* shoulderR_;
+
 	DX9::SPRITEFONT debag_font;
 	DX9::SPRITEFONT time_font;
 
