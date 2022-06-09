@@ -24,8 +24,13 @@ public:
 	DX9::CAMERA GetCamera() { return camera; }
 	Vector3 GetCameraForwardVecter() { return camera.GetForwardVector(); }
 
-protected:
+	static _Camera* GetInstance()
+	{
+		static _Camera instance;
+		return &instance;
+	}
 
+private:
 
 	DX9::CAMERA camera;
 	Vector3 camera_pos_;

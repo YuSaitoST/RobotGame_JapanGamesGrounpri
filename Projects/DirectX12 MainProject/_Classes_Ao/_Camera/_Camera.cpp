@@ -24,8 +24,8 @@ void _Camera::LoadCSV() {
 
 	camera_pos_ = Vector3(
 		pos.x + 0.0f,
-		pos.y + 0.45f,
-		pos.z - 1.5f
+		pos.y + 0.3f,
+		pos.z - 1.17f
 	);
 
 	Vector3 at = Vector3(pos.x, pos.y + 0.15f, pos.z);
