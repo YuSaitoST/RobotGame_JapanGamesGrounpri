@@ -42,17 +42,17 @@ Node* BhMoveThink::ActThinks(Enemy* enemy) {
 	const float distance					= PlayerInfo.GetDistance(enemy->myPosition());
 	const bool TooClose						= distance <= ENParams.UNAPPROACHABLE_DISTANCE;
 	const bool FartherThanTheShootingRange	= ENParams.RANGE_OF_SHOOTING < distance;
+
+	// Player‚Æ‚Ì‹——£‚ª‹ß‚·‚¬‚é‚È‚çABackStep‚Å—£‚ê‚é
+	if (TooClose) {
+		return nd_backStep_;
+	}
 	
 	// Ž©g‚ªUŒ‚‚µ‚Ä‚¢‚È‚¢ê‡
 	if (enemy->nowAttackAttate() == AttackState::None_Attack) {
 		const bool WithinShootingDistance = ENParams.ALWAYS_KEEP_DISTANCE_OPEN < distance && distance < ENParams.RANGE_OF_SHOOTING;
 
-		if (TooClose) {
-			// Player‚Æ‚Ì‹——£‚ª‹ß‚·‚¬‚é‚È‚çABackStep‚Å—£‚ê‚é
-			// Šm—§‚Å•ªŠò‚³‚¹‚½‚¢(BackStep or “Ëi‹ßÚ)
-			return nd_backStep_;
-		}
-		else if (WithinShootingDistance) {
+		if (WithinShootingDistance) {
 			if (PROBABILITY_OF_STEP[enemy->myLevel()] < randomDist_(randomEngine_) % 100) {
 				// ’†‹——£‚È‚çŠm—§‚ÅSideStep‚Å–|˜M‚³‚¹‚é
 				return nd_sideStep_;
