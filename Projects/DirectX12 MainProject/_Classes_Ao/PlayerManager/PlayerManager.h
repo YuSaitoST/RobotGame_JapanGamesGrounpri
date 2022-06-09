@@ -5,7 +5,6 @@
 #include "_Classes_Yu/_InputClasses/UseKeyCheck.h"
 
 #include "_Classes_Ao/PlayerManager/PlayerBase/PlayerBase.h"
-#include "_Classes_Ao/_Camera/_Camera.h"
 
 using namespace DirectX;
 
@@ -44,7 +43,5 @@ private:
 
 private:
 	PlayerBase p_base_;
-
-	_Camera camera_;
 
 };

@@ -2,13 +2,12 @@
 
 #include "_Classes_Yu/_PlayerInformation/PlayerInformation.h"
 #include "_Classes_Yu/_LoadCSV/LoadCSV.h"
-
+#include "_Classes_Ao/_Camera/_Camera.h"
 
 void PlayerManager::Initialize() {
 	p_base_.Initialize(0);
 	
 }
-
 
 void PlayerManager::LoadModel() {
 	p_base_.LoadAssets(L"Player\\j_mein.x");
@@ -16,23 +15,23 @@ void PlayerManager::LoadModel() {
 	font = DX9::SpriteFont::CreateDefaultFont(DXTK->Device9);
 
 
-	camera_.LoadAssets(p_base_.GetPos());
+	_Camera::GetInstance().LoadAssets(p_base_.GetPos());
 
 }
 
 void PlayerManager::Update(const float deltaTime) {
 
 	//カメラの回転
-	camera_.Update(deltaTime, p_base_.GetPos());
+	_Camera::GetInstance().Update(deltaTime, p_base_.GetPos());
 
 	p_base_.Update(deltaTime);
 
 	//移動
-	p_base_.Move(deltaTime,camera_.GetCamera());
+	p_base_.Move(deltaTime,_Camera::GetInstance().GetCamera());
 
 
 	//カメラの追従
-	camera_.Setting(p_base_.GetPos());
+	_Camera::GetInstance().Setting(p_base_.GetPos());
 
 	//ダッシュ
 	p_base_.Dush(deltaTime);
@@ -52,9 +51,10 @@ void PlayerManager::Update(const float deltaTime) {
 }
 
 void PlayerManager::Render() {
-	//DXTK->Direct3D9->SetCamera(camera);
+	//カメラの描画
+	_Camera::GetInstance().Render();
 
-	camera_.Render();
+	//プレイヤーモデルの描画
 	p_base_.Render();
 }
 

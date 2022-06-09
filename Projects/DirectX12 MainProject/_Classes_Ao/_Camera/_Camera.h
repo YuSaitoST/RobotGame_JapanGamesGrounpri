@@ -10,9 +10,10 @@ using namespace DirectX;
 
 class _Camera
 {
-public:
+private:
 	_Camera();
 	~_Camera() {};
+public:
 
 
 	void LoadCSV();
@@ -24,10 +25,10 @@ public:
 	DX9::CAMERA GetCamera() { return camera; }
 	Vector3 GetCameraForwardVecter() { return camera.GetForwardVector(); }
 
-	static _Camera* GetInstance()
+	static _Camera& GetInstance()
 	{
 		static _Camera instance;
-		return &instance;
+		return instance;
 	}
 
 private:
