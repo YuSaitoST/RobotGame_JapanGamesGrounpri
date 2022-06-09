@@ -60,8 +60,6 @@ void Enemy::Update(const float deltaTime) {
 	
 	Field::ClampPosition(pos_);
 
-	shoulderL_->ConvertPosition(pos_, XMFLOAT3(-forward_.z, 0.0f, forward_.x));
-
 	UpdateToMorton();
 
 	model_->SetPosition(pos_);
@@ -71,17 +69,48 @@ void Enemy::Update(const float deltaTime) {
 }
 
 void Enemy::Render() {
-	//DirectX::SimpleMath::Matrix mat = model_->GetWorldTransform();
-	//shader_->SetParameter("mWVP_", mat);
-	//shader_->Begin();
-	//shader_->BeginPass(0);
+	////ライトの方向ベクトル
+	//XMFLOAT3 lightDir = XMFLOAT3(0.0f, -1.0f, 0.0f);
 
-	model_->Draw();
-	shoulderL_->Render();
+	////地面
+	//Plane plane = Plane(0, 1, 0, 1);
+
+	////シャドウのマトリクス
+	//SimpleMath::Matrix matrix = SimpleMath::Matrix::CreateShadow(lightDir, plane);
+	//
+	////モデルのマトリクス
+	//DirectX::XMMATRIX enemy = model_->GetWorldTransform();
+
+	////合成
+	//DirectX::XMMATRIX W = (DirectX::XMMATRIX)matrix;
+	//model_->SetRotationMatrix(W);
+	//model_->SetScale(1.0f);
+	////DXTK->Device9->SetTransform(D3DTS_WORLD, (D3DMATRIX*)&W);
+
+	////alpha blend the shadow
+	//DXTK->Device9->SetRenderState(D3DRS_ALPHABLENDENABLE, true);				// TRUE を指定すると、アルファブレンドの透明度が有効になります。デフォルト値は FALSE です。
+	//DXTK->Device9->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);			// 〇 / ブレンド係数は (As, As, As, As)。
+	//DXTK->Device9->SetRenderState(D3DRS_DESTBLEND, D3DPBLENDCAPS_INVSRCALPHA);
+
+	////陰のマテリアルを用意
+	//D3DMATERIAL9 material;
+	//material.Diffuse = DX9::Colors::Value(0.0f, 0.0f, 0.0f, 0.5f);
+	//material.Ambient = DX9::Colors::Value(0.0f, 0.0f, 0.0f, 1.0f);
+	//material.Emissive = DX9::Colors::Value(0.0f, 0.0f, 0.0f, 1.0f);
+	//material.Specular = DX9::Colors::Value(0.0f, 0.0f, 0.0f, 1.0f);
+
+	////深度バッファを無効にする(床の上に影を描画する際にZファイトが発生しないようにする)
+	//DXTK->Device9->SetRenderState(D3DRS_ZENABLE, false);
+	//DXTK->Device9->SetMaterial(&material);
+
 	//meleeWapon_->Render();
 
-	//shader_->EndPass();
-	//shader_->End();
+	model_->Draw();
+	shoulderL_->Render(pos_, XMFLOAT3(-forward_.z, 0.0f, forward_.x));
+
+	//DXTK->Device9->SetRenderState(D3DRS_ZENABLE, true);				// 深さバッファリング状態。
+	//DXTK->Device9->SetRenderState(D3DRS_ALPHABLENDENABLE, false);
+	//DXTK->Device9->SetRenderState(D3DRS_STENCILENABLE, false);
 }
 
 void Enemy::SetMember() {
@@ -130,7 +159,6 @@ Action Enemy::Move(const Vector3 targetDirection) {
 		Rotate(targetDirection);
 	}
 
-	//pos_ += forward_ * ENLParams.SPEED_OF_ACTION[level_];
 	pos_ += forward_ * ENLParams.SPEED_OF_ACTION[level_];
 	pos_.y = 0.0f;  // 空中に移動するのを防ぐため
 	se_running_->PlayRoopSE(timeDelta_);
@@ -160,12 +188,8 @@ Action Enemy::Step(const Vector3 moveDirection) {
 	jumpTime_ += timeDelta_;
 
 	// 移動計算
-	//pos_ += moveDirection_ * ENLParams.SPEED_OF_ACTION[level_];
-	//pos_.y = ENParams.STEP_INITIALVELOCITY * jumpTime_ - 0.5f * GRAVITY * jumpTime_ * jumpTime_;
-	//pos_.y = std::min(std::max(0.0f, pos_.y), 5.0f);
-	pos_ += moveDirection_ * ENLParams.SPEED_OF_ACTION[level_] * timeDelta_;
+	pos_ += moveDirection_ * ENLParams.SPEED_OF_ACTION[level_];
 	pos_.y = ENParams.STEP_INITIALVELOCITY * jumpTime_ - 0.5f * GRAVITY * jumpTime_ * jumpTime_;
-	//pos_.y = std::min(std::max(0.0f, pos_.y), 5.0f);
 	pos_.y = std::max(0.0f, pos_.y);
 
 	const bool isFine = (pos_.y == 0.0f);

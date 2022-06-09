@@ -3,23 +3,21 @@
 #include "Base/pch.h"
 #include "Base/dxtk.h"
 
-using namespace DirectX::SimpleMath;
-
 class MSShoulderSide {
 public:
-	MSShoulderSide(/*float* rotX, float* rotY*/)/* : rotateX_(*rotX), rotateY_(*rotY)*/ {}  // ボーンの回転を参照する
+	MSShoulderSide() {}
 	virtual ~MSShoulderSide() {}
 
+	void Initialize(/*float* rotX, float* rotY*/);
 	void LoadAsset(std::wstring fileName);
-	void Render();
-
-	void ConvertPosition(Vector3 playerPos, Vector3 shoulderForward);
+	void Render(DirectX::SimpleMath::Vector3 playerPos, DirectX::SimpleMath::Vector3 shoulderForward);
 
 private:
-	const float DIST_FROM_CENTER_TO_SHOULDER = 0.0036f;
+	DirectX::XMFLOAT3 ConvertPosition(DirectX::SimpleMath::Vector3 playerPos, DirectX::SimpleMath::Vector3 shoulderForward);
+
+	const float DIST_FROM_CENTER_TO_SHOULDER_JEGAN = 0.0036f;
 
 	DX9::MODEL shoulder_;
-	Vector3 position_;
-	//float& rotateX_;
-	//float& rotateY_;
+	//float& rotateX_;	//! 上腕のボーンのX軸回転を
+	//float& rotateY_;	//! 腰のY軸回転を入れる(回転自体同じだから)
 };

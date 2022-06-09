@@ -27,6 +27,7 @@ public:
 	void ResetAttackState() { attackState_ = AttackState::None_Attack; }
 
 	Vector3* GetPosPointer() { return &pos_; }
+	float GetRotateY() const { return rotateY_; }
 	int myLevel() const { return level_; }
 	int& GetPosListID() { return posListID_; }
 	bool IsInAction() const { return isInStep_; }
