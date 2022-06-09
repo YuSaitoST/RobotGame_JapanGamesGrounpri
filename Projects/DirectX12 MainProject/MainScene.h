@@ -11,7 +11,6 @@
 #include "_Classes_Yu/_FIelds/Fields.h"
 
 #include "_Classes_Ao/PlayerManager/PlayerManager.h"
-#include"_Classes_Ao/CameraManager/CameraManager.h"
 
 using Microsoft::WRL::ComPtr;
 using std::unique_ptr;
@@ -47,7 +46,6 @@ private:
 	DX12::HGPUDESCRIPTOR dx9GpuDescriptor_;
 
 	ObjectManager* m_object_;
-	CameraManager* camera_;
 
 	PlayerManager player_;
 

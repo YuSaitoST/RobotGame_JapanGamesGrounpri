@@ -33,16 +33,15 @@ public:
 	void Jump(const float deltaTime);
 
 	void Render();
-	void Render(DX9::MODEL& model);
+	void Render(DX9::MODEL& model){};
 	void UIRender();
 	//アニメーション
-	void SetAnimation(DX9::SKINNEDMODEL& model, const int enableTrack);
+	void SetAnimation(DX9::SKINNEDMODEL& model, const int enableTrack){};
 
 
 	//DX9::MODEL& GetModel() { return player_model; }
 	SimpleMath::Vector3* GetPlayer_Pos() { return &pos_; }
 	Vector3 GetPos() { return player_model->GetPosition(); }
-	float GetCameraRotate() { return camera_rotate_speed; }
 
 private:
 	//DX9::SKINNEDMODEL player_model;
@@ -58,7 +57,6 @@ private:
 	DX9::SPRITEFONT debag_font;
 	DX9::SPRITEFONT time_font;
 
-	float camera_rotate_speed;//カメラの回転速度
 	float player_spped;//プレイヤーのスピード()
 	float normal_speed;//プレイヤーの通常のスピード
 	

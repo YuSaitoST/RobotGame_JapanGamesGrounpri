@@ -114,8 +114,6 @@ void PlayerBase::LoadAssets(std::wstring file_name) {
 	shoulderL_->SetRotation(0.0f, XMConvertToRadians(180.0f), 0.0f);
 	shoulderR_->SetRotation(0.0f, XMConvertToRadians(180.0f), 0.0f);
 
-	//shoulderL_->LoadAsset(L"Player\\L_sholder.x");
-	//shoulderR_->LoadAsset(L"Player\\R_sholder.x");
 
 	player_model->SetPosition(pos_);
 	shoulderL_->SetPosition(pos_);
@@ -128,11 +126,10 @@ void PlayerBase::LoadAssets(std::wstring file_name) {
 void PlayerBase::LoadCsv() {
 	CSV::Schan(
 		L"_Parameters\\PlayerParams.csv",
-		"%f,%f,%f,%f,%f,%i,%f",
+		"%f,%f,%f,%f,%i,%f",
 		&normal_speed,
 		&boost_dush,
-		&camera_rotate_speed, 
-		&pos_.x, &pos_.z, 
+		&pos_.x, &pos_.z,
 		&shotdamage,
 		&cool_time_max
 	);
@@ -146,10 +143,6 @@ void PlayerBase::Update(const float deltaTime) {
 	player_model->SetPosition(pos_);
 	shoulderL_->SetPosition(pos_);
 	shoulderR_->SetPosition(pos_);
-
-
-	//shoulderL_->ConvertPosition(pos_, XMFLOAT3(-forward_.z, 0.0f, forward_.x));
-	//shoulderR_->ConvertPosition(pos_, XMFLOAT3( forward_.z, 0.0f, forward_.x));
 
 	UpdateToMorton();
 }
@@ -384,18 +377,8 @@ void PlayerBase::Render() {
 
 	shoulderL_->Draw();
 	shoulderR_->Draw();
-	//shoulderL_->Render();
-	//shoulderR_->Render();
 }
 
-void PlayerBase::Render(DX9::MODEL& model) {
-	player_model->Draw();
-
-	shoulderL_->Draw();
-	shoulderR_->Draw();
-	//shoulderL_->Render();
-	//shoulderR_->Render();
-}
 
 void PlayerBase::UIRender() {
 	if (burst_state_mode == BURST_STATE::NOT_BURST) {
