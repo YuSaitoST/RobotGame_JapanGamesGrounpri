@@ -11,8 +11,6 @@
 #include "_Classes_Yu/_MeleeWeapon/MeleeWeapon.h"
 #include "_Classes_Yu/_LoadCSV/LoadCSV.h"
 
-#include "_Classes_Ao/PlayerManager/PlayerManager.h"
-
 
 PlayerBase::PlayerBase() {
 	LoadCsv();
@@ -20,14 +18,17 @@ PlayerBase::PlayerBase() {
 	SetBaseMember(OBJ_TYPE::PLAYER, SimpleMath::Vector3::Zero, 1.0f);
 
 	player_model = nullptr;
+	//shoulderL_ = new MSShoulderSide();
+	//shoulderR_ = new MSShoulderSide();
+
 	player_spped = 0.0f;
 	pos_ = SimpleMath::Vector3(0.0f, 0.0f, 0.0f);
 
-	boost_zero = 0;//オーバーヒートの初期値
-	boost_max  = 0; //オーバーヒートの最大値
-	overheart_flag = false; //オーバーヒートのフラグ
-	overheart_time = 0.0f;//オーバーヒートしている時間 初期値
-	overheart_max = 0.0f; //オーバーヒートしている時間 最大値
+	boost_zero = 0;
+	boost_max  = 0;
+	overheart_flag = false;
+	overheart_time = 0.0f;
+	overheart_max = 0.0f;
 
 	jump_flag = false;
 	jump_time = 0.0f;
@@ -36,16 +37,21 @@ PlayerBase::PlayerBase() {
 	gravity_ = 0.0f;
 	V0 = 0.0f;
 
+	attack_flag = false;
 	burst_state_mode = BURST_STATE::NOT_BURST;
-	frist_reception_time = 0.0f; //受付時間初期値
-	frist_reception_max = 0.0f;  //受付時間最大値
-	frist_check_flag = false;     //次に攻撃に移る
-	second_reception_time = 0.0f; //受付時間初期値
-	second_reception_max = 0.0f;   //受付時間最大値
-	second_check_flag = false;      //次に攻撃に移る
-	third_reception_time = 0.0f; //受付時間初期値
-	third_reception_max = 0.0f;  //受付時間最大値
-	third_check_flag = false;     //最後終わるまで攻撃不可
+	frist_reception_time = 0.0f;
+	frist_reception_max = 0.0f;
+	frist_check_flag = false;
+	second_reception_time = 0.0f;
+	second_reception_max = 0.0f;
+	second_check_flag = false;
+	third_reception_time = 0.0f;
+	third_reception_max = 0.0f; 
+	third_check_flag = false;
+	attack_cool_flag = false;
+	cool_time_default = 0.0f;
+
+
 }
 
 void PlayerBase::Initialize(const int id) {
@@ -72,6 +78,9 @@ void PlayerBase::Initialize(const int id) {
 	//初速
 	V0 = 1.0f;
 
+	//攻撃しているかどうかのフラグ
+	attack_flag = false;
+
 	//近接攻撃 コンボ
 	burst_state_mode = BURST_STATE::NOT_BURST;
 	//一撃目
@@ -86,6 +95,10 @@ void PlayerBase::Initialize(const int id) {
 	third_reception_time = 0.0f; //受付時間初期値
 	third_reception_max = 1.0f;  //受付時間最大値
 	third_check_flag = false;    //最後終わるまで攻撃不可
+	//近接　クールタイム 
+	attack_cool_flag = false;//三撃目以降に発生するフラグ
+	cool_time_default = 0.0f; //クールタイムの初期値
+
 
 	PlayerInfo.SetMenber(&pos_, &attackState_);
 }
@@ -94,10 +107,18 @@ void PlayerBase::LoadAssets(std::wstring file_name) {
 	//player_model = DX9::SkinnedModel::CreateFromFile(DXTK->Device9, L"Player\\j_mein.x");
 	player_model = DX9::Model::CreateFromFile(DXTK->Device9,L"Player\\j_mein.x");
 
+	shoulderL_ = DX9::Model::CreateFromFile(DXTK->Device9, L"Player\\L_sholder.x");
+	shoulderR_ = DX9::Model::CreateFromFile(DXTK->Device9, L"Player\\R_sholder.x");
+	
 	player_model->SetRotation(0.0f, XMConvertToRadians(180.0f), 0.0f);
+	shoulderL_->SetRotation(0.0f, XMConvertToRadians(180.0f), 0.0f);
+	shoulderR_->SetRotation(0.0f, XMConvertToRadians(180.0f), 0.0f);
+
+
 	player_model->SetPosition(pos_);
+	shoulderL_->SetPosition(pos_);
+	shoulderR_->SetPosition(pos_);
 		
-	font = DX9::SpriteFont::CreateDefaultFont(DXTK->Device9);
 	debag_font = DX9::SpriteFont::CreateDefaultFont(DXTK->Device9);
 	time_font = DX9::SpriteFont::CreateDefaultFont(DXTK->Device9);
 }
@@ -105,12 +126,12 @@ void PlayerBase::LoadAssets(std::wstring file_name) {
 void PlayerBase::LoadCsv() {
 	CSV::Schan(
 		L"_Parameters\\PlayerParams.csv",
-		"%f,%f,%f,%f,%f,%i",
+		"%f,%f,%f,%f,%i,%f",
 		&normal_speed,
 		&boost_dush,
-		&camera_rotate_speed, 
-		&pos_.x, &pos_.z, 
-		&shotdamage
+		&pos_.x, &pos_.z,
+		&shotdamage,
+		&cool_time_max
 	);
 }
 
@@ -118,7 +139,10 @@ void PlayerBase::Update(const float deltaTime) {
 	pos_ = player_model->GetPosition();
 
 	Field::ClampPosition(pos_);
+
 	player_model->SetPosition(pos_);
+	shoulderL_->SetPosition(pos_);
+	shoulderR_->SetPosition(pos_);
 
 	UpdateToMorton();
 }
@@ -130,49 +154,67 @@ void PlayerBase::Setting(const float deltaTime) {
 
 void PlayerBase::Move(const float deltaTime, DX9::CAMERA camera) {
 	//キーボード操作
-	if (Press.MoveForwardStateKey()) {
+	if (!attack_flag) {
+		if (Press.MoveForwardStateKey()) {
 
-		Vector3 cam_dir = camera->GetForwardVector();
-		cam_dir.y = 0.0f;
-		cam_dir.Normalize();
-		const float rotation_y = atan2(-cam_dir.z, cam_dir.x) + XMConvertToRadians(-90.0f);
-		const auto  rot_mat = Matrix::CreateRotationY(rotation_y);
-		player_model->SetRotationMatrix(rot_mat);
+			Vector3 cam_dir = camera->GetForwardVector();
+			cam_dir.y = 0.0f;
+			cam_dir.Normalize();
+			const float rotation_y = atan2(-cam_dir.z, cam_dir.x) + XMConvertToRadians(-90.0f);
+			const auto  rot_mat = Matrix::CreateRotationY(rotation_y);
+			player_model->SetRotationMatrix(rot_mat);
+			shoulderL_->SetRotationMatrix(rot_mat);
+			shoulderR_->SetRotationMatrix(rot_mat);
 
-		player_model->Move(0, 0, -PlayerSpeedMode() * deltaTime);
-	}
-	if (Press.MoveBackwardStateKey()) {
+			player_model->Move(0, 0, -PlayerSpeedMode() * deltaTime);
+			shoulderL_->Move(0, 0, -PlayerSpeedMode() * deltaTime);
+			shoulderR_->Move(0, 0, -PlayerSpeedMode() * deltaTime);
+		}
+		if (Press.MoveBackwardStateKey()) {
 
-		Vector3 cam_dir = camera->GetForwardVector();
-		cam_dir.y = 0.0f;
-		cam_dir.Normalize();
-		const float rotation_y = atan2(-cam_dir.z, cam_dir.x) + XMConvertToRadians(90.0f);
-		const auto  rot_mat = Matrix::CreateRotationY(rotation_y);
-		player_model->SetRotationMatrix(rot_mat);
+			Vector3 cam_dir = camera->GetForwardVector();
+			cam_dir.y = 0.0f;
+			cam_dir.Normalize();
+			const float rotation_y = atan2(-cam_dir.z, cam_dir.x) + XMConvertToRadians(90.0f);
+			const auto  rot_mat = Matrix::CreateRotationY(rotation_y);
+			player_model->SetRotationMatrix(rot_mat);
+			shoulderL_->SetRotationMatrix(rot_mat);
+			shoulderR_->SetRotationMatrix(rot_mat);
 
-		player_model->Move(0, 0,  -PlayerSpeedMode() * deltaTime);
-	}
-	if (Press.MoveLeftStateKey()) {
+			player_model->Move(0, 0, -PlayerSpeedMode() * deltaTime);
+			shoulderL_->Move(0, 0, -PlayerSpeedMode() * deltaTime);
+			shoulderR_->Move(0, 0, -PlayerSpeedMode() * deltaTime);
+		}
+		if (Press.MoveLeftStateKey()) {
 
-		Vector3 cam_dir = camera->GetForwardVector();
-		cam_dir.y = 0.0f;
-		cam_dir.Normalize();
-		const float rotation_y = atan2(-cam_dir.z, cam_dir.x) + XMConvertToRadians(180.0f);
-		const auto  rot_mat = Matrix::CreateRotationY(rotation_y);
-		player_model->SetRotationMatrix(rot_mat);
+			Vector3 cam_dir = camera->GetForwardVector();
+			cam_dir.y = 0.0f;
+			cam_dir.Normalize();
+			const float rotation_y = atan2(-cam_dir.z, cam_dir.x) + XMConvertToRadians(180.0f);
+			const auto  rot_mat = Matrix::CreateRotationY(rotation_y);
+			player_model->SetRotationMatrix(rot_mat);
+			shoulderL_->SetRotationMatrix(rot_mat);
+			shoulderR_->SetRotationMatrix(rot_mat);
 
-		player_model->Move( 0, 0, -PlayerSpeedMode() * deltaTime);
-	}
-	if (Press.MoveRightStateKey()) {
+			player_model->Move(0, 0, -PlayerSpeedMode() * deltaTime);
+			shoulderL_->Move(0, 0, -PlayerSpeedMode() * deltaTime);
+			shoulderR_->Move(0, 0, -PlayerSpeedMode() * deltaTime);
+		}
+		if (Press.MoveRightStateKey()) {
 
-		Vector3 cam_dir = camera->GetForwardVector();
-		cam_dir.y = 0.0f;
-		cam_dir.Normalize();
-		const float rotation_y = atan2(-cam_dir.z, cam_dir.x) + XMConvertToRadians(0.0f);
-		const auto  rot_mat = Matrix::CreateRotationY(rotation_y);
-		player_model->SetRotationMatrix(rot_mat);
+			Vector3 cam_dir = camera->GetForwardVector();
+			cam_dir.y = 0.0f;
+			cam_dir.Normalize();
+			const float rotation_y = atan2(-cam_dir.z, cam_dir.x) + XMConvertToRadians(0.0f);
+			const auto  rot_mat = Matrix::CreateRotationY(rotation_y);
+			player_model->SetRotationMatrix(rot_mat);
+			shoulderL_->SetRotationMatrix(rot_mat);
+			shoulderR_->SetRotationMatrix(rot_mat);
 
-		player_model->Move(0, 0, -PlayerSpeedMode() * deltaTime);
+			player_model->Move(0, 0, -PlayerSpeedMode() * deltaTime);
+			shoulderL_->Move(0, 0, -PlayerSpeedMode() * deltaTime);
+			shoulderR_->Move(0, 0, -PlayerSpeedMode() * deltaTime);
+		}
 	}
 }
 
@@ -220,9 +262,12 @@ void PlayerBase::Attack(const float deltaTime) {
 	switch (burst_state_mode)
 	{
 	case BURST_STATE::NOT_BURST:
-		if (Press.AtackEventKey()) {
-			burst_state_mode = BURST_STATE::FIRST;
-			attackState_ = AttackState::Adjacent;
+		if (!attack_cool_flag) {
+			if (Press.AtackEventKey()) {
+				burst_state_mode = BURST_STATE::FIRST;
+				attack_flag = true;
+				attackState_ = AttackState::Adjacent;
+			}
 		}
 		break;
 	case BURST_STATE::FIRST:
@@ -243,6 +288,7 @@ void PlayerBase::Attack(const float deltaTime) {
 		else if (frist_reception_time >= frist_reception_max && !frist_check_flag) {
 			frist_reception_time = 0.0f;
 			frist_check_flag = false;
+			attack_flag = false;
 			burst_state_mode = BURST_STATE::NOT_BURST;
 			attackState_ = AttackState::None_Attack;
 		}
@@ -265,6 +311,7 @@ void PlayerBase::Attack(const float deltaTime) {
 		else if (second_reception_time >= second_reception_max && !second_check_flag) {
 			second_reception_time = 0.0f;
 			second_check_flag = false;
+			attack_flag = false;
 			burst_state_mode = BURST_STATE::NOT_BURST;
 			attackState_ = AttackState::None_Attack;
 		}
@@ -275,10 +322,20 @@ void PlayerBase::Attack(const float deltaTime) {
 		if (third_reception_time >= third_reception_max) {
 			third_reception_time = 0.0f;
 			third_reception_time = false;
+			attack_flag = false;
+			attack_cool_flag = true;
 			burst_state_mode = BURST_STATE::NOT_BURST;
 			attackState_ = AttackState::None_Attack;
 		}
 		break;
+	}
+
+	if (attack_cool_flag) {
+		cool_time_default += deltaTime;
+		if (cool_time_default >= cool_time_max) {
+			attack_cool_flag = false;
+			cool_time_default = 0.0f;
+		}
 	}
 }
 
@@ -317,11 +374,11 @@ void PlayerBase::Jump(const float deltaTime) {
 
 void PlayerBase::Render() {
 	player_model->Draw();
+
+	shoulderL_->Draw();
+	shoulderR_->Draw();
 }
 
-void PlayerBase::Render(DX9::MODEL& model) {
-	player_model->Draw();
-}
 
 void PlayerBase::UIRender() {
 	if (burst_state_mode == BURST_STATE::NOT_BURST) {
@@ -377,13 +434,13 @@ void PlayerBase::UIRender() {
 	DX9::SpriteBatch->DrawString(
 		debag_font.Get(),
 		SimpleMath::Vector2(0.0f, 60.0f),
-		DX9::Colors::Green,
+		DX9::Colors::Red,
 		L"ブーストゲージ %d", boost_max
 	);
 	DX9::SpriteBatch->DrawString(
 		debag_font.Get(),
 		SimpleMath::Vector2(0.0f, 90.0f),
-		DX9::Colors::Green,
+		DX9::Colors::Red,
 		L"プレイヤーのスピード %f", player_spped
 	);
 

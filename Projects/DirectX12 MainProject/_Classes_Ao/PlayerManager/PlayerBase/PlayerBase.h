@@ -4,7 +4,7 @@
 #include "Base/dxtk.h"
 
 #include "_Classes_Yu/_CellList/_Object/ObjectBase.h"
-
+#include "_Classes_Yu/_MSShoulderSide/MSShoulderSide.h"
 
 
 using namespace DirectX;
@@ -33,26 +33,30 @@ public:
 	void Jump(const float deltaTime);
 
 	void Render();
-	void Render(DX9::MODEL& model);
+	void Render(DX9::MODEL& model){};
 	void UIRender();
 	//アニメーション
-	void SetAnimation(DX9::SKINNEDMODEL& model, const int enableTrack);
+	void SetAnimation(DX9::SKINNEDMODEL& model, const int enableTrack){};
 
 
 	//DX9::MODEL& GetModel() { return player_model; }
 	SimpleMath::Vector3* GetPlayer_Pos() { return &pos_; }
 	Vector3 GetPos() { return player_model->GetPosition(); }
-	float GetCameraRotate() { return camera_rotate_speed; }
 
 private:
 	//DX9::SKINNEDMODEL player_model;
 	DX9::MODEL player_model;
 
-	DX9::SPRITEFONT font;
+	DX9::MODEL shoulderL_;
+	DX9::MODEL shoulderR_;
+
+
+	//MSShoulderSide* shoulderL_;
+	//MSShoulderSide* shoulderR_;
+
 	DX9::SPRITEFONT debag_font;
 	DX9::SPRITEFONT time_font;
 
-	float camera_rotate_speed;//カメラの回転速度
 	float player_spped;//プレイヤーのスピード()
 	float normal_speed;//プレイヤーの通常のスピード
 	
@@ -94,7 +98,10 @@ private:
 		THIRD
 	};
 	BURST_STATE burst_state_mode;
-	 
+
+	//攻撃しているかどうかのフラグ
+	bool attack_flag;
+
 	//一撃目
 	float frist_reception_time; //受付時間初期値
 	float frist_reception_max;  //受付時間最大値
@@ -109,6 +116,11 @@ private:
 	float third_reception_time; //受付時間初期値
 	float third_reception_max;  //受付時間最大値
 	bool  third_check_flag;     //最後終わるまで攻撃不可
+
+	//近接　クールタイム 
+	bool attack_cool_flag;//三撃目以降に発生するフラグ
+	float cool_time_default; //クールタイムの初期値
+	float cool_time_max;  //クールタイムの終わり
 
 	//射撃
 	int shotdamage;

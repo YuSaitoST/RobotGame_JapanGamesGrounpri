@@ -2,6 +2,7 @@
 
 void SkyDome::LoadAsset() {
 	model_ = DX9::Model::CreateFromFile(DXTK->Device9, L"_Models_SkyDome\\Dome.x");
+	model_->SetTexture(L"_Models_SkyDome\\F204.jpg");
 	model_->SetScale(3.5f);
 }
 

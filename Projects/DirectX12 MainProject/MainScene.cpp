@@ -25,7 +25,7 @@ void MainScene::Initialize()
 	light_test_.Diffuse		= DX9::Colors::Value(1.0f, 1.0f, 1.0f, 1.0f);
 	light_test_.Specular	= DX9::Colors::Value(1.0f, 1.0f, 1.0f, 1.0f);
 	light_test_.Ambient		= DX9::Colors::Value(1.0f, 1.0f, 1.0f, 1.0f);
-	light_test_.Direction	= DX9::VectorSet(0.0f, -1.0f, 1.0f);
+	light_test_.Direction	= DX9::VectorSet(0.0f, -1.0f, 0.0f);
 
 	Lighting.Setting("MainLight", light_test_);
 	Lighting.SetEnable("MainLight", true);
@@ -104,11 +104,11 @@ NextScene MainScene::Update(const float deltaTime)
 // Draws the scene.
 void MainScene::Render()
 {
-	DXTK->Direct3D9->Clear(DX9::Colors::RGBA(0, 0, 255, 0));  // 画面をクリア
+	DXTK->Direct3D9->Clear(DX9::Colors::RGBA(255, 255, 255, 0));  // 画面をクリア
 	DXTK->Direct3D9->BeginScene();  // シーンの開始を宣言
 
 	m_object_->RenderModels();
-	
+
 	player_.Render();
 	field_->Render();
 

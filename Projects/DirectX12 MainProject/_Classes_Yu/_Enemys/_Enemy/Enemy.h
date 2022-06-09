@@ -27,6 +27,7 @@ public:
 	void ResetAttackState() { attackState_ = AttackState::None_Attack; }
 
 	Vector3* GetPosPointer() { return &pos_; }
+	float GetRotateY() const { return rotateY_; }
 	int myLevel() const { return level_; }
 	int& GetPosListID() { return posListID_; }
 	bool IsInAction() const { return isInStep_; }
@@ -54,7 +55,7 @@ private:
 	SoundPlayer* se_adjacent_;
 	SoundPlayer* se_shooting_;
 
-	//MSShoulderSide* shoulderL_;
+	MSShoulderSide* shoulderL_;
 
 	EneState* state_;
 	SwitchStates* m_state_;
@@ -63,8 +64,6 @@ private:
 
 	//DX9::SKINNEDMODEL model_;
 	DX9::MODEL model_;
-
-	DX9::SHADER shader_;
 
 	int posListID_;
 	int level_;

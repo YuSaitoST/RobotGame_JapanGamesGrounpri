@@ -7,7 +7,7 @@ Bullet::Bullet() {
 }
 
 void Bullet::Update(const float deltaTime) {
-	pos_ += forward_  * 1.25f * deltaTime;
+	pos_ += forward_  * 5.25f * deltaTime;
 
 	if (Field::IsOut(pos_)) {
 		pos_ = Vector3::Zero;

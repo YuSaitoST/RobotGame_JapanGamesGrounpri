@@ -23,6 +23,7 @@ void Fields::LoadAssets() {
 	domes_->LoadAsset();
 
 	model_ = DX9::Model::CreateFromFile(DXTK->Device9, L"_Models_Field\\field.X");
+	model_->SetTexture(L"_Models_Field\\lambert2_Base_color.png");
 	//model_->SetPosition(DirectX::SimpleMath::Vector3(FLParams.GetFieldFalfScale(), -0.25f, FLParams.GetFieldFalfScale()));
 	 model_->SetPosition(DirectX::SimpleMath::Vector3(HALFSIZE, POS_Y, HALFSIZE));
 	//model_->SetScale(FLParams.GetNumber().SCALE, 0.0f, FLParams.GetNumber().SCALE);
@@ -51,17 +52,17 @@ void Fields::Render() {
 
 	//shader_->Begin();
 	//shader_->BeginPass(0);
-	//model_->SetPosition(DirectX::XMFLOAT3(HALFSIZE, POS_Y, HALFSIZE));
-	//model_->Draw();
+	model_->SetPosition(DirectX::XMFLOAT3(HALFSIZE, POS_Y, HALFSIZE));
+	model_->Draw();
 
-	//model_->SetPosition(DirectX::XMFLOAT3(HALFSIZE * 2, POS_Y, HALFSIZE));
-	//model_->Draw();
+	model_->SetPosition(DirectX::XMFLOAT3(HALFSIZE * 3, POS_Y, HALFSIZE));
+	model_->Draw();
 
-	//model_->SetPosition(DirectX::XMFLOAT3(HALFSIZE * 2, POS_Y, HALFSIZE * 2));
-	//model_->Draw();
+	model_->SetPosition(DirectX::XMFLOAT3(HALFSIZE * 3, POS_Y, HALFSIZE * 3));
+	model_->Draw();
 
-	//model_->SetPosition(DirectX::XMFLOAT3(HALFSIZE, POS_Y, HALFSIZE * 2));
-	//model_->Draw();
+	model_->SetPosition(DirectX::XMFLOAT3(HALFSIZE, POS_Y, HALFSIZE * 3));
+	model_->Draw();
 	//shader_->EndPass();
 	//shader_->End();
 

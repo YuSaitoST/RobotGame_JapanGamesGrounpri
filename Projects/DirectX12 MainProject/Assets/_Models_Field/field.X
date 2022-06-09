@@ -157,7 +157,7 @@ Frame Root {
      0.000000;0.000000;0.000000;;
 
      TextureFilename {
-      "lambert2_Base_color.png";
+      "lambert1_Base_color.png";
      }
     }
    }
